@@ -24,6 +24,24 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class BaseRetrofit
 
+    @Singleton
+    @Provides
+    fun provideLoggingInterceptor(): Interceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(loggingInterceptor: Interceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
 
     @Singleton
     @Provides
@@ -36,23 +54,4 @@ object NetworkModule {
             .client(okHttpClient)
             .build()
     }
-
-
-
-
-    @Singleton
-    @Provides
-    fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient =
-        OkHttpClient.Builder()
-            .run {
-                connectTimeout(120, TimeUnit.SECONDS)
-                readTimeout(120, TimeUnit.SECONDS)
-                writeTimeout(120, TimeUnit.SECONDS)
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-                addInterceptor(interceptor)
-                build()
-            }
-
-
-
 }

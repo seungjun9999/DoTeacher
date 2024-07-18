@@ -8,14 +8,14 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+
 @Module
 @InstallIn(SingletonComponent::class)
-interface DataSourceModule {
+interface DataSoureceModule {
 
     @Singleton
     @Binds
     fun provideUserDataSource(
         userDataSourceImpl: UserDataSourceImpl
     ): UserDataSource
-
 }

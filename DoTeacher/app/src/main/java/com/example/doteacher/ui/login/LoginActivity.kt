@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+val TAG: String = LoginActivity::class.java.getSimpleName()
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
@@ -40,6 +41,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
                     // 가져온 자격 증명에서 Google ID 토큰을 추출
                     val googleIdToken = credential.googleIdToken
+                    Timber.d("구글 아이디 토큰$googleIdToken")
                     if (googleIdToken != null) {
                         // Google ID 토큰을 사용해 Firebase 인증 자격 증명을 생성
                         val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
@@ -66,13 +68,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                     }
                                 }
                             } else {
-                                Timber.e(task.exception)
+                                Timber.d("구글 로그인 오류 ${task.exception}")
                             }
                         }
                     } else {
                         Timber.e("GoogleIdToken is null.")
                     }
                 } catch (exception: ApiException) {
+                    Timber.d("구글 로그인 오류 ${exception.localizedMessage}")
                     Timber.e(exception.localizedMessage)
                 }
             }
@@ -117,20 +120,22 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun clickGoogleLoginBtn() {
         binding.googlelogin.setOnClickListener {
+            Timber.d("Google login button clicked")
 
-            oneTapClient
-                .beginSignIn(signInRequest)
+            oneTapClient.beginSignIn(signInRequest)
                 .addOnSuccessListener(this) { result ->
-                    runCatching {
+                    Timber.d("beginSignIn success")
+                    try {
                         oneTapClientResult.launch(
                             IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
                         )
-                    }.onFailure {
-                        Timber.e("Couldn't start One Tap UI: ${it.localizedMessage}")
+                        Timber.d("IntentSender launched")
+                    } catch (e: Exception) {
+                        Timber.e("Error launching IntentSender: ${e.message}")
                     }
                 }
-                .addOnFailureListener(this) { exception ->
-                    Timber.e(exception.localizedMessage)
+                .addOnFailureListener(this) { e ->
+                    Timber.e("beginSignIn failed: ${e.message}")
                 }
         }
     }

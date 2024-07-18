@@ -5,6 +5,7 @@ import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.model.param.UserParam
 
 interface UserDataSource {
+
     //회원가입
     suspend fun signUp(userParam: UserParam): ResponseData<UserData>
 
