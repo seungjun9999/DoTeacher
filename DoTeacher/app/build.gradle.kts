@@ -57,7 +57,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v240)
 
     //Google service
     // Import the BoM for the Firebase platform
@@ -68,7 +68,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-analytics")
     // Also add the dependency for the Google Play services library and specify its version
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation(libs.play.services.auth)
 
 
     //timber

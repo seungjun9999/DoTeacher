@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "489987802914-77nfap4etc3se36qfeorj60opumqbjl2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.doteacher",
+            "certificate_hash": "ace2ffceb7d48e042cb2a03a052a8863a7dd79f1"
+          }
+        },
+        {
           "client_id": "489987802914-bu00nnv5fqla1vnajghu7o11d04hsldo.apps.googleusercontent.com",
           "client_type": 3
         }

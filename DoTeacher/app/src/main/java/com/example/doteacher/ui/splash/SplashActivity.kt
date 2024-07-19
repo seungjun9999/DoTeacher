@@ -1,5 +1,6 @@
 package com.example.doteacher.ui.splash
 
+import android.annotation.SuppressLint
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.doteacher.R
