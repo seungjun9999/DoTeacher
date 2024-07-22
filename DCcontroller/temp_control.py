@@ -1,32 +1,52 @@
-import time
-import math
+
+from adafruit_motor import motor
+from adafruit_pca9685 import PCA9685
+from adafruit_servokit import ServoKit
 import board
 import busio
-from adafruit_pca9685 import PCA9685
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import Float32
+import time
+from sshkeyboard import listen_keyboard
+import Jetson.GPIO as GPIO
 
 # I2C 버스 설정
 i2c = busio.I2C(board.SCL, board.SDA)
 pca = PCA9685(i2c)
-pca.frequency = 60  # PCA9685 주파수 설정
+pca.frequency = 500  # PCA9685 주파수 설정
 
-# PWM 제어
+# PID 제어 클래스 정의
+class PIDController:
+    def __init__(self, kp, ki, kd, setpoint=0):
+        self.kp = kp
+        self.ki = ki
+        self.kd = kd
+        self.setpoint = setpoint
+        self.previous_error = 0
+        self.integral = 0
+
+    def update(self, current_value):
+        error = self.setpoint - current_value
+        self.integral += error
+        derivative = error - self.previous_error
+        self.previous_error = error
+        return self.kp * error + self.ki * self.integral + self.kd * derivative
+
+# PWMThrottleHat 클래스 정의
 class PWMThrottleHat:
-    def __init__(self, pwm, channel):
+    def __init__(self, pwm, channel, pid):
         self.pwm = pwm
         self.channel = channel
         self.pwm.frequency = 60
+        self.pid = pid
 
     def set_throttle(self, throttle):
         try:
-            pulse = int(0xFFFF * abs(throttle))
-            if throttle > 0: # 전진
+            pid_output = self.pid.update(throttle)
+            pulse = int(0xFFFF * abs(pid_output))
+            if pid_output > 0: # 전진
                 self.pwm.channels[self.channel + 5].duty_cycle = pulse
                 self.pwm.channels[self.channel + 4].duty_cycle = 0
                 self.pwm.channels[self.channel + 3].duty_cycle = 0xFFFF
-            elif throttle < 0: # 후진
+            elif pid_output < 0: # 후진
                 self.pwm.channels[self.channel + 5].duty_cycle = pulse
                 self.pwm.channels[self.channel + 4].duty_cycle = 0xFFFF
                 self.pwm.channels[self.channel + 3].duty_cycle = 0
@@ -36,130 +56,171 @@ class PWMThrottleHat:
                 self.pwm.channels[self.channel + 3].duty_cycle = 0
                 
         except Exception as e:
-            # get_logger() : ROS2에서 Python 활용 개발 시 로깅 위해 사용
             self.get_logger().error(f"PWM throttle ERROR: {e}")
 
-class AdaptiveDCMotorController(Node):
-    def __init__(self, channel):
-        super().__init__('adaptive_dc_motor_controller')
-        self.motor = PWMThrottleHat(pca, channel)
+# 서보 모터용 PID 제어 클래스 정의
+class PIDServoController:
+    def __init__(self, servo, pid, channel):
+        self.servo = servo
+        self.pid = pid
+        self.channel = channel
 
-        # self.wheel_diameter = 0.06  # 0.06 미터 단위의 바퀴 지름 (예: 6cm)
-        # self.gear_ratio = 1.5  # 기어 비 (모터 회전 대 바퀴 회전)
-        # self.max_rpm = 330  # 모터의 최대 RPM
-        # self.scaling_factor = 1.0  # 스케일링 계수 초기값 => 무게 등의 변화가 생기면 실험을 통해 수정 필요!!!!!!!!
-        # self.distance_traveled = 0
-        # self.last_update_time = time.time()
-        # self.current_speed = 0
+    def set_angle(self, angle):
+        pid_output = self.pid.update(angle)
+        new_angle = min(max(0, self.servo[self.channel].angle + pid_output), 180)
+        self.servo[self.channel].angle = new_angle
 
-        # ROS2 파라미터 선언
-        self.declare_parameter('wheel_diameter', 0.06)
-        self.declare_parameter('gear_ratio', 1.5)
-        self.declare_parameter('max_rpm', 330)
-        self.declare_parameter('scaling_factor', 1.0)
+# PID 제어기 생성
+pid_motor = PIDController(kp=1.0, ki=0.1, kd=0.05, setpoint=0.5)  # 원하는 속도(setpoint)로 설정
+pid_servo = PIDController(kp=1.0, ki=0.1, kd=0.05, setpoint=100)  # 원하는 각도(setpoint)로 설정
 
-        # 파라미터 값 가져오기
-        self.wheel_diameter = self.get_parameter('wheel_diameter').value
-        self.gear_ratio = self.get_parameter('gear_ratio').value
-        self.max_rpm = self.get_parameter('max_rpm').value
-        self.scaling_factor = self.get_parameter('scaling_factor').value
+# PWMThrottleHat 인스턴스 생성
+motor_hat = PWMThrottleHat(pca, channel=0, pid=pid_motor)
 
-        # 나머지 초기화
-        self.motor = PWMThrottleHat(pca, channel)
-        self.distance_traveled = 0
-        self.last_update_time = self.get_clock().now().to_msg().sec
-        self.current_speed = 0
+# 서보 모터 제어 설정
+kit = ServoKit(channels=16, i2c=i2c, address=0x60)
+servo_controller = PIDServoController(kit.servo, pid_servo, channel=0)
 
-        # 파라미터 변경 콜백 추가
-        self.add_on_set_parameters_callback(self.parameters_callback)
+# 자율주행 모드 변수
+autonomous_mode = False
 
-        self.subscription = self.create_subscription(
-            Float32,
-            'target_distance',
-            self.move_distance_callback,
-            10
-        )
-    def parameters_callback(self, params):
-        for param in params:
-            if param.name == 'wheel_diameter':
-                self.wheel_diameter = param.value
-            elif param.name == 'gear_ratio':
-                self.gear_ratio = param.value
-            elif param.name == 'max_rpm':
-                self.max_rpm = param.value
-            elif param.name == 'scaling_factor':
-                self.scaling_factor = param.value
+# 초음파 센서 핀 설정
+GPIO_TRIGGER = 7
+GPIO_ECHO = 11
+
+# GPIO 모드 설정
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+GPIO.setup(GPIO_ECHO, GPIO.IN)
+
+def measure_distance():
+    GPIO.output(GPIO_TRIGGER, True)
+    time.sleep(0.00001)
+    GPIO.output(GPIO_TRIGGER, False)
+
+    start_time = time.time()
+    while GPIO.input(GPIO_ECHO) == 0:
+        start_time = time.time()
+
+    stop_time = time.time()
+    while GPIO.input(GPIO_ECHO) == 1:
+        stop_time = time.time()
+
+    time_elapsed = stop_time - start_time
+    distance = (time_elapsed * 34300) / 2
+
+    return distance
+
+def turn_left_back():
+    global pan
+    print("Turning left_back")
+    motor_hat.set_throttle(-0.5)  # 좌회전 시 속도 감소
+    pan = max(30, pan - 30)
+    servo_controller.set_angle(pan)
+    time.sleep(2)  # 2초 동안 회전
+    motor_hat.set_throttle(0)
+    pan = 100
+    servo_controller.set_angle(pan)
+
+def turn_right_back():
+    global pan
+    print("Turning right_back")
+    motor_hat.set_throttle(-0.5)  # 좌회전 시 속도 감소
+    pan = max(30, pan + 30)
+    servo_controller.set_angle(pan)
+    time.sleep(2)  # 2초 동안 회전
+    motor_hat.set_throttle(0)
+    pan = 100
+    servo_controller.set_angle(pan)
+
+def turn_left():
+    global pan
+    print("Turning left")
+    motor_hat.set_throttle(0.5)  # 좌회전 시 속도 감소
+    pan = max(30, pan - 30)
+    servo_controller.set_angle(pan)
+    time.sleep(2)  # 2초 동안 회전
+    motor_hat.set_throttle(0)
+    pan = 100
+    servo_controller.set_angle(pan)
+
+def turn_right():
+    global pan
+    print("Turning right")
+    motor_hat.set_throttle(0.5)  # 우회전 시 속도 감소
+    pan = min(150, pan + 30)
+    servo_controller.set_angle(pan)
+    time.sleep(2)  # 2초 동안 회전
+    motor_hat.set_throttle(0)
+    pan = 100
+    servo_controller.set_angle(pan)
+
+def autonomous_drive():
+    global autonomous_mode
+    while autonomous_mode:
+        distance = measure_distance()
+        print(f"Measured Distance = {distance:.1f} cm")
         
-        self.get_logger().info('Parameters updated')
-        return SetParametersResult(successful=True)
+        if distance < 30:  # 30cm 이내에 장애물이 있으면 멈춤
+            print("Obstacle detected! Stopping.")
+            motor_hat.set_throttle(0)
+        else:
+            motor_hat.set_throttle(0.7)  # 전진
+        time.sleep(0.1)  # 거리 측정을 주기적으로 수행
+        turn_left()
+        time.sleep(2)
+        turn_right()
+        time.sleep(2)
 
-    def set_speed(self, speed):
-        self.motor.set_throttle(speed)
-        self.current_speed = speed
-        self.last_update_time = time.time()
+def press(key):
+    global pan, autonomous_mode
+    if key == 'w':
+        print("Motor forward")
+        motor_hat.set_throttle(1.0)
+    elif key == 's':
+        print("Motor backward")
+        motor_hat.set_throttle(-1.0)
+    elif key == 'a':
+        print("Servo left")
+        turn_left()
+    elif key == 'd':
+        print("Servo right")
+        turn_right()
+    elif key == 'z': # 후진 좌회전
+        print("Servo back_left")
+        turn_left_back()
+    elif key == 'c': # 후진 우회전
+        print("Servo back_right")
+        turn_right_back()
+    elif key == 'm':
+        autonomous_mode = not autonomous_mode
+        if autonomous_mode:
+            print("Autonomous mode activated")
+            autonomous_drive()
+        else:
+            print("Manual mode activated")
 
-    def stop(self):
-        self.motor.set_throttle(0)
-        self.current_speed = 0
+def release(key):
+    global autonomous_mode
+    if key in ['w', 's'] and not autonomous_mode:
+        print("Motor stopped")
+        motor_hat.set_throttle(0)
 
-    def update_distance(self):
-        current_time = time.time()
-        elapsed_time = current_time - self.last_update_time
+def main():
+    print("Press 'w' for forward, 's' for backward, 'a' for left, 'd' for right")
+    print("Press 'm' to toggle autonomous mode, 'esc' to quit")
+    listen_keyboard(
+        on_press=press,
+        on_release=release,
+        sequential=True
+    )
 
-        if self.current_speed != 0:
-            # 현재 속도에 따른 RPM 계산
-            current_rpm = abs(self.current_speed) * self.max_rpm
-
-            # 바퀴의 회전 속도 계산 (RPM)
-            wheel_rpm = current_rpm / self.gear_ratio
-
-            # 이동 거리 계산 (미터)
-            distance = (wheel_rpm / 60) * elapsed_time * math.pi * self.wheel_diameter * self.scaling_factor
-
-            # 방향에 따라 거리 더하기 또는 빼기
-            self.distance_traveled += distance if self.current_speed > 0 else -distance
-
-        self.last_update_time = current_time
-
-    def move_distance(self, target_distance, speed=0.5):
-        start_distance = self.distance_traveled
-        self.set_speed(speed if target_distance > 0 else -speed)
-
-        while abs(self.distance_traveled - start_distance) < abs(target_distance):
-            self.update_distance()
-            time.sleep(0.01)  # 10ms 간격으로 업데이트
-
-        self.stop()
-
-    def move_distance_callback(self, msg):
-        target_distance = msg.data
-        self.get_logger().info(f"Received target distance: {target_distance} meters")
-        self.move_distance(target_distance)
-
-    def calibrate(self, actual_distance):
-        # 실제 이동 거리를 기반으로 파라미터 조정
-        estimated_distance = abs(self.distance_traveled)
-        self.scaling_factor = actual_distance / estimated_distance
-        self.scaling_factor = actual_distance / estimated_distance
-
-        self.get_logger().info(f"Calibrated: New scaling factor = {self.scaling_factor:.4f}")
-
-        # 거리 재설정
-        self.distance_traveled = 0
-
-def main(args=None):
-    rclpy.init(args=args)
-    controller = AdaptiveDCMotorController(channel=0)
-
-    try:
-        rclpy.spin(controller)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        controller.stop()
-        pca.deinit()
-        controller.destroy_node()
-        rclpy.shutdown()
+    # 프로그램 종료 시 정리
+    motor_hat.set_throttle(0)  # 모터 정지
+    servo_controller.set_angle(100)  # 서보 모터 초기 위치로 리셋
+    pca.deinit()  # PCA9685 정리
+    GPIO.cleanup()  # GPIO 정리
+    print("Program stopped and motor stopped.")
 
 if __name__ == "__main__":
     main()
