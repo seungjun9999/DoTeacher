@@ -29,7 +29,10 @@ abstract class BaseFragment<T: ViewDataBinding>(private val layoutResId : Int):F
     ) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewCreated()
     }
+
+    abstract fun initViewCreated()
 
     abstract fun initView()
 
