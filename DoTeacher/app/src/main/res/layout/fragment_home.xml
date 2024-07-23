@@ -1,450 +1,445 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="userData"
-            type="com.example.doteacher.data.model.UserData" />
+                name="userData"
+                type="com.example.doteacher.data.model.UserData" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black"
-        tools:context=".ui.home.HomeFragment">
-
+    <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.home.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/home_menu"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/home_menu"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black">
 
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="38dp"
-                android:gravity="center"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/menu_welcome_dosunsang"
-                android:fontFamily="@font/oxygen_bold"
-                android:text="Welcome to Dosunsang"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tv_menu_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="150dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:fontFamily="@font/oxygen_bold"
-                    android:gravity="center"
-                    android:text="프로필"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView3"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageView3"
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_profile"
+                    setCircleProfileImage="@{userData.userImage}"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="58dp"
+                    android:layout_marginEnd="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/profile_icon"
-                    app:tint="@color/white" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    tools:src="@tools:sample/avatars" />
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tv_menu_preference"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="35dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_menu_profile">
-
-                <TextView
+            <TextView
+                    android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:fontFamily="@font/oxygen_bold"
-                    android:gravity="center"
-                    android:text="취향 수정"
+                    android:layout_marginTop="67dp"
+                    android:fontFamily="@font/allerta"
+                    android:hint="최승준님 안녕하세요!ㅁ"
+                    android:text="@{@string/greeting_format(userData.userName)}"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView4"
+                    android:textColorHint="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@+id/img_profile"
+                    app:layout_constraintStart_toEndOf="@+id/menu"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="35sp"
-                    android:layout_height="35sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/edit_icon"
-                    app:tint="@color/white" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tv_tuto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="27dp"
-                android:layout_marginTop="35dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_menu_preference">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:fontFamily="@font/oxygen_bold"
-                    android:text="사용법 안내"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView5"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="40sp"
+            <ImageView
+                    android:id="@+id/menu"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="58dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/book_icon"
-                    app:tint="@color/white" />
+                    app:srcCompat="@drawable/home_menu_btn" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="35dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_tuto">
-
-                <TextView
+            <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:fontFamily="@font/oxygen_bold"
-                    android:text="로그아웃"
-                    android:textColor="#ff0000"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView6"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="50dp"
+                    android:fontFamily="@font/oxygen"
+                    android:text="How may I help\nyou today?"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_username" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_dosunsang"
+                    android:layout_width="190dp"
+                    android:layout_height="240dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="55dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/main_btn_round_dosunsang"
+                    android:padding="16dp"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_chatbot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_dosunsang"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="#9ec328"
+                        app:cardCornerRadius="40dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/blue_brain" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                        android:id="@+id/btn_dosunsang_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/oxygen_bold"
+                        android:text="Do\nsun\nsang"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="32sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="40sp"
-                    android:layout_height="40sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/logout_icon"
-                    app:tint="#ff0000" />
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/right_arrow" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="35dp"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="@font/oxygen_bold"
-                android:text="Dosunsang ver 1.0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_chatbot"
+                    android:layout_width="183dp"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="55dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/main_btn_round_chat"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_profile"
-            setCircleProfileImage="@{userData.userImage}"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="58dp"
-            android:layout_marginEnd="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/tv_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="67dp"
-            android:fontFamily="@font/allerta"
-            android:hint="최승준님 안녕하세요!ㅁ"
-            android:text="@{@string/greeting_format(userData.userName)}"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/img_profile"
-            app:layout_constraintStart_toEndOf="@+id/menu_back"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ImageView
-            android:id="@+id/menu_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="58dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/black_background"
-            app:tint="#343a40" />
-
-        <ImageView
-            android:id="@+id/menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="58dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menu2"
-            app:tint="#808080" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="50dp"
-            android:fontFamily="@font/oxygen"
-            android:text="How may I help\nyou today?"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_username" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btn_dosunsang"
-            android:layout_width="190dp"
-            android:layout_height="240dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="55dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/main_btn_round_dosunsang"
-            android:padding="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_chatbot"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2">
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_dosunsang"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:backgroundTint="#9ec328"
-                app:cardCornerRadius="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:fontFamily="@font/oxygen_bold"
+                        android:text="Chat with Bot"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/brain" />
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/right_arrow" />
 
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_chat"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:backgroundTint="#9A7FC6"
+                        app:cardCornerRadius="40dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/btn_dosunsang_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/oxygen_bold"
-                android:text="Do\nsun\nsang"
-                android:textAlignment="viewStart"
-                android:textColor="@color/black"
-                android:textSize="32sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                    <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/chat" />
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/right_arrow" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_gallery"
+                    android:layout_width="183dp"
+                    android:layout_height="128dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/main_btn_round_gallery"
+                    android:fontFamily="@font/oxygen_bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_chatbot">
 
+                <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_gallery"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:backgroundTint="#CB9DB1"
+                        app:cardCornerRadius="40dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btn_chatbot"
-            android:layout_width="183dp"
-            android:layout_height="104dp"
-            android:layout_marginTop="55dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/main_btn_round_chat"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2">
+                    <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/gallery" />
+                </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="@font/oxygen_bold"
-                android:text="Chat with Bot"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-            </TextView>
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/right_arrow" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_chat"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#9A7FC6"
-                app:cardCornerRadius="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:fontFamily="@font/oxygen_bold"
+                        android:text="Search by \nImage"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/chat" />
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/right_arrow" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            <Button
+                    android:id="@+id/btn_viewall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="270dp"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginEnd="7dp"
+                    android:drawableEnd="@drawable/arrow_right"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:gravity="start|center_vertical"
+                    android:padding="10dp"
+                    android:text="View all"
+                    android:textSize="16sp"
+                    app:backgroundTint="@null"
+                    app:drawableTint="@color/white"
+                    app:drawableTintMode="src_in"
+                    app:iconSize="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_dosunsang" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/product_recycle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_viewall" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btn_gallery"
-            android:layout_width="183dp"
-            android:layout_height="128dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/main_btn_round_gallery"
-            android:fontFamily="@font/oxygen_bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_chatbot">
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_gallery"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#CB9DB1"
-                app:cardCornerRadius="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/gallery" />
-
-            </androidx.cardview.widget.CardView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="@font/oxygen_bold"
-                android:text="Search by\nImage"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-            </TextView>
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/right_arrow" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/univer"
+                    android:id="@+id/imageView2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/btn_viewall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="270dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginEnd="10dp"
-            android:drawableEnd="@drawable/center_arrowxml"
-            android:drawablePadding="8dp"
-            android:fontFamily="@font/oxygen_bold"
-            android:gravity="start|center_vertical"
-            android:padding="10dp"
-            android:text="View all"
-            android:textSize="16sp"
-            app:backgroundTint="@null"
-            app:drawableTint="@color/white"
-            app:drawableTintMode="src_in"
-            app:iconSize="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_dosunsang" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_viewall" />
+        <com.google.android.material.navigation.NavigationView
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@drawable/home_menu">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="38dp"
+                        android:gravity="center"
+                        android:layout_marginTop="40dp"
+                        android:background="@drawable/menu_welcome_dosunsang"
+                        android:fontFamily="@font/oxygen_bold"
+                        android:text="Welcome to Dosunsang"
+                        android:padding="10dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tv_menu_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="150dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                            android:id="@+id/textView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:fontFamily="@font/oxygen_bold"
+                            android:gravity="center"
+                            android:text="프로필"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageView3"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/profile_icon"
+                            app:tint="@color/white" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tv_menu_preference"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="35dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_menu_profile">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:fontFamily="@font/oxygen_bold"
+                            android:gravity="center"
+                            android:text="취향 수정"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageView4"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="35sp"
+                            android:layout_height="35sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/edit_icon"
+                            app:tint="@color/white" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tv_menu_tuto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="27dp"
+                        android:layout_marginTop="35dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_menu_preference">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:fontFamily="@font/oxygen_bold"
+                            android:text="사용법 안내"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageView5"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="40sp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/book_icon"
+                            app:tint="@color/white" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tv_menu_logout"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="35dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_menu_tuto">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:fontFamily="@font/oxygen_bold"
+                            android:text="로그아웃"
+                            android:textColor="#ff0000"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageView6"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                            android:id="@+id/imageView6"
+                            android:layout_width="40sp"
+                            android:layout_height="40sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/logout_icon"
+                            app:tint="#ff0000" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginBottom="15dp"
+                        android:fontFamily="@font/oxygen_bold"
+                        android:text="Dosunsang ver 1.0"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
 </layout>

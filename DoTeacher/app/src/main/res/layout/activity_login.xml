@@ -26,5 +26,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+                android:text="비회원 ㅎㅎ;"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/guestlogin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/googlelogin"
+                android:layout_marginTop="40dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

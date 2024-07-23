@@ -1,61 +1,74 @@
 package com.example.doteacher.ui.home
 
+import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentHomeBinding
 import com.example.doteacher.ui.base.BaseFragment
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-    private val homeViewModel : HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var homeAdapter: HomeAdapter
-
-    private val viewModel: HomeViewModel by viewModels()
-
-
 
     override fun initView() {
         initData()
-    }
-
-    override fun initViewCreated(){
+        setupOnBackPressed()
+        setupRecyclerView()
+        observeData()
         clickEventListener()
     }
+
 
     override fun onResume() {
         super.onResume()
         initData()
     }
 
-
-    private fun initData(){
+    private fun initData() {
         binding.userData = SingletonUtil.user
     }
 
-    //클릭 이벤트
-    private fun clickEventListener(){
+    private fun clickEventListener() {
         binding.menu.setOnClickListener {
-            binding.homeMenu.bringToFront()
-            animateView(binding.homeMenu,-binding.homeMenu.width.toFloat(),0f)
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+        binding.btnViewall.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_mainFragment_to_productFragment)
         }
     }
 
-    private fun animateView(view: View, startTranslationX: Float, endTranslationX: Float) {
-        view.translationX = startTranslationX
-        view.isVisible = true
-        view.animate()
-            .translationX(endTranslationX)
-            .setDuration(Companion.ANIMATION_DURATION)
-            .setListener(null)
-            .start()
+    private fun setupRecyclerView() {
+        homeAdapter = HomeAdapter()
+        binding.productRecycle.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = homeAdapter
+        }
     }
 
-    companion object {
-        private const val ANIMATION_DURATION = 300L
+    private fun setupOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    } else {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            })
+    }
+
+    private fun observeData() {
     }
 }

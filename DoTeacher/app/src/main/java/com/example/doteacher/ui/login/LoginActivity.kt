@@ -84,6 +84,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     override fun init() {
         initGoogleLogin()
         clickGoogleLoginBtn()
+        clickGuestLoginBtn()
         observeSignUpSuccess()
     }
 
@@ -105,6 +106,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             // 이전에 선택 했던 계정을 기억
             .setAutoSelectEnabled(true)
             .build()
+    }
+
+    private fun clickGuestLoginBtn(){
+        binding.guestlogin.setOnClickListener {  // 새로운 게스트 로그인 버튼 사용
+                UserParam(
+                    userEmail = "guest",
+                    userName = "게스트",
+                    userImage = null.toString()
+                )
+            initGoActivity(this, MainActivity::class.java)
+        }
     }
 
     private fun observeSignUpSuccess() {
