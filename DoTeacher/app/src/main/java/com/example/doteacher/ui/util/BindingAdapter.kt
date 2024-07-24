@@ -24,6 +24,8 @@ fun loadImage(view: ImageView, url: String?) {
             .load(url)
             .centerCrop()
             .into(view)
+    }else{
+        view.setImageResource(R.drawable.mimitaya)
     }
 }
 

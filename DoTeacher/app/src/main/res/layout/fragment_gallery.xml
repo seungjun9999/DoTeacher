@@ -42,8 +42,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     app:imageUrl="@{userData.userImage}"
-                    android:id="@+id/img_profile_gallery"
-                    tools:src="@drawable/mimitaya" />
+                    android:id="@+id/img_profile_gallery" />
 
         </androidx.cardview.widget.CardView>
 
