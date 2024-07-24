@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.doteacher.R
@@ -29,21 +31,19 @@ class ProductFragment : BaseFragment<FragmentProductBinding>(R.layout.fragment_p
 
     override fun initView() {
         initData()
-        initAdapter()
         setupRecyclerView()
+        initAdapter()
         loadProducts()
+        clickEventListener()
     }
-
 
     private fun initData(){
         binding.userData = SingletonUtil.user
     }
 
     private fun setupRecyclerView(){
-        productAdapter = ProductAdapter()
         binding.allProductRecycle.apply {
-            adapter = productAdapter
-            layoutManager = GridLayoutManager(context,3)
+            layoutManager = GridLayoutManager(context, 3)
         }
     }
     private fun loadProducts() {
@@ -54,15 +54,21 @@ class ProductFragment : BaseFragment<FragmentProductBinding>(R.layout.fragment_p
     }
 
     private fun initAdapter() {
-        productAdapter = ProductAdapter()
+        productAdapter = ProductAdapter().apply {
+            setOnItemClickListener { productData ->
+                Timber.d("Product clicked: $productData")
+                findNavController().navigate(
+                    R.id.action_productFragment_to_productdetailFragment,
+                    bundleOf("productData" to productData)
+                )
+            }
+        }
         binding.allProductRecycle.adapter = productAdapter
+    }
 
-        productAdapter.setOnItemClickListener { productData ->
-            Timber.d("Product clicked: $productData")
-            this@ProductFragment.findNavController().navigate(
-                R.id.action_productFragment_to_productdetailFragment,
-                bundleOf("productData" to productData)
-            )
+    private fun clickEventListener() {
+        binding.btnReturnHome.setOnClickListener {
+            it.findNavController().popBackStack()
         }
     }
 

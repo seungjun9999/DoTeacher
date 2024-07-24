@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="userData"
+                type="com.example.doteacher.data.model.UserData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.gallery.GalleryFragment"
+            android:background="@color/black">
+
+        <ImageView
+                android:src="@drawable/arrow_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/btn_return_home"
+                android:backgroundTint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="62dp"
+                android:layout_marginStart="20dp" />
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="45dp"
+                android:layout_marginTop="110dp"
+                android:id="@+id/cardView2">
+
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{userData.userImage}"
+                    android:id="@+id/img_profile_gallery"
+                    tools:src="@drawable/mimitaya" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+                android:id="@+id/textView8"
+    android:text="아무거나"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_bold"
+                android:background="@drawable/gallery_orange"
+                android:layout_width="72dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="65dp"
+                app:layout_constraintEnd_toStartOf="@+id/textView9" />
+
+        <TextView
+                android:id="@+id/textView9"
+                android:text="아무거나"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_bold"
+                android:background="@drawable/gallery_orange"
+                android:layout_width="72dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+                android:id="@+id/textView10"
+                android:text="아무거나"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_bold"
+                android:background="@drawable/gallery_orange"
+                android:layout_width="72dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView9"
+                android:layout_marginEnd="65dp" />
+
+        <TextView
+                android:id="@+id/tv_username_gallery"
+                android:text="@{userData.userName}"
+                android:textSize="32sp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="30dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

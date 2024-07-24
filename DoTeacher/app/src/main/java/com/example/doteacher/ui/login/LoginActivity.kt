@@ -1,6 +1,10 @@
 package com.example.doteacher.ui.login
 
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +36,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
     private lateinit var idToken: String
+    private lateinit var rotateAnimation: ObjectAnimator
 
     private val oneTapClientResult =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -86,6 +91,26 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         clickGoogleLoginBtn()
         clickGuestLoginBtn()
         observeSignUpSuccess()
+        setupLoadingAnimation()
+    }
+
+    @SuppressLint("Recycle")
+    private fun setupLoadingAnimation() {
+        rotateAnimation = ObjectAnimator.ofFloat(binding.loadingBird, View.ROTATION, 0f, 360f).apply {
+            duration = 2000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = LinearInterpolator()
+        }
+    }
+
+    private fun showLoading() {
+        binding.loadingVisible = true
+        rotateAnimation.start()
+    }
+
+    private fun hideLoading() {
+        binding.loadingVisible = false
+        rotateAnimation.cancel()
     }
 
 
@@ -122,8 +147,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private fun observeSignUpSuccess() {
         loginViewModel.userSignUpSuccess.observe(this) {
             if (it) {
+                hideLoading()
                 initGoActivity(this, MainActivity::class.java)
             }else{
+                hideLoading()
                 Toast.makeText(this, "잠시후 다시 시도해주세요.",Toast.LENGTH_SHORT).show()
             }
             binding.loadingVisible = false
@@ -133,7 +160,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private fun clickGoogleLoginBtn() {
         binding.googlelogin.setOnClickListener {
             Timber.d("Google login button clicked")
-
+            showLoading()
             oneTapClient.beginSignIn(signInRequest)
                 .addOnSuccessListener(this) { result ->
                     Timber.d("beginSignIn success")
@@ -144,10 +171,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         Timber.d("IntentSender launched")
                     } catch (e: Exception) {
                         Timber.e("Error launching IntentSender: ${e.message}")
+                        hideLoading()
                     }
                 }
                 .addOnFailureListener(this) { e ->
                     Timber.e("beginSignIn failed: ${e.message}")
+                    hideLoading()
                 }
         }
     }

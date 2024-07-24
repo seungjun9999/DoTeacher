@@ -44,6 +44,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.btnViewall.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_mainFragment_to_productFragment)
         }
+        binding.btnGallery.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_mainFragment_to_galleryFragment)
+        }
     }
 
     private fun setupRecyclerView() {

@@ -36,7 +36,7 @@
                 android:src="@drawable/arrow_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/imageView"
+                android:id="@+id/btn_return_home"
                 android:backgroundTint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
