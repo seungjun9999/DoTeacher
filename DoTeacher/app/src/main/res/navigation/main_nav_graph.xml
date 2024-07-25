@@ -15,6 +15,12 @@
         <action
                 android:id="@+id/action_mainFragment_to_galleryFragment"
                 app:destination="@id/galleryFragment" />
+        <action
+                android:id="@+id/action_mainFragment_to_chatgptFragment"
+                app:destination="@id/chatgptFragment" />
+        <action
+                android:id="@+id/action_mainFragment_to_btn_dosunsangFragment"
+                app:destination="@id/btn_dosunsangFragment" />
     </fragment>
 
     <fragment
@@ -53,6 +59,20 @@
             android:label="GalleryFragment">
 
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatgptFragment"
+        android:name="com.example.doteacher.ui.chatgpt.ChatGptFragment"
+        tools:layout="@layout/fragment_chat_gpt"
+        android:label="ChatGptFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/btn_dosunsangFragment"
+        android:name="com.example.doteacher.ui.DosunsangFragment"
+        tools:layout="@layout/fragment_dosunsang"
+        android:label="DosunsangFragment">
     </fragment>
 
 </navigation>

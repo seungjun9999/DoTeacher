@@ -47,6 +47,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.btnGallery.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_mainFragment_to_galleryFragment)
         }
+        binding.btnChatbot.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_mainFragment_to_chatgptFragment)
+        }
+        binding.btnDosunsang.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_mainFragment_to_btn_dosunsangFragment)
+        }
     }
 
     private fun setupRecyclerView() {

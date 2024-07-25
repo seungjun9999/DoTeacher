@@ -10,11 +10,26 @@
                 type="com.example.doteacher.data.model.UserData" />
     </data>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".ui.gallery.GalleryFragment"
             android:background="@color/black">
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/banner"
+                android:id="@+id/imageView10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_username_gallery" />
 
         <ImageView
                 android:src="@drawable/arrow_back"
@@ -48,7 +63,7 @@
 
         <TextView
                 android:id="@+id/textView8"
-    android:text="아무거나"
+                android:text="아무거나"
                 android:textSize="12sp"
                 android:fontFamily="@font/poppins_bold"
                 android:background="@drawable/gallery_orange"
@@ -101,8 +116,44 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="10dp" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_username_gallery"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/constraintLayout">
 
+            <TextView
+                    android:id="@+id/tv_phtos_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="24sp"
+                    android:textColor="#ffbe4e"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Photos"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_phtos_cnt"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/poppins"
+                    android:textSize="12sp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <include layout="@layout/layout_bottom_sheet"
+                android:id="@+id/bottom_sheet_layout"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

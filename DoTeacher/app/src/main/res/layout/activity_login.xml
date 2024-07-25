@@ -117,7 +117,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/guestlogin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="60dp" />
+                    android:layout_marginTop="40dp" />
 
             <ImageView
                     android:layout_width="65dp"
@@ -126,7 +126,7 @@
                     android:id="@+id/googlelogin"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView6"
-                    android:layout_marginTop="35dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginStart="110dp" />
 
             <TextView
@@ -161,14 +161,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#80000000"
-                android:visibility="gone">
-<!--                android:visibility="@{loadingVisible ? View.VISIBLE : View.GONE}">-->
+                android:visibility="@{loadingVisible ? View.VISIBLE : View.GONE}">
 
 
             <ImageView
                     android:id="@+id/loadingBird"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="130dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:src="@drawable/loading_bird"
                     app:layout_constraintBottom_toBottomOf="parent"
