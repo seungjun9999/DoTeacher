@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+                name="productData"
+                type="com.example.doteacher.data.model.ProductData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+        <ImageView
+                android:id="@+id/img_product_back"
+                android:layout_width="131dp"
+                android:layout_height="136dp"
+                app:srcCompat="@drawable/product_backgroud"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="40dp" />
+
+        <TextView
+                android:id="@+id/tv_product_plain"
+                android:text="황소"
+                android:letterSpacing="0.05"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/img_product_back"
+                app:layout_constraintEnd_toEndOf="@+id/img_product_back"
+                app:layout_constraintBottom_toBottomOf="@+id/img_product_back"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/abhaya_libre_bold" />
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="10dp"
+                app:cardBackgroundColor="@android:color/white"
+                android:layout_margin="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/img_product_back"
+                app:layout_constraintStart_toStartOf="@+id/img_product_back"
+                app:layout_constraintBottom_toTopOf="@+id/tv_product_plain"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/cardView">
+
+            <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="133dp"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/hwangso"
+                    android:id="@+id/imageView7" />
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+                android:layout_width="100dp"
+                android:layout_height="133dp"
+                app:srcCompat="@drawable/product_shadow"
+                android:id="@+id/imageView8"
+                app:layout_constraintStart_toStartOf="@+id/img_product_back"
+                app:layout_constraintEnd_toEndOf="@+id/img_product_back"
+                app:layout_constraintBottom_toTopOf="@+id/tv_product_plain"
+                android:layout_marginStart="20dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,78 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_nav_graph"
+        app:startDestination="@id/mainFragment">
+
+    <fragment
+            android:id="@+id/mainFragment"
+            android:name="com.example.doteacher.ui.home.HomeFragment"
+            tools:layout="@layout/fragment_home"
+            android:label="HomeFragment">
+        <action
+                android:id="@+id/action_mainFragment_to_productFragment"
+                app:destination="@id/productFragment" />
+        <action
+                android:id="@+id/action_mainFragment_to_galleryFragment"
+                app:destination="@id/galleryFragment" />
+        <action
+                android:id="@+id/action_mainFragment_to_chatgptFragment"
+                app:destination="@id/chatgptFragment" />
+        <action
+                android:id="@+id/action_mainFragment_to_btn_dosunsangFragment"
+                app:destination="@id/btn_dosunsangFragment" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/productFragment"
+            android:name="com.example.doteacher.ui.product.ProductFragment"
+            tools:layout="@layout/fragment_product"
+            android:label="ProductFragment">
+        <action
+                android:id="@+id/action_productFragment_to_productdetailFragment"
+                app:destination="@id/productdetailFragment">
+            <argument
+                    android:name="productData"
+                    app:argType="com.example.doteacher.data.model.ProductData" />
+        </action>
+        <action
+                android:id="@+id/action_productFragment_to_mainFragment"
+                app:destination="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/productdetailFragment"
+            android:name="com.example.doteacher.ui.product.detail.ProductDetailFragment"
+            tools:layout="@layout/fragment_product_detail"
+            android:label="ProductDetailFragment">
+    <argument
+            android:name="productData"
+            app:nullable="true"
+            android:defaultValue="@null"
+            app:argType="com.example.doteacher.data.model.ProductData" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.example.doteacher.ui.gallery.GalleryFragment"
+        tools:layout="@layout/fragment_gallery"
+            android:label="GalleryFragment">
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatgptFragment"
+        android:name="com.example.doteacher.ui.chatgpt.ChatGptFragment"
+        tools:layout="@layout/fragment_chat_gpt"
+        android:label="ChatGptFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/btn_dosunsangFragment"
+        android:name="com.example.doteacher.ui.DosunsangFragment"
+        tools:layout="@layout/fragment_dosunsang"
+        android:label="DosunsangFragment">
+    </fragment>
+
+</navigation>
