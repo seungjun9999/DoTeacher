@@ -1,13 +1,6 @@
 package com.example.doteacher.ui.product
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -16,7 +9,6 @@ import com.example.doteacher.R
 import com.example.doteacher.data.model.ProductData
 import com.example.doteacher.databinding.FragmentProductBinding
 import com.example.doteacher.ui.base.BaseFragment
-import com.example.doteacher.ui.home.HomeAdapter
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

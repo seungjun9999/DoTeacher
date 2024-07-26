@@ -1,16 +1,14 @@
 package com.example.doteacher.ui.home
 
-import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentHomeBinding
 import com.example.doteacher.ui.base.BaseFragment
+import com.example.doteacher.ui.dialog.DialogFragment
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +23,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setupRecyclerView()
         observeData()
         clickEventListener()
+        showImageSliderDialog()
     }
 
 
@@ -77,6 +76,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 }
             })
     }
+    private fun showImageSliderDialog(){
+        val dialog = DialogFragment()
+
+        dialog.show(childFragmentManager,"DialogFragment")
+    }
+
 
     private fun observeData() {
     }
