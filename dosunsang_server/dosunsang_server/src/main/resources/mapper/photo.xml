@@ -13,22 +13,10 @@
         WHERE photo_id = #{photoId}
     </select>
 
-    <select id="selectPhotosByUserId" parameterType="int" resultType="com.dosunsang.dosunsang_server.dto.PhotoDto">
+    <select id="selectAllPhotos" resultType="com.dosunsang.dosunsang_server.dto.PhotoDto">
         SELECT photo_id as photoId, file_name as fileName, description, image_url as imageUrl,
         user_id as userId, created_at as createdAt
         FROM photo
-        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
     </select>
-
-    <update id="updatePhoto" parameterType="com.dosunsang.dosunsang_server.dto.PhotoDto">
-        UPDATE photo
-        SET file_name = #{fileName},
-        description = #{description},
-        image_url = #{imageUrl}
-        WHERE photo_id = #{photoId}
-    </update>
-
-    <delete id="deletePhoto" parameterType="int">
-        DELETE FROM photo WHERE photo_id = #{photoId}
-    </delete>
 </mapper>

@@ -31,18 +31,8 @@ public class PhotoService {
         return photoDao.selectPhoto(photoId);
     }
 
-    public List<PhotoDto> findPhotosByUserId(int userId) {
+    public List<PhotoDto> findAllPhotos() {
         PhotoDao photoDao = sqlSession.getMapper(PhotoDao.class);
-        return photoDao.selectPhotosByUserId(userId);
-    }
-
-    public boolean updatePhoto(PhotoDto photo) {
-        PhotoDao photoDao = sqlSession.getMapper(PhotoDao.class);
-        return photoDao.updatePhoto(photo);
-    }
-
-    public boolean deletePhoto(int photoId) {
-        PhotoDao photoDao = sqlSession.getMapper(PhotoDao.class);
-        return photoDao.deletePhoto(photoId);
+        return photoDao.selectAllPhotos();
     }
 }
