@@ -20,6 +20,9 @@ class UserDataSourceImpl @Inject constructor(
 
     override suspend fun getUsers(): ResponseData<List<UserData>> {
         return userService.getUsers()
+    }
 
+    override suspend fun updateUserPreferences(userId: Int, preferences: List<String>): ResponseData<UserData> {
+        return userService.updateUserPreferences(userId, preferences)
     }
 }

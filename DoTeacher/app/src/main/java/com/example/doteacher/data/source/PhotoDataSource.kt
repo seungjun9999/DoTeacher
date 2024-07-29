@@ -20,5 +20,6 @@ interface PhotoDataSource {
     // 사진 다운로드
     suspend fun downloadPhoto(fileName: String): ResponseData<ResponseBody>
 
+    // 어떤 유저의 사진 정보 가져오기
     suspend fun getUserPhotos(userId: Int): ResponseData<List<PhotoData>>
 }

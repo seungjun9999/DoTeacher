@@ -24,8 +24,11 @@ class LoginViewModel @Inject constructor(
     private val _userSignUpSuccess = MutableLiveData<Boolean>()
     val userSignUpSuccess: LiveData<Boolean> get() = _userSignUpSuccess
 
+    private val _userHasPreferences = MutableLiveData<Boolean>()
+    val userHasPreferences: LiveData<Boolean> get() = _userHasPreferences
+
     fun setUserSignUpSuccess(value: Boolean){
-        _userSignUpSuccess.value =value
+        _userSignUpSuccess.value = value
     }
 
     fun signUp(userParam: UserParam) {
@@ -37,7 +40,8 @@ class LoginViewModel @Inject constructor(
                     Timber.d("signup param $userParam")
                     SingletonUtil.user = response.data.data
                     setUserSignUpSuccess(true)
-                    Timber.d("signup suc ${response.data.data}")
+                    _userHasPreferences.value = !SingletonUtil.user?.preferences.isNullOrEmpty()
+                    Timber.d("signup suc ${response.data.data}, has preferences: ${_userHasPreferences.value}")
                 }
 
                 is ResultWrapper.GenericError -> {
@@ -51,6 +55,5 @@ class LoginViewModel @Inject constructor(
                 }
             }
         }
-
     }
 }

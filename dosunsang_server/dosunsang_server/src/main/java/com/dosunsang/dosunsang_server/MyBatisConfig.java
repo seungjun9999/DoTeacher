@@ -1,6 +1,8 @@
 package com.dosunsang.dosunsang_server;
 
+import com.dosunsang.dosunsang_server.StringListTypeHandler;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandler;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -27,13 +29,18 @@ public class MyBatisConfig {
         return DataSourceBuilder.create().build();
     }
 
-
     @Bean(name = "SqlSessionFactory")
     public SqlSessionFactory SqlSessionFactory(@Qualifier("dataSource") DataSource DataSource, ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(DataSource);
         sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources(mPath));
         sqlSessionFactoryBean.setTypeAliasesPackage("com.dosunsang.dosunsang_server.dto");
+
+        // TypeHandler 등록
+        sqlSessionFactoryBean.setTypeHandlers(new TypeHandler[]{
+                new StringListTypeHandler()
+        });
+
         return sqlSessionFactoryBean.getObject();
     }
 
@@ -41,5 +48,4 @@ public class MyBatisConfig {
     public SqlSessionTemplate SqlSessionTemplate(@Qualifier("SqlSessionFactory") SqlSessionFactory firstSqlSessionFactory) {
         return new SqlSessionTemplate(firstSqlSessionFactory);
     }
-
 }

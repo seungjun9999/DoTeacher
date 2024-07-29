@@ -7,7 +7,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentGalleryBinding
 import com.example.doteacher.ui.base.BaseFragment
-import com.example.doteacher.ui.gallery.viewmodel.GalleryAdapter
 import com.example.doteacher.ui.gallery.viewmodel.GalleryViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,12 +36,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     }
 
     private fun loadUserPhotos() {
-        SingletonUtil.user?.let { user ->
-            galleryViewModel.getUserPhotos(user.id)
-        } ?: run {
-            Timber.e("User data is null")
-            // 사용자 데이터가 없는 경우에 대한 처리 (예: 에러 메시지 표시)
-        }
+        SingletonUtil.user?.id?.let { galleryViewModel.getUserPhotos(it) }
     }
 
     private fun clickEventListener() {

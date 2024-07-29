@@ -3,6 +3,7 @@ package com.example.doteacher.ui.login
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
@@ -14,6 +15,7 @@ import com.example.doteacher.data.model.param.UserParam
 import com.example.doteacher.databinding.ActivityLoginBinding
 import com.example.doteacher.ui.base.BaseActivity
 import com.example.doteacher.ui.main.MainActivity
+import com.example.doteacher.ui.preference.PreferenceActivity
 import com.example.doteacher.ui.util.initGoActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -66,7 +68,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                                     userEmail = task.result.user?.email.toString(),
                                                     userName = task.result.user?.displayName.toString(),
                                                     userImage = task.result.user?.photoUrl.toString()
-
                                                 )
                                             )
                                         } ?: Timber.e("FirebaseIdToken is null.")
@@ -91,6 +92,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         clickGoogleLoginBtn()
         clickGuestLoginBtn()
         observeSignUpSuccess()
+        observeUserPreferences()
         setupLoadingAnimation()
     }
 
@@ -111,7 +113,34 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private fun hideLoading() {
         binding.loadingVisible = false
         rotateAnimation.cancel()
+
     }
+
+    private fun observeSignUpSuccess() {
+        loginViewModel.userSignUpSuccess.observe(this) {
+            if (it) {
+                hideLoading()
+                // 사용자 취향 여부에 따라 다른 화면으로 이동하는 로직은
+                // observeUserPreferences()에서 처리합니다.
+            } else {
+                hideLoading()
+                Toast.makeText(this, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            binding.loadingVisible = false
+        }
+    }
+
+    private fun observeUserPreferences() {
+        loginViewModel.userHasPreferences.observe(this) { hasPreferences ->
+            if (hasPreferences) {
+                startActivity(Intent(this, MainActivity::class.java))
+            } else {
+                startActivity(Intent(this, PreferenceActivity::class.java))
+            }
+            finish()
+        }
+    }
+
 
 
     private fun initGoogleLogin() {
@@ -144,18 +173,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         }
     }
 
-    private fun observeSignUpSuccess() {
-        loginViewModel.userSignUpSuccess.observe(this) {
-            if (it) {
-                hideLoading()
-                initGoActivity(this, MainActivity::class.java)
-            }else{
-                hideLoading()
-                Toast.makeText(this, "잠시후 다시 시도해주세요.",Toast.LENGTH_SHORT).show()
-            }
-            binding.loadingVisible = false
-        }
-    }
 
     private fun clickGoogleLoginBtn() {
         binding.googlelogin.setOnClickListener {

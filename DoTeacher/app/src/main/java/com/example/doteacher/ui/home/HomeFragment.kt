@@ -52,6 +52,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.btnDosunsang.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_mainFragment_to_btn_dosunsangFragment)
         }
+
+        binding.tvMenuPreference.setOnClickListener {
+           view?.findNavController()?.navigate(R.id.action_mainFragment_to_preferenceActivity)
+        }
     }
 
     private fun setupRecyclerView() {

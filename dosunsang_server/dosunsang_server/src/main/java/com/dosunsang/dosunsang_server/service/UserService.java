@@ -1,6 +1,5 @@
 package com.dosunsang.dosunsang_server.service;
 
-
 import com.dosunsang.dosunsang_server.dao.UserDao;
 import com.dosunsang.dosunsang_server.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
@@ -39,4 +38,8 @@ public class UserService {
         return userDao.selectUserId(userId);
     }
 
+    public boolean updateUserPreferences(int userId, List<String> preferences) {
+        UserDao userDao = sqlSession.getMapper(UserDao.class);
+        return userDao.updateUserPreferences(userId, preferences);
+    }
 }

@@ -14,4 +14,7 @@ interface UserDataSource {
 
     //유저 전체 정보
     suspend fun getUsers() : ResponseData<List<UserData>>
+
+    //유저 취향 업데이트
+    suspend fun updateUserPreferences(userId: Int, preferences: List<String>): ResponseData<UserData>
 }

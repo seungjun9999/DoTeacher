@@ -1,4 +1,4 @@
-package com.example.doteacher.ui.gallery.viewmodel
+package com.example.doteacher.ui.gallery
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -28,7 +28,7 @@ class GalleryAdapter() :
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: GalleryAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
             onItemClick?.let {
