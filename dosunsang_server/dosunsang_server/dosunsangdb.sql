@@ -5,16 +5,45 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `dosunsangdb` DEFAULT CHARACTER SET utf8 ;
 USE `dosunsangdb` ;
 
+-- 기존 테이블 삭제
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS photo;
 
+-- user 테이블 생성
 CREATE TABLE IF NOT EXISTS `user` (
-	`id` int auto_increment NOT NULL,
+    `id` int auto_increment NOT NULL,
     `useremail` VARCHAR(50) NOT NULL,
     `username` VARCHAR(16) NOT NULL,
     `userImage` VARCHAR(200) NOT NULL,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
+-- photo 테이블 생성
+CREATE TABLE IF NOT EXISTS `photo` (
+    `photo_id` INT AUTO_INCREMENT NOT NULL,
+    `file_name` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `image_url` VARCHAR(2083) NOT NULL,
+    `user_id` INT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`photo_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+-- 인덱스 추가
+CREATE INDEX `idx_user_id` ON `photo` (`user_id`);
 
-select * from dosunsangdb.user;
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- 테이블 생성 확인
+SHOW TABLES;
+
+-- 테이블 구조 확인
+DESCRIBE `user`;
+DESCRIBE `photo`;
+
+-- 데이터 확인 (선택사항)
+SELECT * FROM dosunsangdb.user;
+SELECT * FROM dosunsangdb.photo;

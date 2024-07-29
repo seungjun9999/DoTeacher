@@ -1,29 +1,40 @@
 package com.example.doteacher.ui.gallery
 
 import android.graphics.Color
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentGalleryBinding
 import com.example.doteacher.ui.base.BaseFragment
+import com.example.doteacher.ui.gallery.viewmodel.GalleryAdapter
+import com.example.doteacher.ui.gallery.viewmodel.GalleryViewModel
 import com.example.doteacher.ui.util.SingletonUtil
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
+@AndroidEntryPoint
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {
-
+    private val galleryViewModel : GalleryViewModel by viewModels()
+    private lateinit var galleryAdapter : GalleryAdapter
     private var isPhotoListActive = true
 
-    override fun initView() {
-        intitData()
-        clickEventListener()
+    override fun onResume() {
+        super.onResume()
+        initData()
+        initAdapter()
     }
 
-    private fun intitData(){
+    override fun initView() {
+        initData()
+        clickEventListener()
+        observePhotoData()
+    }
+
+    private fun initData(){
         binding.userData = SingletonUtil.user
+        galleryViewModel.getAllPhotos()
     }
 
     private fun clickEventListener(){
@@ -44,6 +55,25 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
         } else {
             binding.bottomSheetLayout.btnPhotoList.background = null
             binding.bottomSheetLayout.btnPhotoList.setTextColor(Color.parseColor("#88878a"))
+        }
+    }
+
+    private fun initAdapter(){
+        galleryAdapter = GalleryAdapter()
+        binding.bottomSheetLayout.rvMyphotoList.adapter = galleryAdapter
+
+        galleryAdapter.setOnItemClickListener { photoData ->
+            this@GalleryFragment.findNavController().navigate(
+                R.id.action_galleryFragment_to_photodetailFragment,
+                bundleOf("photoData" to photoData)
+            )
+        }
+    }
+
+    private fun observePhotoData(){
+        galleryViewModel.userPhotos.observe(viewLifecycleOwner){
+            Timber.d("Observed photos: ${it.size}")
+            galleryAdapter.submitList(it)
         }
     }
 }

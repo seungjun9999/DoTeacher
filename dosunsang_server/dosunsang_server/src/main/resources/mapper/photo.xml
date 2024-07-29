@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dosunsang.dosunsang_server.dao.PhotoDao">
+    <insert id="insertPhoto" parameterType="com.dosunsang.dosunsang_server.dto.PhotoDto">
+        INSERT INTO photo (file_name, description, image_url, user_id)
+        VALUES (#{fileName}, #{description}, #{imageUrl}, #{userId})
+    </insert>
+
+    <select id="selectPhoto" parameterType="int" resultType="com.dosunsang.dosunsang_server.dto.PhotoDto">
+        SELECT photo_id as photoId, file_name as fileName, description, image_url as imageUrl,
+        user_id as userId, created_at as createdAt
+        FROM photo
+        WHERE photo_id = #{photoId}
+    </select>
+
+    <select id="selectAllPhotos" resultType="com.dosunsang.dosunsang_server.dto.PhotoDto">
+        SELECT photo_id as photoId, file_name as fileName, description, image_url as imageUrl,
+        user_id as userId, created_at as createdAt
+        FROM photo
+        ORDER BY created_at DESC
+    </select>
+</mapper>
