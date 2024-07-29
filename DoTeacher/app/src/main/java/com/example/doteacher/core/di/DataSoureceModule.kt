@@ -1,5 +1,7 @@
 package com.example.doteacher.core.di
 
+import com.example.doteacher.data.source.GptDataSource
+import com.example.doteacher.data.source.GptDataSourceImpl
 import com.example.doteacher.data.source.PhotoDataSource
 import com.example.doteacher.data.source.PhotoDataSourceImpl
 import com.example.doteacher.data.source.UserDataSource
@@ -26,4 +28,11 @@ interface DataSoureceModule {
     fun providePhotoDataSource(
         photoDataSourceImpl: PhotoDataSourceImpl
     ): PhotoDataSource
+
+
+    @Singleton
+    @Binds
+    fun provideGptDataSource(
+        gptDataSourceImpl: GptDataSourceImpl
+    ): GptDataSource
 }

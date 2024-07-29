@@ -31,4 +31,8 @@ class PhotoDataSourceImpl @Inject constructor(
         return photoService.downloadPhoto(fileName)
     }
 
+    override suspend fun getUserPhotos(userId: Int): ResponseData<List<PhotoData>> {
+        return photoService.getUserPhotos(userId)
+    }
+
 }

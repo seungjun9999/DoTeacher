@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.doteacher.data.model.PhotoData
 import com.example.doteacher.data.source.PhotoDataSource
+import com.example.doteacher.ui.util.SingletonUtil
 import com.example.doteacher.ui.util.server.ResultWrapper
 import com.example.doteacher.ui.util.server.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,23 +31,43 @@ class GalleryViewModel @Inject constructor(
         }
     }
     init {
-        getAllPhotos()
+//        getAllPhotos()
+        SingletonUtil.user?.let { getUserPhotos(it.id) }
     }
 
-    fun getAllPhotos() {
+//    fun getAllPhotos() {
+//        viewModelScope.launch {
+//            when (val response = safeApiCall(Dispatchers.IO) {
+//                photoDataSource.getAllPhotos()
+//            }) {
+//                is ResultWrapper.Success -> {
+//                    setPhotos(response.data.data)
+//                    Timber.d("사진 조회 성공 ${response.data.data}")
+//                }
+//                is ResultWrapper.GenericError -> {
+//                    Timber.d("사진 조회 에러 ${response.message}")
+//                }
+//                is ResultWrapper.NetworkError -> {
+//                    Timber.d("사진 조회 네트워크 에러")
+//                }
+//            }
+//        }
+//    }
+
+    fun getUserPhotos(userId: Int) {
         viewModelScope.launch {
             when (val response = safeApiCall(Dispatchers.IO) {
-                photoDataSource.getAllPhotos()
+                photoDataSource.getUserPhotos(userId)
             }) {
                 is ResultWrapper.Success -> {
                     setPhotos(response.data.data)
-                    Timber.d("사진 조회 성공 ${response.data.data}")
+                    Timber.d("사용자 사진 조회 성공 ${response.data.data}")
                 }
                 is ResultWrapper.GenericError -> {
-                    Timber.d("사진 조회 에러 ${response.message}")
+                    Timber.d("사용자 사진 조회 에러 ${response.message}")
                 }
                 is ResultWrapper.NetworkError -> {
-                    Timber.d("사진 조회 네트워크 에러")
+                    Timber.d("사용자 사진 조회 네트워크 에러")
                 }
             }
         }

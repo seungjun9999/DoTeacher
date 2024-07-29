@@ -19,4 +19,12 @@
         FROM photo
         ORDER BY created_at DESC
     </select>
+
+    <select id="selectPhotosByUserId" parameterType="int" resultType="com.dosunsang.dosunsang_server.dto.PhotoDto">
+        SELECT photo_id as photoId, file_name as fileName, description, image_url as imageUrl,
+        user_id as userId, created_at as createdAt
+        FROM photo
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
 </mapper>

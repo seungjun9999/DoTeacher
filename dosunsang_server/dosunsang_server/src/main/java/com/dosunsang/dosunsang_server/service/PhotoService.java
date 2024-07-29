@@ -35,4 +35,9 @@ public class PhotoService {
         PhotoDao photoDao = sqlSession.getMapper(PhotoDao.class);
         return photoDao.selectAllPhotos();
     }
+
+    public List<PhotoDto> findPhotosByUserId(int userId) {
+        PhotoDao photoDao = sqlSession.getMapper(PhotoDao.class);
+        return photoDao.selectPhotosByUserId(userId);
+    }
 }

@@ -10,4 +10,5 @@ public interface PhotoDao {
     boolean insertPhoto(PhotoDto photo);
     PhotoDto selectPhoto(int photoId);
     List<PhotoDto> selectAllPhotos();
+    List<PhotoDto> selectPhotosByUserId(int userId);
 }

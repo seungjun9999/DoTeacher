@@ -74,6 +74,15 @@ public class PhotoController {
             return ResultDto.res(HttpStatus.BAD_REQUEST, "실패");
         }
     }
+    @GetMapping("/photos/{userId}")
+    public ResultDto<List<PhotoDto>> getUserPhotos(@PathVariable int userId) {
+        try {
+            List<PhotoDto> photos = photoService.findPhotosByUserId(userId);
+            return ResultDto.res(HttpStatus.OK, "성공", photos);
+        } catch (Exception e) {
+            return ResultDto.res(HttpStatus.BAD_REQUEST, "실패: " + e.getMessage());
+        }
+    }
 
     @GetMapping(path = "/photo/download/{fileName}")
     @Operation(summary = "사진 다운로드", description = "사진을 다운로드 합니다")

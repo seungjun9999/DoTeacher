@@ -26,6 +26,9 @@ interface PhotoService {
         @Path("photoId") photoId: Int
     ): ResponseData<PhotoData>
 
+    @GET("photos/{userId}")
+    suspend fun getUserPhotos(@Path("userId") userId: Int): ResponseData<List<PhotoData>>
+
     @GET("photos")
     suspend fun getAllPhotos(): ResponseData<List<PhotoData>>
 

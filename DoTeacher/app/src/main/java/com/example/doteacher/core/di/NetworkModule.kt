@@ -14,6 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -25,8 +26,13 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class BaseRetrofit
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class GptRetrofit
+
     @Singleton
     @Provides
+    @Named("LoggingInterceptor")
     fun provideLoggingInterceptor(): Interceptor {
         return HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -35,12 +41,31 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: Interceptor): OkHttpClient {
+    @Named("AuthInterceptor")
+    fun provideInterceptor(): Interceptor =
+        Interceptor { chain ->
+            with(chain) {
+                val newRequest = request().newBuilder()
+                    .addHeader("Authorization", "Bearer ${SingletonUtil.chatGptApi}")
+                    .addHeader("Content-Type", "application/json")
+                    .build()
+
+                proceed(newRequest)
+            }
+        }
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(
+        @Named("LoggingInterceptor") loggingInterceptor: Interceptor,
+        @Named("AuthInterceptor") authInterceptor: Interceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
             .build()
     }
 
@@ -52,6 +77,18 @@ object NetworkModule {
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .baseUrl(SingletonUtil.baseUrl)
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    @GptRetrofit
+    fun provideGptRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+            .baseUrl(SingletonUtil.gptUrl)
             .client(okHttpClient)
             .build()
     }

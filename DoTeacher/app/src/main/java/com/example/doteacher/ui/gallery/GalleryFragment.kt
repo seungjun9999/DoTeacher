@@ -13,11 +13,10 @@ import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-
 @AndroidEntryPoint
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {
-    private val galleryViewModel : GalleryViewModel by viewModels()
-    private lateinit var galleryAdapter : GalleryAdapter
+    private val galleryViewModel: GalleryViewModel by viewModels()
+    private lateinit var galleryAdapter: GalleryAdapter
     private var isPhotoListActive = true
 
     override fun onResume() {
@@ -32,12 +31,21 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
         observePhotoData()
     }
 
-    private fun initData(){
+    private fun initData() {
         binding.userData = SingletonUtil.user
-        galleryViewModel.getAllPhotos()
+        loadUserPhotos()
     }
 
-    private fun clickEventListener(){
+    private fun loadUserPhotos() {
+        SingletonUtil.user?.let { user ->
+            galleryViewModel.getUserPhotos(user.id)
+        } ?: run {
+            Timber.e("User data is null")
+            // 사용자 데이터가 없는 경우에 대한 처리 (예: 에러 메시지 표시)
+        }
+    }
+
+    private fun clickEventListener() {
         binding.btnReturnHome.setOnClickListener {
             this.findNavController().popBackStack()
         }
@@ -46,7 +54,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
         }
     }
 
-    private fun togglePhotoListBtn(){
+    private fun togglePhotoListBtn() {
         isPhotoListActive = !isPhotoListActive
 
         if (isPhotoListActive) {
@@ -58,7 +66,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
         }
     }
 
-    private fun initAdapter(){
+    private fun initAdapter() {
         galleryAdapter = GalleryAdapter()
         binding.bottomSheetLayout.rvMyphotoList.adapter = galleryAdapter
 
@@ -70,10 +78,10 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
         }
     }
 
-    private fun observePhotoData(){
-        galleryViewModel.userPhotos.observe(viewLifecycleOwner){
-            Timber.d("Observed photos: ${it.size}")
-            galleryAdapter.submitList(it)
+    private fun observePhotoData() {
+        galleryViewModel.userPhotos.observe(viewLifecycleOwner) { photos ->
+            Timber.d("Observed photos: ${photos.size}")
+            galleryAdapter.submitList(photos)
         }
     }
 }
