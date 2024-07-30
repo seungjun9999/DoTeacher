@@ -1,5 +1,6 @@
 package com.example.doteacher.ui.chatgpt.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.doteacher.data.model.param.GptParam
@@ -10,21 +11,26 @@ import com.example.doteacher.ui.util.SingleLiveEvent
 import com.example.doteacher.ui.util.server.ResultWrapper
 import com.example.doteacher.ui.util.server.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hustle.com.util.custom.ListLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-
 
 @HiltViewModel
 class ChatGptViewModel @Inject constructor(
     private val gptDataSource: GptDataSource
 ) : ViewModel(){
 
-    val gptData = ListLiveData<GptMessageItem>()
+    private val _gptData = MutableLiveData<List<GptMessageItem>>(emptyList())
+    val gptData: MutableLiveData<List<GptMessageItem>> = _gptData
 
     val gptDataSuccess = SingleLiveEvent<Boolean>()
+
+    fun addUserMessage(message: String) {
+        val currentList = _gptData.value.orEmpty().toMutableList()
+        currentList.add(GptMessageItem("user", message))
+        _gptData.value = currentList
+    }
 
     fun sendChat(answer: String) {
         viewModelScope.launch {
@@ -74,9 +80,12 @@ class ChatGptViewModel @Inject constructor(
                 )
             }) {
                 is ResultWrapper.Success -> {
-                    gptData.addAll(response.data.choices.map {
+                    val currentList = _gptData.value?.toMutableList() ?: mutableListOf()
+                    currentList.addAll(response.data.choices.map {
                         it.toGptMessageItem()
                     })
+
+                    gptData.value = currentList
                     gptDataSuccess.value = true
                     Timber.d("gpt 전송 성공! ${response.data}")
                 }

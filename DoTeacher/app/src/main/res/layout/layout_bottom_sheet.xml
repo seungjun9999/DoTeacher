@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="565dp"
+            android:layout_height="575dp"
             app:behavior_peekHeight="430dp"
             app:behavior_hideable="false"
             app:behavior_expandedOffset="0dp"
