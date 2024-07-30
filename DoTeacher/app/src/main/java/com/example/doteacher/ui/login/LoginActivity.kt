@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
@@ -37,8 +38,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
-    private lateinit var idToken: String
+    private  var idToken: String? = null
     private lateinit var rotateAnimation: ObjectAnimator
+    private lateinit var pref : SharedPreferences
 
     private val oneTapClientResult =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -58,16 +60,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                 Firebase.auth.currentUser?.getIdToken(true)?.addOnCompleteListener { idTokenTask ->
                                     if (idTokenTask.isSuccessful) {
                                         idTokenTask.result?.token?.let { token ->
-                                            Timber.d("이메일 ${task.result.user?.email.toString()}")
-                                            Timber.d("이름 ${task.result.user?.displayName.toString()}")
-                                            Timber.d("사진 ${task.result.user?.photoUrl}")
+                                            Timber.d("email이메일 ${task.result.user?.email.toString()}")
+                                            Timber.d("name이름 ${task.result.user?.displayName.toString()}")
+                                            Timber.d("phot사진 ${task.result.user?.photoUrl}")
                                             idToken = token
                                             binding.loadingVisible = true
                                             loginViewModel.signUp(
                                                 UserParam(
                                                     userEmail = task.result.user?.email.toString(),
                                                     userName = task.result.user?.displayName.toString(),
-                                                    userImage = task.result.user?.photoUrl.toString()
+                                                    userImage = task.result.user?.photoUrl.toString(),
+                                                    idToken = idToken!!
                                                 )
                                             )
                                         } ?: Timber.e("FirebaseIdToken is null.")
@@ -88,12 +91,36 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         }
 
     override fun init() {
+        pref= getSharedPreferences("userToken", MODE_PRIVATE)
+        setupLoadingAnimation()
         initGoogleLogin()
+        checkAutoLogin()
+        observeNavigation()
         clickGoogleLoginBtn()
         clickGuestLoginBtn()
         observeSignUpSuccess()
         observeUserPreferences()
-        setupLoadingAnimation()
+
+    }
+
+    private fun observeNavigation() {
+        loginViewModel.navigateToMain.observe(this) { shouldNavigateToMain ->
+            if (shouldNavigateToMain) {
+                startActivity(Intent(this, MainActivity::class.java))
+            } else {
+                startActivity(Intent(this, PreferenceActivity::class.java))
+            }
+            finish()
+        }
+    }
+
+    private fun checkAutoLogin(){
+        pref.getString("userToken","")?.let { token ->
+            if(token.isNotEmpty()){
+                showLoading()
+                loginViewModel.checkUser(token)
+            }
+        }
     }
 
     @SuppressLint("Recycle")
@@ -117,11 +144,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     }
 
     private fun observeSignUpSuccess() {
-        loginViewModel.userSignUpSuccess.observe(this) {
-            if (it) {
+        loginViewModel.userSignUpSuccess.observe(this) { user ->
+            if (user != null) {
                 hideLoading()
-                // 사용자 취향 여부에 따라 다른 화면으로 이동하는 로직은
-                // observeUserPreferences()에서 처리합니다.
+                idToken?.let { token ->
+                    pref.edit().putString("userToken", token).apply()
+                }
             } else {
                 hideLoading()
                 Toast.makeText(this, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
@@ -167,7 +195,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 UserParam(
                     userEmail = "guest",
                     userName = "게스트",
-                    userImage = null.toString()
+                    userImage = null.toString(),
+                    null,
+                    ""
                 )
             initGoActivity(this, MainActivity::class.java)
         }

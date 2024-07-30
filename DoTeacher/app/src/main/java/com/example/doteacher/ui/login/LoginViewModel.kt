@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.model.param.UserParam
 import com.example.doteacher.data.source.UserDataSource
 import com.example.doteacher.ui.util.SingletonUtil
@@ -21,15 +22,14 @@ class LoginViewModel @Inject constructor(
     private val userDataSource: UserDataSource
 ) : ViewModel() {
 
-    private val _userSignUpSuccess = MutableLiveData<Boolean>()
-    val userSignUpSuccess: LiveData<Boolean> get() = _userSignUpSuccess
+    private val _navigateToMain = MutableLiveData<Boolean>()
+    val navigateToMain: LiveData<Boolean> = _navigateToMain
+
+    private val _userSignUpSuccess = MutableLiveData<UserData?>()
+    val userSignUpSuccess: LiveData<UserData?> = _userSignUpSuccess
 
     private val _userHasPreferences = MutableLiveData<Boolean>()
-    val userHasPreferences: LiveData<Boolean> get() = _userHasPreferences
-
-    fun setUserSignUpSuccess(value: Boolean){
-        _userSignUpSuccess.value = value
-    }
+    val userHasPreferences: LiveData<Boolean> = _userHasPreferences
 
     fun signUp(userParam: UserParam) {
         viewModelScope.launch {
@@ -37,23 +37,41 @@ class LoginViewModel @Inject constructor(
                 userDataSource.signUp(userParam)
             }) {
                 is ResultWrapper.Success -> {
-                    Timber.d("signup param $userParam")
-                    SingletonUtil.user = response.data.data
-                    setUserSignUpSuccess(true)
-                    _userHasPreferences.value = !SingletonUtil.user?.preferences.isNullOrEmpty()
-                    Timber.d("signup suc ${response.data.data}, has preferences: ${_userHasPreferences.value}")
+                    Timber.d("signup success ${response.data.data}")
+                    SingletonUtil.user  = response.data.data
+                    _userSignUpSuccess.value = response.data.data
                 }
-
-                is ResultWrapper.GenericError -> {
-                    setUserSignUpSuccess(false)
-                    Timber.d("signup error ${response.message}")
-                }
-
-                is ResultWrapper.NetworkError -> {
-                    setUserSignUpSuccess(false)
-                    Timber.d("signup network error")
+                else -> {
+                    _userSignUpSuccess.value = null
+                    Timber.d("signup failed")
                 }
             }
         }
+    }
+
+    fun checkUser(token: String) {
+        viewModelScope.launch {
+            when (val response = safeApiCall(Dispatchers.IO) {
+                userDataSource.getUserByIdToken(token)
+            }) {
+                is ResultWrapper.Success -> {
+                    response.data.data?.let { user ->
+                        SingletonUtil.user = user
+                        _userSignUpSuccess.value = user
+                        checkUserPreferences(user)
+                    }
+                }
+                else -> {
+                    _userSignUpSuccess.value = null
+                    Timber.d("Failed to get user by token")
+                }
+            }
+        }
+    }
+
+    fun checkUserPreferences(user: UserData) {
+        val hasPreferences = !user.preferences.isNullOrEmpty()
+        _userHasPreferences.value = hasPreferences
+        _navigateToMain.value = hasPreferences
     }
 }

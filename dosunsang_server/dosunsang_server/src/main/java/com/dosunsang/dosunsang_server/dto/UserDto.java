@@ -17,4 +17,5 @@ public class UserDto {
     public String userName;
     public String userImage;
     public List<String> preferences;
+    public String idToken;
 }

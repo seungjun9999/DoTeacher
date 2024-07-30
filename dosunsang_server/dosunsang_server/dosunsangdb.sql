@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     `useremail` VARCHAR(50) NOT NULL,
     `username` VARCHAR(16) NOT NULL,
     `userImage` VARCHAR(200) NOT NULL,
+
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 

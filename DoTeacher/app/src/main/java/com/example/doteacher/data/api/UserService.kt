@@ -25,4 +25,9 @@ interface UserService {
         @Path("userId") userId: Int,
         @Body preferences: List<String>
     ): ResponseData<UserData>
+
+    @GET("user-check")
+    suspend fun getUserByIdToken(
+        @Query("idToken") idToken : String
+    ) : ResponseData<UserData>
 }

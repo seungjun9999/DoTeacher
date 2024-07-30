@@ -42,4 +42,9 @@ public class UserService {
         UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.updateUserPreferences(userId, preferences);
     }
+
+    public UserDto findUserByIdToken(String idToken){
+        UserDao userDao = sqlSession.getMapper(UserDao.class);
+        return userDao.checkUser(idToken);
+    }
 }

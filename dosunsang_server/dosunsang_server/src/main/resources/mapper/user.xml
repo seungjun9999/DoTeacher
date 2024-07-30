@@ -3,8 +3,8 @@
 <mapper namespace="com.dosunsang.dosunsang_server.dao.UserDao">
 
     <insert id="insertUser" parameterType="UserDto" useGeneratedKeys="true" keyProperty="id">
-        insert into user (id, useremail, username, userImage, preferences)
-        values (0, #{userEmail}, #{userName}, #{userImage}, #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler})
+        insert into user (id, useremail, username, userImage, preferences, idtoken)
+        values (0, #{userEmail}, #{userName}, #{userImage}, #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler}, #{idToken})
     </insert>
 
     <select id="selectUser" parameterType="string" resultType="UserDto">
@@ -12,6 +12,13 @@
         preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
         from user
         where useremail = #{userEmail}
+    </select>
+
+    <select id="checkUser" parameterType="string" resultType="UserDto">
+        select id, useremail, username, userImage,
+        preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
+        from user
+        where idtoken = #{idToken}
     </select>
 
     <select id="selectUsers" resultType="userDto">

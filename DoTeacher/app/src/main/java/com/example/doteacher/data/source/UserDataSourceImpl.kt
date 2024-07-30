@@ -25,4 +25,8 @@ class UserDataSourceImpl @Inject constructor(
     override suspend fun updateUserPreferences(userId: Int, preferences: List<String>): ResponseData<UserData> {
         return userService.updateUserPreferences(userId, preferences)
     }
+
+    override suspend fun getUserByIdToken(idToken: String): ResponseData<UserData> {
+        return userService.getUserByIdToken(idToken)
+    }
 }

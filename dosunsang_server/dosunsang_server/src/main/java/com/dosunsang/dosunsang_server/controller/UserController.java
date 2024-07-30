@@ -68,5 +68,16 @@ public class UserController {
     }
 
 
+    @GetMapping("/user-check")
+    @Operation(summary = "유저 idToken 조회", description = "유저의 정보를 idToken 값으로 조회합니다.")
+    public ResultDto<UserDto> getFindUserByIdToken(@RequestParam(value="idToken") String idToken) {
+        try {
+            UserDto userDto = userService.findUserByIdToken(idToken);
+            return ResultDto.res(HttpStatus.OK, "성공", userDto);
+        } catch (Exception e) {
+            return ResultDto.res(HttpStatus.BAD_REQUEST, "실패");
+        }
+    }
+
 
 }
