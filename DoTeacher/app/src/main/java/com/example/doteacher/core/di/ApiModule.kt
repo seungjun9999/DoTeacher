@@ -1,6 +1,7 @@
 package com.example.doteacher.core.di
 
 import com.example.doteacher.data.api.GptService
+import com.example.doteacher.data.api.ProductService
 import com.example.doteacher.data.api.UserService
 import dagger.Module
 import dagger.Provides
@@ -24,5 +25,12 @@ object ApiModule {
     fun provideGptService(
         @NetworkModule.GptRetrofit retrofit : Retrofit
     ) : GptService = retrofit.create(GptService::class.java)
+
+
+    @Singleton
+    @Provides
+    fun provideProductService(
+        @NetworkModule.BaseRetrofit retrofit: Retrofit
+    ) : ProductService = retrofit.create(ProductService::class.java)
 
 }

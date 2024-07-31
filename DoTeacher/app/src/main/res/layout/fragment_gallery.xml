@@ -127,7 +127,7 @@
                 android:id="@+id/constraintLayout">
 
             <TextView
-                    android:id="@+id/tv_phtos_cnt"
+                    android:id="@+id/tv_photo_cnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10"
@@ -142,7 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Photos"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_phtos_cnt"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_photo_cnt"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:textColor="@color/white"

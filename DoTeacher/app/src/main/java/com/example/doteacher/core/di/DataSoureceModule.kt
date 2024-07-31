@@ -4,6 +4,8 @@ import com.example.doteacher.data.source.GptDataSource
 import com.example.doteacher.data.source.GptDataSourceImpl
 import com.example.doteacher.data.source.PhotoDataSource
 import com.example.doteacher.data.source.PhotoDataSourceImpl
+import com.example.doteacher.data.source.ProductDataSource
+import com.example.doteacher.data.source.ProductDataSourceImpl
 import com.example.doteacher.data.source.UserDataSource
 import com.example.doteacher.data.source.UserDataSourceImpl
 import dagger.Binds
@@ -35,4 +37,11 @@ interface DataSoureceModule {
     fun provideGptDataSource(
         gptDataSourceImpl: GptDataSourceImpl
     ): GptDataSource
+
+
+    @Singleton
+    @Binds
+    fun provideProductDataSource(
+        productDataSourceImpl: ProductDataSourceImpl
+    ) : ProductDataSource
 }

@@ -9,6 +9,7 @@ import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentHomeBinding
 import com.example.doteacher.ui.base.BaseFragment
 import com.example.doteacher.ui.dialog.DialogFragment
+import com.example.doteacher.ui.home.viewmodel.HomeViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,16 +21,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun initView() {
         initData()
         setupOnBackPressed()
-        setupRecyclerView()
         observeData()
         clickEventListener()
         showImageSliderDialog()
+        initAdapter()
     }
 
 
     override fun onResume() {
         super.onResume()
         initData()
+        homeViewModel.getRandomProducts()
     }
 
     private fun initData() {
@@ -56,14 +58,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.tvMenuPreference.setOnClickListener {
            view?.findNavController()?.navigate(R.id.action_mainFragment_to_preferenceActivity)
         }
+        binding.tvMenuProfile.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_mainFragment_to_profileFragment)
+        }
+        binding.imgProfile.setOnClickListener{
+            view?.findNavController()?.navigate(R.id.action_mainFragment_to_profileFragment)
+        }
     }
 
-    private fun setupRecyclerView() {
+    private fun initAdapter() {
         homeAdapter = HomeAdapter()
         binding.productRecycle.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = homeAdapter
         }
+        homeViewModel.getRandomProducts()
     }
 
     private fun setupOnBackPressed() {
@@ -88,5 +97,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
 
     private fun observeData() {
+        homeViewModel.randomProducts.observe(viewLifecycleOwner) { products ->
+            homeAdapter.submitList(products)
+        }
     }
 }

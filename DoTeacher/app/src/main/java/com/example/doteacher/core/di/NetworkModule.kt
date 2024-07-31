@@ -1,6 +1,7 @@
 package com.example.doteacher.core.di
 
 import com.example.doteacher.data.api.PhotoService
+import com.example.doteacher.data.api.ProductService
 import com.example.doteacher.ui.util.SingletonUtil
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -98,4 +99,5 @@ object NetworkModule {
     fun providePhotoService(@BaseRetrofit retrofit: Retrofit): PhotoService {
         return retrofit.create(PhotoService::class.java)
     }
+
 }

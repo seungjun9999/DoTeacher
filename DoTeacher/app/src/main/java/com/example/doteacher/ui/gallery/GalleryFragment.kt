@@ -75,6 +75,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     private fun observePhotoData() {
         galleryViewModel.userPhotos.observe(viewLifecycleOwner) { photos ->
             Timber.d("Observed photos: ${photos.size}")
+            binding.tvPhotoCnt.text = photos.size.toString()
             galleryAdapter.submitList(photos)
         }
     }

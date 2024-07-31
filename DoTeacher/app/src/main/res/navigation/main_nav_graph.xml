@@ -24,6 +24,9 @@
         <action
                 android:id="@+id/action_mainFragment_to_preferenceActivity"
                 app:destination="@id/preferenceActivity" />
+        <action
+                android:id="@+id/action_mainFragment_to_profileFragment"
+                app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
@@ -48,58 +51,61 @@
             android:name="com.example.doteacher.ui.product.detail.ProductDetailFragment"
             tools:layout="@layout/fragment_product_detail"
             android:label="ProductDetailFragment">
-    <argument
-            android:name="productData"
-            app:nullable="true"
-            android:defaultValue="@null"
-            app:argType="com.example.doteacher.data.model.ProductData" />
+        <argument
+                android:name="productData"
+                app:nullable="true"
+                android:defaultValue="@null"
+                app:argType="com.example.doteacher.data.model.ProductData" />
     </fragment>
 
     <fragment
-        android:id="@+id/galleryFragment"
-        android:name="com.example.doteacher.ui.gallery.GalleryFragment"
-        tools:layout="@layout/fragment_gallery"
+            android:id="@+id/galleryFragment"
+            android:name="com.example.doteacher.ui.gallery.GalleryFragment"
+            tools:layout="@layout/fragment_gallery"
             android:label="GalleryFragment">
-
-
         <action
                 android:id="@+id/action_galleryFragment_to_photodetailFragment"
                 app:destination="@id/photodetailFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/chatgptFragment"
-        android:name="com.example.doteacher.ui.chatgpt.ChatGptFragment"
-        tools:layout="@layout/fragment_chat_gpt"
-        android:label="ChatGptFragment">
+            android:id="@+id/chatgptFragment"
+            android:name="com.example.doteacher.ui.chatgpt.ChatGptFragment"
+            tools:layout="@layout/fragment_chat_gpt"
+            android:label="ChatGptFragment"></fragment>
+
+    <fragment
+            android:id="@+id/dosunsangFragment"
+            android:name="com.example.doteacher.ui.DosunsangFragment"
+            tools:layout="@layout/fragment_dosunsang"
+            android:label="DosunsangFragment"></fragment>
+
+    <fragment
+            android:id="@+id/photodetailFragment"
+            android:name="com.example.doteacher.ui.photo.PhotoDetailFragment"
+            tools:layout="@layout/fragment_photo_detail"
+            android:label="PhotoDetailFragment">
+
     </fragment>
 
     <fragment
-        android:id="@+id/dosunsangFragment"
-        android:name="com.example.doteacher.ui.DosunsangFragment"
-        tools:layout="@layout/fragment_dosunsang"
-        android:label="DosunsangFragment">
+        android:id="@+id/profileFragment"
+        android:name="com.example.doteacher.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile"
+        android:label="ProfileFragment">
     </fragment>
-
-    <fragment
-        android:id="@+id/photodetailFragment"
-        android:name="com.example.doteacher.ui.photo.PhotoDetailFragment"
-        tools:layout="@layout/fragment_photo_detail"
-        android:label="PhotoDetailFragment">
-
-    </fragment>
-
-<activity
-    android:id="@+id/preferenceActivity"
-    android:name="com.example.doteacher.ui.preference.PreferenceActivity"
-    tools:layout="@layout/activity_preference">
-
-</activity>
 
     <activity
-        android:id="@+id/loginActivity"
-        android:name="com.example.doteacher.ui.login.LoginActivity"
-        tools:layout="@layout/activity_login">
+            android:id="@+id/preferenceActivity"
+            android:name="com.example.doteacher.ui.preference.PreferenceActivity"
+            tools:layout="@layout/activity_preference">
+
+    </activity>
+
+    <activity
+            android:id="@+id/loginActivity"
+            android:name="com.example.doteacher.ui.login.LoginActivity"
+            tools:layout="@layout/activity_login">
     </activity>
 
 
