@@ -14,7 +14,7 @@ FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
 # 빌더 이미지에서 jar 파일만 복사
-COPY --from=builder /build/build/libs/dosunsang_server-0.0.1-SNAOSHOT.jar .
+COPY --from=builder /build/build/libs/dosunsang_server-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8080
 
