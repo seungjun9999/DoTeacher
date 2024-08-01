@@ -59,10 +59,12 @@ class MotorController(Node):
             self.current_angle = min(self.steering_max, self.current_angle + self.steering_step)
         elif angular_velocity < 0:
             self.current_angle = max(self.steering_min, self.current_angle - self.steering_step)
+        else:
+            self.current_angle = self.steering_center  # 입력이 없을 때
         self.control_steering(self.current_angle)
 
     def update_drive(self, linear_velocity):
-        throttle = -linear_velocity
+        throttle = linear_velocity
         self.control_drive(throttle)
 
     def control_steering(self, angle):
@@ -78,7 +80,7 @@ class MotorController(Node):
         self.motor_hat.set_throttle(throttle)
 
     def log_status(self, linear_velocity, angular_velocity):
-        self.get_logger().info(f'Steering angle: {self.current_angle}, Throttle: {-linear_velocity}, '
+        self.get_logger().info(f'Steering angle: {self.current_angle}, Throttle: {linear_velocity}, '
                                f'Angular velocity: {angular_velocity}, Linear velocity: {linear_velocity}')
 
 def main(args=None):
