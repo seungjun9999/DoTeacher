@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @RestController
 @Slf4j
-@RequestMapping("/24")
+@RequestMapping("/gpt")
 public class ChatGptController {
 
     @Autowired
