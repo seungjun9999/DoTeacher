@@ -1,0 +1,27 @@
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: false
+    map_start_pose: [0.0, 0.0, 0.0]  # 초기 위치를 [x, y, theta] 형식으로 지정
+    # 또는
+    # map_start_at_dock: true
+    # Add other parameters as needed
+    
+    # Pose of the robot
+    base_frame: base_footprint
+    odom_frame: odom
+    map_frame: map
+
+    # Map publishing
+    publish_period_sec: 1.0
+
+    # Sensors
+    scan_topic: scan
+    scan_queue_size: 10
+
+    # SLAM
+    resolution: 0.05
+    max_laser_range: 20.0
+    minimum_time_interval: 0.5
+
+    # Optimizer settings
+    pose_graph_solver_plugin: plugin
