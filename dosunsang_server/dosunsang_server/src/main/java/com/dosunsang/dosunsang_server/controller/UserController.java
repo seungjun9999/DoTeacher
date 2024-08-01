@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{userId}/preferences")
-    @Operation(summary = "유저 취향 업데이트", description = "유저의 취향 정보를 업데이트합니다.")
+    @Operation(summary = "유저 ㅇ취향 업데이트", description = "유저의 취향 정보를 업데이트합니다.")
     public ResultDto<UserDto> updateUserPreferences(@PathVariable int userId, @RequestBody List<String> preferences) {
         try {
             boolean updated = userService.updateUserPreferences(userId, preferences);
