@@ -95,6 +95,19 @@
         android:label="ProfileFragment">
     </fragment>
 
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.example.doteacher.ui.mypage.MyPageFragment"
+        tools:layout="@layout/fragment_my_page"
+            android:label="MyPageFragment">
+        <action
+                android:id="@+id/action_mypageFragment_to_profileFragment"
+                app:destination="@id/profileFragment" />
+        <action
+                android:id="@+id/action_mypageFragment_to_preferenceActivity"
+                app:destination="@id/preferenceActivity" />
+    </fragment>
+
     <activity
             android:id="@+id/preferenceActivity"
             android:name="com.example.doteacher.ui.preference.PreferenceActivity"

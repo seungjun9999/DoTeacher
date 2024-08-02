@@ -40,9 +40,6 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     }
 
     private fun clickEventListener() {
-        binding.btnReturnHome.setOnClickListener {
-            this.findNavController().popBackStack()
-        }
         binding.bottomSheetLayout.btnPhotoList.setOnClickListener {
             togglePhotoListBtn()
         }

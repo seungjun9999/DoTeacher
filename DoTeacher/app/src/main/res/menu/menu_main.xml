@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/mainFragment"
+            android:title="홈"
+            android:icon="@drawable/menu_home">
+    </item>
+
+
+    <item
+            android:id="@+id/chatgptFragment"
+            android:title="채팅"
+            android:icon="@drawable/chat">
+    </item>
+    <item
+        android:id="@+id/dosunsangFragment"
+        android:title="도선생"
+        android:icon="@drawable/robot_wifi">
+    </item>
+
+
+
+    <item
+            android:id="@+id/galleryFragment"
+            android:title="갤러리"
+            android:icon="@drawable/gallery">
+    </item>
+
+    <item
+            android:id="@+id/mypageFragment"
+            android:title="더보기"
+            android:icon="@drawable/morebogi">
+    </item>
+
+</menu>
