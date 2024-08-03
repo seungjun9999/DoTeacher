@@ -25,4 +25,7 @@ interface UserService {
         @Path("userId") userId: Int,
         @Body preferences: List<String>
     ): ResponseData<UserData>
+
+    @PUT("user/{userId}/tuto")
+    suspend fun updateUserTuto(@Path("userId") userId: Int, @Query("userTuto") userTuto: Boolean): ResponseData<UserData>
 }

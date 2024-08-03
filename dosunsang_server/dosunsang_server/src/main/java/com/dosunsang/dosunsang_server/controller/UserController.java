@@ -29,30 +29,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user")
-    @Operation(summary = "유저 조회", description = "유저의 정보를 조회합니다.")
-    public ResultDto<UserDto> getUser(@RequestParam(value="userEmail") String userEmail) {
-        try {
-            UserDto userDto = userService.findUser(userEmail);
-            return ResultDto.res(HttpStatus.OK, "성공", userDto);
-        } catch (Exception e) {
-            return ResultDto.res(HttpStatus.BAD_REQUEST, "실패");
-        }
-    }
-
-    @GetMapping("/users")
-    @Operation(summary = "전체 유저 조회", description = "전체 유저의 정보를 조회합니다.")
-    public ResultDto<List<UserDto>> getUser() {
-        try {
-            List<UserDto> userDto = userService.getUsers() ;
-            return ResultDto.res(HttpStatus.OK, "성공", userDto);
-        } catch (Exception e) {
-            return ResultDto.res(HttpStatus.BAD_REQUEST, "실패");
-        }
-    }
+    // 다른 메서드들은 그대로 유지
 
     @PutMapping("/user/{userId}/preferences")
-    @Operation(summary = "유저! 취향 업데이트", description = "유저의 취향 정보를 업데이트합니다.")
+    @Operation(summary = "유저 취향 업데이트", description = "유저의 취향 정보를 업데이트합니다.")
     public ResultDto<UserDto> updateUserPreferences(@PathVariable int userId, @RequestBody List<String> preferences) {
         try {
             boolean updated = userService.updateUserPreferences(userId, preferences);
@@ -67,6 +47,19 @@ public class UserController {
         }
     }
 
-
-
+    @PutMapping("/user/{userId}/tuto")
+    @Operation(summary = "유저 튜토리얼 완료", description = "유저의 튜토리얼 완료 상태를 업데이트합니다.")
+    public ResultDto<UserDto> updateUserTutorial(@PathVariable int userId) {
+        try {
+            boolean updated = userService.updateUserTuto(userId, true);
+            if (updated) {
+                UserDto updatedUser = userService.findUserId(userId);
+                return ResultDto.res(HttpStatus.OK, "성공", updatedUser);
+            } else {
+                return ResultDto.res(HttpStatus.BAD_REQUEST, "업데이트 실패");
+            }
+        } catch (Exception e) {
+            return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
+        }
+    }
 }

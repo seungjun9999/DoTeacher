@@ -3,25 +3,25 @@
 <mapper namespace="com.dosunsang.dosunsang_server.dao.UserDao">
 
     <insert id="insertUser" parameterType="UserDto" useGeneratedKeys="true" keyProperty="id">
-        insert into user (id, useremail, username, userImage, preferences)
-        values (0, #{userEmail}, #{userName}, #{userImage}, #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler})
+        insert into user (id, useremail, username, userImage, token, userTuto, prefSelect, preferences)
+        values (0, #{userEmail}, #{userName}, #{userImage}, #{token}, #{userTuto}, #{prefSelect}, #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler})
     </insert>
 
     <select id="selectUser" parameterType="string" resultType="UserDto">
-        select id, useremail, username, userImage,
+        select id, useremail, username, userImage, token, userTuto, prefSelect,
         preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
         from user
         where useremail = #{userEmail}
     </select>
 
     <select id="selectUsers" resultType="userDto">
-        select id, useremail, username, userImage,
+        select id, useremail, username, userImage, token, userTuto, prefSelect,
         preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
         from user
     </select>
 
     <select id="selectUserId" parameterType ="int" resultType="UserDto">
-        select id, useremail, username, userImage,
+        select id, useremail, username, userImage, token, userTuto, prefSelect,
         preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
         from user
         where id = #{userId}
@@ -29,9 +29,15 @@
 
     <update id="updateUserPreferences">
         UPDATE user
-        SET preferences = #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler}
+        SET preferences = #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler},
+        prefSelect = true
         WHERE id = #{userId}
     </update>
 
+    <update id="updateUserTuto">
+        UPDATE user
+        SET userTuto = #{userTuto}
+        WHERE id = #{userId}
+    </update>
 
 </mapper>

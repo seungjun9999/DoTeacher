@@ -10,7 +10,8 @@ plugins {
 
 android {
     namespace = "com.example.doteacher"
-    compileSdk = 34
+    compileSdk = 35
+    compileSdkPreview = "VanillaIceCream"
 
     defaultConfig {
         applicationId = "com.example.doteacher"
@@ -102,6 +103,17 @@ dependencies {
 
     implementation (libs.androidx.core.ktx)
 
-    implementation (libs.material.v190)
+    implementation ("androidx.biometric:biometric:1.2.0-alpha05")
 
+    implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+    implementation ("androidx.credentials:credentials:1.2.2")
+    implementation ("androidx.credentials:credentials-play-services-auth:1.2.2")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha03")
+    implementation("androidx.credentials:credentials:1.5.0-alpha03")
+
+    //coroutines
+    implementation (libs.kotlinx.coroutines.android)
+
+    //datastore
+    implementation ("androidx.datastore:datastore-preferences:1.1.1")
 }

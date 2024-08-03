@@ -18,21 +18,20 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     private lateinit var galleryAdapter: GalleryAdapter
     private var isPhotoListActive = true
 
-    override fun onResume() {
-        super.onResume()
-        initData()
-        initAdapter()
-    }
-
     override fun initView() {
         initData()
+        initAdapter()  // 여기로 이동
         clickEventListener()
         observePhotoData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadUserPhotos()  // 사진 데이터만 새로 로드
+    }
+
     private fun initData() {
         binding.userData = SingletonUtil.user
-        loadUserPhotos()
     }
 
     private fun loadUserPhotos() {

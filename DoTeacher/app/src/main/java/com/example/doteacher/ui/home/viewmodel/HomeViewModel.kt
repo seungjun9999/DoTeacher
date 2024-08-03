@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.doteacher.data.model.ProductData
 import com.example.doteacher.data.source.ProductDataSource
+import com.example.doteacher.data.source.UserDataSource
+import com.example.doteacher.ui.util.SingletonUtil
 import com.example.doteacher.ui.util.server.ResultWrapper
 import com.example.doteacher.ui.util.server.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,24 +16,26 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val productDataSource : ProductDataSource
-)  : ViewModel() {
+    private val productDataSource: ProductDataSource,
+    private val userDataSource: UserDataSource
+) : ViewModel() {
 
     private val _randomProducts = MutableLiveData<List<ProductData>>()
     val randomProducts: LiveData<List<ProductData>> get() = _randomProducts
 
-    fun setProducts(value : List<ProductData>?){
+    private val _userTutoUpdated = MutableLiveData<Boolean>()
+    val userTutoUpdated: LiveData<Boolean> get() = _userTutoUpdated
+
+    fun setProducts(value: List<ProductData>?) {
         value.let {
-            _randomProducts.value=it
+            _randomProducts.value = it
             if (it != null) {
                 Timber.d("Products set : ${it.size}")
             }
         }
     }
-
 
     fun getRandomProducts() {
         viewModelScope.launch {
@@ -52,4 +56,37 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun updateUserTuto() {
+        viewModelScope.launch {
+            SingletonUtil.user?.id?.let { userId ->
+                Timber.d("Updating UserTuto for user ID: $userId")
+                when (val response = safeApiCall(Dispatchers.IO) {
+                    userDataSource.updateUserTuto(userId, true)
+                }) {
+                    is ResultWrapper.Success -> {
+                        val updatedUser = response.data.data
+                        if (updatedUser != null) {
+                            SingletonUtil.user = updatedUser
+                            _userTutoUpdated.value = true
+                            Timber.d("UserTuto update success: ${updatedUser.userTuto}")
+                        } else {
+                            _userTutoUpdated.value = false
+                            Timber.d("UserTuto update failed: user data is null")
+                        }
+                    }
+                    is ResultWrapper.GenericError -> {
+                        _userTutoUpdated.value = false
+                        Timber.d("UserTuto update error: ${response.message}")
+                    }
+                    is ResultWrapper.NetworkError -> {
+                        _userTutoUpdated.value = false
+                        Timber.d("UserTuto update network error")
+                    }
+                }
+            } ?: run {
+                _userTutoUpdated.value = false
+                Timber.d("UserTuto update failed: user ID is null")
+            }
+        }
+    }
 }

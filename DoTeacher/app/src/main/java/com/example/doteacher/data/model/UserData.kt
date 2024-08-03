@@ -6,5 +6,8 @@ data class UserData(
     val userEmail: String,
     val userName: String,
     val userImage: String,
-    var preferences: List<String>
+    var preferences: List<String>,
+    var token: String,
+    val userTuto: Boolean,
+    val prefSelect : Boolean
 )

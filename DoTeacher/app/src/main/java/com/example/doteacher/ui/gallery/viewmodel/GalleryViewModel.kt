@@ -31,28 +31,9 @@ class GalleryViewModel @Inject constructor(
         }
     }
     init {
-//        getAllPhotos()
         SingletonUtil.user?.let { getUserPhotos(it.id) }
     }
 
-//    fun getAllPhotos() {
-//        viewModelScope.launch {
-//            when (val response = safeApiCall(Dispatchers.IO) {
-//                photoDataSource.getAllPhotos()
-//            }) {
-//                is ResultWrapper.Success -> {
-//                    setPhotos(response.data.data)
-//                    Timber.d("사진 조회 성공 ${response.data.data}")
-//                }
-//                is ResultWrapper.GenericError -> {
-//                    Timber.d("사진 조회 에러 ${response.message}")
-//                }
-//                is ResultWrapper.NetworkError -> {
-//                    Timber.d("사진 조회 네트워크 에러")
-//                }
-//            }
-//        }
-//    }
 
     fun getUserPhotos(userId: Int) {
         viewModelScope.launch {

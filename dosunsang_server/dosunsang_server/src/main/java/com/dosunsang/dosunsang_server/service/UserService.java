@@ -42,4 +42,9 @@ public class UserService {
         UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.updateUserPreferences(userId, preferences);
     }
+
+    public boolean updateUserTuto(int userId, boolean userTuto) {
+        UserDao userDao = sqlSession.getMapper(UserDao.class);
+        return userDao.updateUserTuto(userId, userTuto);
+    }
 }

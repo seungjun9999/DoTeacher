@@ -11,4 +11,5 @@ public interface UserDao {
     List<UserDto> selectUsers();
     UserDto selectUserId(int userId);
     boolean updateUserPreferences(@Param("userId") int userId, @Param("preferences") List<String> preferences);
+    boolean updateUserTuto(@Param("userId") int userId, @Param("userTuto") boolean userTuto);
 }

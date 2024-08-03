@@ -12,9 +12,10 @@ import com.example.doteacher.ui.dialog.DialogFragment
 import com.example.doteacher.ui.home.viewmodel.HomeViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), DialogFragment.DialogListener {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var homeAdapter: HomeAdapter
 
@@ -23,10 +24,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setupOnBackPressed()
         observeData()
         clickEventListener()
-        showImageSliderDialog()
+        checkAndShowDialog()
         initAdapter()
+        observeUserTutoUpdate()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -54,9 +55,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.btnDosunsang.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_mainFragment_to_btn_dosunsangFragment)
         }
-
         binding.tvMenuPreference.setOnClickListener {
-           view?.findNavController()?.navigate(R.id.action_mainFragment_to_preferenceActivity)
+            view?.findNavController()?.navigate(R.id.action_mainFragment_to_preferenceActivity)
         }
         binding.tvMenuProfile.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_mainFragment_to_profileFragment)
@@ -89,16 +89,42 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 }
             })
     }
-    private fun showImageSliderDialog(){
-        val dialog = DialogFragment()
 
-        dialog.show(childFragmentManager,"DialogFragment")
+    private fun checkAndShowDialog() {
+        if (SingletonUtil.user?.userTuto == false) {
+            showImageSliderDialog()
+        }
     }
 
+    private fun showImageSliderDialog() {
+        val dialog = DialogFragment()
+        dialog.setDialogListener(this)
+        dialog.show(childFragmentManager, "DialogFragment")
+    }
+
+    override fun onDialogClosed(neverShowAgain: Boolean) {
+        Timber.d("Dialog closed with neverShowAgain: $neverShowAgain")
+        if (neverShowAgain) {
+            homeViewModel.updateUserTuto()
+        }
+    }
 
     private fun observeData() {
         homeViewModel.randomProducts.observe(viewLifecycleOwner) { products ->
             homeAdapter.submitList(products)
         }
     }
+
+    private fun observeUserTutoUpdate() {
+        homeViewModel.userTutoUpdated.observe(viewLifecycleOwner) { updated ->
+            if (updated) {
+                Timber.d("UserTuto updated successfully")
+                // UI 업데이트 또는 다른 필요한 작업 수행
+            } else {
+                Timber.d("UserTuto update failed")
+            }
+        }
+    }
+
+
 }

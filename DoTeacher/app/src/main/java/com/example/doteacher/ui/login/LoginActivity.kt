@@ -2,199 +2,188 @@ package com.example.doteacher.ui.login
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
+import androidx.lifecycle.lifecycleScope
 import com.example.doteacher.R
 import com.example.doteacher.data.model.param.UserParam
 import com.example.doteacher.databinding.ActivityLoginBinding
 import com.example.doteacher.ui.base.BaseActivity
 import com.example.doteacher.ui.main.MainActivity
 import com.example.doteacher.ui.preference.PreferenceActivity
-import com.example.doteacher.ui.util.initGoActivity
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.common.api.ApiException
+import com.example.doteacher.ui.util.SingletonUtil
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
-
-val TAG: String = LoginActivity::class.java.getSimpleName()
+import java.security.MessageDigest
+import java.util.UUID
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
 
+    private val loginViewModel: LoginViewModel by viewModels()
 
-    private  val loginViewModel: LoginViewModel by viewModels()
+    private lateinit var credentialManager: CredentialManager
+    private var rotateAnimation: ObjectAnimator? = null
 
-    private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
-    private lateinit var idToken: String
-    private lateinit var rotateAnimation: ObjectAnimator
+    override fun init() {
+        setupCredentialManager()
+        setupClickListeners()
+        setupLoadingAnimation()
+        observeLoginState()
+    }
 
-    private val oneTapClientResult =
-        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                try {
-                    // 인텐트로 부터 로그인 자격 정보를 가져옴
-                    val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
-                    // 가져온 자격 증명에서 Google ID 토큰을 추출
-                    val googleIdToken = credential.googleIdToken
-                    Timber.d("구글 아이디 토큰$googleIdToken")
-                    if (googleIdToken != null) {
-                        // Google ID 토큰을 사용해 Firebase 인증 자격 증명을 생성
-                        val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
-                        // 생성된 Firebase 인증 자격 증명을 사용하여 Firebase 에 로그인을 시도
-                        Firebase.auth.signInWithCredential(firebaseCredential).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Firebase.auth.currentUser?.getIdToken(true)?.addOnCompleteListener { idTokenTask ->
-                                    if (idTokenTask.isSuccessful) {
-                                        idTokenTask.result?.token?.let { token ->
-                                            Timber.d("이메일 ${task.result.user?.email.toString()}")
-                                            Timber.d("이름 ${task.result.user?.displayName.toString()}")
-                                            Timber.d("사진 ${task.result.user?.photoUrl}")
-                                            idToken = token
-                                            binding.loadingVisible = true
-                                            loginViewModel.signUp(
-                                                UserParam(
-                                                    userEmail = task.result.user?.email.toString(),
-                                                    userName = task.result.user?.displayName.toString(),
-                                                    userImage = task.result.user?.photoUrl.toString()
-                                                )
-                                            )
-                                        } ?: Timber.e("FirebaseIdToken is null.")
-                                    }
-                                }
-                            } else {
-                                Timber.d("구글 로그인 오류 ${task.exception}")
-                            }
-                        }
-                    } else {
-                        Timber.e("GoogleIdToken is null.")
-                    }
-                } catch (exception: ApiException) {
-                    Timber.d("구글 로그인 오류 ${exception.localizedMessage}")
-                    Timber.e(exception.localizedMessage)
+    private fun setupCredentialManager() {
+        credentialManager = CredentialManager.create(this)
+    }
+
+    private fun setupClickListeners() {
+        binding.googlelogin.setOnClickListener { initiateGoogleLogin() }
+        binding.guestlogin.setOnClickListener { initiateGuestLogin() }
+    }
+
+    private fun observeLoginState() {
+        lifecycleScope.launch {
+            loginViewModel.loginState.collect { state ->
+                when (state) {
+                    is LoginState.Loading -> showLoading()
+                    is LoginState.Success -> handleLoginSuccess()
+                    is LoginState.Error -> handleLoginError(state.message)
+                    LoginState.Idle -> hideLoading()
+                    null -> {}
                 }
             }
         }
-
-    override fun init() {
-        initGoogleLogin()
-        clickGoogleLoginBtn()
-        clickGuestLoginBtn()
-        observeSignUpSuccess()
-        observeUserPreferences()
-        setupLoadingAnimation()
     }
 
     @SuppressLint("Recycle")
     private fun setupLoadingAnimation() {
-        rotateAnimation = ObjectAnimator.ofFloat(binding.loadingBird, View.ROTATION, 0f, 360f).apply {
-            duration = 2000
-            repeatCount = ObjectAnimator.INFINITE
-            interpolator = LinearInterpolator()
+        if (rotateAnimation == null) {
+            rotateAnimation = ObjectAnimator.ofFloat(binding.loadingBird, View.ROTATION, 0f, 360f).apply {
+                duration = 2000
+                repeatCount = ObjectAnimator.INFINITE
+                interpolator = LinearInterpolator()
+            }
         }
     }
 
     private fun showLoading() {
         binding.loadingVisible = true
-        rotateAnimation.start()
+        setupLoadingAnimation()
+        rotateAnimation?.start()
     }
 
     private fun hideLoading() {
         binding.loadingVisible = false
-        rotateAnimation.cancel()
-
+        rotateAnimation?.cancel()
     }
 
-    private fun observeSignUpSuccess() {
-        loginViewModel.userSignUpSuccess.observe(this) {
-            if (it) {
-                hideLoading()
-                // 사용자 취향 여부에 따라 다른 화면으로 이동하는 로직은
-                // observeUserPreferences()에서 처리합니다.
-            } else {
-                hideLoading()
-                Toast.makeText(this, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-            binding.loadingVisible = false
+    private fun handleLoginSuccess() {
+        hideLoading()
+        if (SingletonUtil.user?.prefSelect == true) {
+            startActivity(Intent(this, MainActivity::class.java))
+        } else {
+            startActivity(Intent(this, PreferenceActivity::class.java))
         }
+        finish()
     }
 
-    private fun observeUserPreferences() {
-        loginViewModel.userHasPreferences.observe(this) { hasPreferences ->
-            if (hasPreferences) {
-                startActivity(Intent(this, MainActivity::class.java))
-            } else {
-                startActivity(Intent(this, PreferenceActivity::class.java))
-            }
-            finish()
-        }
+    private fun handleLoginError(message: String) {
+        hideLoading()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-
-
-    private fun initGoogleLogin() {
-        // 현쟈 액티비티(this)에 대한 Google One Tap 로그인 클라이언트를 가져옴
-        oneTapClient = Identity.getSignInClient(this)
-        signInRequest = BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    // Google Id Token 기반 로그인을 지원하도록 설정
-                    .setSupported(true)
-                    // 서버의 클라이언트 ID 를 설정
-                    .setServerClientId(this.getString(R.string.web_application))
-                    // 기존에 인증된 계정만을 필터링하지 않도록 설정
-                    .setFilterByAuthorizedAccounts(false)
-                    .build(),
+    private fun initiateGuestLogin() {
+        loginViewModel.signUp(
+            UserParam(
+                userEmail = "guest",
+                userName = "게스트",
+                userImage = null.toString(),
+                token = null,
+                userTuto = false,
+                prefSelect = false
             )
-            // 이전에 선택 했던 계정을 기억
-            .setAutoSelectEnabled(true)
-            .build()
+        )
     }
 
-    private fun clickGuestLoginBtn(){
-        binding.guestlogin.setOnClickListener {  // 새로운 게스트 로그인 버튼 사용
-                UserParam(
-                    userEmail = "guest",
-                    userName = "게스트",
-                    userImage = null.toString()
+    private fun initiateGoogleLogin() {
+        Timber.d("Google login button clicked")
+        val rawNonce = UUID.randomUUID().toString()
+        val hashedNonce = hashNonce(rawNonce)
+
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setServerClientId(getString(R.string.web_application))
+            .setFilterByAuthorizedAccounts(false)
+            .setAutoSelectEnabled(true)
+            .setNonce(hashedNonce)
+            .build()
+
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        lifecycleScope.launch {
+            try {
+                val result = credentialManager.getCredential(
+                    request = request,
+                    context = this@LoginActivity,
                 )
-            initGoActivity(this, MainActivity::class.java)
+                val credential = result.credential
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                handleGoogleCredential(googleIdTokenCredential)
+            } catch (e: GetCredentialException) {
+                handleLoginError(e.message ?: "Google Sign-In failed")
+            } catch (e: GoogleIdTokenParsingException) {
+                handleLoginError(e.message ?: "Failed to parse Google ID token")
+            }
         }
     }
 
-
-    private fun clickGoogleLoginBtn() {
-        binding.googlelogin.setOnClickListener {
-            Timber.d("Google login button clicked")
-            showLoading()
-            oneTapClient.beginSignIn(signInRequest)
-                .addOnSuccessListener(this) { result ->
-                    Timber.d("beginSignIn success")
-                    try {
-                        oneTapClientResult.launch(
-                            IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
-                        )
-                        Timber.d("IntentSender launched")
-                    } catch (e: Exception) {
-                        Timber.e("Error launching IntentSender: ${e.message}")
-                        hideLoading()
+    private fun handleGoogleCredential(credential: GoogleIdTokenCredential) {
+        val googleIdToken = credential.idToken
+        if (googleIdToken != null) {
+            val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
+            Firebase.auth.signInWithCredential(firebaseCredential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        val user = Firebase.auth.currentUser
+                        user?.let {
+                            loginViewModel.signUp(
+                                UserParam(
+                                    userEmail = it.email ?: "",
+                                    userName = it.displayName ?: "",
+                                    userImage = it.photoUrl?.toString() ?: "",
+                                    token = googleIdToken,
+                                    userTuto = false,
+                                    prefSelect = false
+                                )
+                            )
+                        }
+                    } else {
+                        handleLoginError("Google login failed: ${task.exception?.message}")
                     }
                 }
-                .addOnFailureListener(this) { e ->
-                    Timber.e("beginSignIn failed: ${e.message}")
-                    hideLoading()
-                }
+        } else {
+            handleLoginError("GoogleIdToken is null")
         }
+    }
+
+    private fun hashNonce(rawNonce: String): String {
+        val bytes = rawNonce.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.fold("") { str, it -> str + "%02x".format(it) }
     }
 }
