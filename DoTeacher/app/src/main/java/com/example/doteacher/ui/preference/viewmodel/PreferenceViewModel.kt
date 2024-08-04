@@ -34,7 +34,7 @@ class PreferenceViewModel @Inject constructor(
                     is ResultWrapper.Success -> {
                         val userData = response.data.data
                         _userPreferences.value = userData?.preferences ?: emptyList()
-                        Timber.d("User preferences loaded: ${userData?.preferences}")
+                        Timber.d("User preferences loaded: ${userData.preferences}")
                     }
                     is ResultWrapper.GenericError -> {
                         Timber.d("Failed to load user preferences: ${response.message}")

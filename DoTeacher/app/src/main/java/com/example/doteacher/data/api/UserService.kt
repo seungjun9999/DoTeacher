@@ -28,4 +28,10 @@ interface UserService {
 
     @PUT("user/{userId}/tuto")
     suspend fun updateUserTuto(@Path("userId") userId: Int, @Query("userTuto") userTuto: Boolean): ResponseData<UserData>
+
+    @PUT("user/{userId}/profile-image")
+    suspend fun updateProfileImage(
+        @Path("userId") userId: Int,
+        @Query("imageUrl") imageUrl: String
+    ): ResponseData<UserData>
 }

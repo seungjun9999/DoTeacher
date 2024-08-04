@@ -62,4 +62,20 @@ public class UserController {
             return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
         }
     }
+
+    @PutMapping("/user/{userId}/profile-image")
+    @Operation(summary = "유저 프로필 이미지 업데이트", description = "유저의 프로필 이미지 URL을 업데이트합니다.")
+    public ResultDto<UserDto> updateUserProfileImage(@PathVariable int userId, @RequestParam String imageUrl) {
+        try {
+            boolean updated = userService.updateUserProfileImage(userId, imageUrl);
+            if (updated) {
+                UserDto updatedUser = userService.findUserId(userId);
+                return ResultDto.res(HttpStatus.OK, "성공", updatedUser);
+            } else {
+                return ResultDto.res(HttpStatus.BAD_REQUEST, "업데이트 실패");
+            }
+        } catch (Exception e) {
+            return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
+        }
+    }
 }

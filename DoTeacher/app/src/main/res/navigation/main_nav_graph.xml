@@ -96,6 +96,14 @@
     </fragment>
 
     <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.doteacher.ui.settings.SettingsFragment"
+        tools:layout="@layout/fragment_setting"
+        android:label="SettingsFragment">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/mypageFragment"
         android:name="com.example.doteacher.ui.mypage.MyPageFragment"
         tools:layout="@layout/fragment_my_page"
@@ -106,6 +114,9 @@
         <action
                 android:id="@+id/action_mypageFragment_to_preferenceActivity"
                 app:destination="@id/preferenceActivity" />
+        <action
+                android:id="@+id/action_mypageFragment_to_settingsFragment"
+                app:destination="@id/settingsFragment" />
     </fragment>
 
     <activity

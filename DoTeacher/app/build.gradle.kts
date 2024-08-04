@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,8 +7,16 @@ plugins {
     kotlin("kapt")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
-    id("androidx.navigation.safeargs")
+    id("androidx.navigation.safeargs.kotlin")
 }
+
+
+fun getLocalProperty(key: String): String {
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").inputStream())
+    return properties.getProperty(key) ?: ""
+}
+
 
 android {
     namespace = "com.example.doteacher"
@@ -21,6 +31,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "AWS_BUCKET_NAME", "\"${getLocalProperty("aws.bucket.name")}\"")
+        buildConfigField("String", "AWS_ACCESS_KEY", "\"${getLocalProperty("aws.access.key")}\"")
+        buildConfigField("String", "AWS_SECRET_KEY", "\"${getLocalProperty("aws.secret.key")}\"")
+
     }
 
     buildTypes {
@@ -42,9 +57,11 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
         dataBinding = true
     }
 }
+
 
 dependencies {
 
@@ -116,4 +133,7 @@ dependencies {
 
     //datastore
     implementation ("androidx.datastore:datastore-preferences:1.1.1")
+
+    //s3
+    implementation (libs.aws.android.sdk.s3)
 }

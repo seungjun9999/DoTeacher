@@ -47,4 +47,9 @@ public class UserService {
         UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.updateUserTuto(userId, userTuto);
     }
+
+    public boolean updateUserProfileImage(int userId, String imageUrl) {
+        UserDao userDao = sqlSession.getMapper(UserDao.class);
+        return userDao.updateUserProfileImage(userId, imageUrl);
+    }
 }

@@ -29,4 +29,8 @@ class UserDataSourceImpl @Inject constructor(
     override suspend fun updateUserTuto(userId: Int, userTuto: Boolean): ResponseData<UserData> {
         return userService.updateUserTuto(userId, userTuto)
     }
+
+    override suspend fun updateProfileImage(userId: Int, imageUrl: String): ResponseData<UserData> {
+        return userService.updateProfileImage(userId, imageUrl)
+    }
 }

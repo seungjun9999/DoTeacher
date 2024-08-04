@@ -1,10 +1,5 @@
 package com.example.doteacher.ui.mypage
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentMyPageBinding
@@ -42,6 +37,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             itemSettings.apply {
                 imgMypage.setImageResource(R.drawable.setting) // 설정 아이콘 리소스
                 tvMypageText.text = "설정"
+                root.setOnClickListener{
+                    findNavController().navigate(R.id.action_mypageFragment_to_settingsFragment)
+                }
             }
         }
     }

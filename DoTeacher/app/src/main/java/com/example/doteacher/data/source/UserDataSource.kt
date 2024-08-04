@@ -20,4 +20,7 @@ interface UserDataSource {
 
     //유저 튜토 안내
     suspend fun updateUserTuto(userId: Int, userTuto: Boolean): ResponseData<UserData>
+
+    // 프로필 이미지 업데이트
+    suspend fun updateProfileImage(userId: Int, imageUrl: String): ResponseData<UserData>
 }
