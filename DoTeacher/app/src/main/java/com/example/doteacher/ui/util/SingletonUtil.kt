@@ -12,7 +12,7 @@ object SingletonUtil {
         }
 
     val gptUrl = " https://api.openai.com/v1/"
-    val baseUrl = "http://192.168.137.20:8080/" // 핫스팟 로컬
+    val baseUrl = "http://i11d102.p.ssafy.io:8081/" // 핫스팟 로컬
 //    val baseUrl = "http://10.0.2.2:8080/" // 에뮬레이터
 
     //    val baseUrl = "http://43.202.32.75:8081/" // docker
