@@ -82,7 +82,7 @@ public class UserController {
             boolean updated = userService.updateUserProfileImage(userId, imageUrl);
             if (updated) {
                 UserDto updatedUser = userService.findUserId(userId);
-                return ResultDto.res(HttpStatus.OK, "성공", updatedUser);
+                return ResultDto.res(HttpStatus.OK, "성공!", updatedUser);
             } else {
                 return ResultDto.res(HttpStatus.BAD_REQUEST, "업데이트 실패");
             }
