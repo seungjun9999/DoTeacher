@@ -5,12 +5,15 @@ import android.graphics.Color
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.viewModelScope
 import com.example.doteacher.R
 import com.example.doteacher.databinding.ActivityPreferenceBinding
 import com.example.doteacher.ui.base.BaseActivity
 import com.example.doteacher.ui.main.MainActivity
 import com.example.doteacher.ui.preference.viewmodel.PreferenceViewModel
+import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -56,7 +59,8 @@ class PreferenceActivity : BaseActivity<ActivityPreferenceBinding>(R.layout.acti
                 if (selectedPreferences.isNotEmpty()) {
                     viewModel.updateUserPreferences(selectedPreferences.toList())
                 } else {
-                    Toast.makeText(this@PreferenceActivity, "취향을 하나 이상 선택해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PreferenceActivity, "취향을 하나 이상 선택해주세요.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -66,9 +70,12 @@ class PreferenceActivity : BaseActivity<ActivityPreferenceBinding>(R.layout.acti
         viewModel.preferencesUpdated.observe(this) { success ->
             if (success) {
                 Timber.d("Preferences updated, moving to MainActivity")
+                Timber.d("Updated preferences: ${SingletonUtil.user?.preferences} , ${SingletonUtil.user}")
+
                 val intent = Intent(this@PreferenceActivity, MainActivity::class.java)
                 startActivity(intent)
                 finish()
+
             } else {
                 Toast.makeText(this, "취향 업데이트에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }

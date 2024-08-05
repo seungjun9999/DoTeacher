@@ -76,7 +76,7 @@
 
     <fragment
             android:id="@+id/dosunsangFragment"
-            android:name="com.example.doteacher.ui.DosunsangFragment"
+            android:name="com.example.doteacher.ui.dosunsang.DosunsangFragment"
             tools:layout="@layout/fragment_dosunsang"
             android:label="DosunsangFragment"></fragment>
 

@@ -13,6 +13,7 @@ import com.example.doteacher.ui.home.viewmodel.HomeViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.sql.Time
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), DialogFragment.DialogListener {
@@ -31,35 +32,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     override fun onResume() {
         super.onResume()
-        initData()
+        loadUserData()
         homeViewModel.getRandomProducts()
     }
 
     private fun initData() {
         binding.userData = SingletonUtil.user
+        binding.executePendingBindings()
+        Timber.d("Home screen user data: ${SingletonUtil.user}")
+    }
+
+    private fun loadUserData() {
+        SingletonUtil.user?.userEmail?.let { email ->
+            homeViewModel.loadUserData(email)
+        } ?: run {
+            Timber.e("User email is null in HomeFragment")
+        }
     }
 
     private fun clickEventListener() {
-        binding.menu.setOnClickListener {
-            binding.drawerLayout.openDrawer(GravityCompat.START)
-        }
         binding.btnViewall.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_mainFragment_to_productFragment)
-        }
-        binding.btnGallery.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_mainFragment_to_galleryFragment)
-        }
-        binding.btnChatbot.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_mainFragment_to_chatgptFragment)
-        }
-        binding.btnDosunsang.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_mainFragment_to_btn_dosunsangFragment)
-        }
-        binding.tvMenuPreference.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_mainFragment_to_preferenceActivity)
-        }
-        binding.tvMenuProfile.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_mainFragment_to_profileFragment)
         }
         binding.imgProfile.setOnClickListener{
             view?.findNavController()?.navigate(R.id.action_mainFragment_to_profileFragment)

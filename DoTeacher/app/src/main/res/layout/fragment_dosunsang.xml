@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.DosunsangFragment"
+            tools:context=".ui.dosunsang.DosunsangFragment"
             android:background="@color/black">
 
         <TextView
@@ -29,15 +29,6 @@
                 android:layout_marginTop="70dp"
                 android:id="@+id/textView11"></TextView>
 
-        <ImageView
-                android:src="@drawable/top"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/dosunsang_to_home"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="70dp" />
 
         <ImageView
                 android:src="@drawable/group_1"

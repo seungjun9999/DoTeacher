@@ -23,19 +23,30 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
         initAdapter()  // 여기로 이동
         clickEventListener()
         observePhotoData()
+        observeUserData()
     }
 
     override fun onResume() {
         super.onResume()
+        loadUserData()
         loadUserPhotos()  // 사진 데이터만 새로 로드
     }
 
     private fun initData() {
         binding.userData = SingletonUtil.user
+        Timber.d(" 지금 갤러리 화면 사앹는? ${SingletonUtil.user}")
     }
+
 
     private fun loadUserPhotos() {
         SingletonUtil.user?.id?.let { galleryViewModel.getUserPhotos(it) }
+    }
+    private fun loadUserData(){
+        SingletonUtil.user?.userEmail?.let { email ->
+            galleryViewModel.loadUserData(email)
+        } ?: run {
+            Timber.e("User or user email is null")
+        }
     }
 
     private fun clickEventListener() {
@@ -73,6 +84,18 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
             Timber.d("Observed photos: ${photos.size}")
             binding.tvPhotoCnt.text = photos.size.toString()
             galleryAdapter.submitList(photos)
+        }
+    }
+
+    private fun observeUserData(){
+        galleryViewModel.userData.observe(viewLifecycleOwner){ user ->
+            user.let {
+                binding.userData = user
+                binding.executePendingBindings()
+                Timber.d("여기가 전혀 안찍히네 $it")
+
+            }
+
         }
     }
 }

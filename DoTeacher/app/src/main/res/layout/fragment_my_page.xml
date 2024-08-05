@@ -12,6 +12,14 @@
             tools:context=".ui.mypage.MyPageFragment"
             android:background="@color/black">
 
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/banner"
+                android:scaleType="fitXY">
+
+        </ImageView>
+
         <TextView
                 android:layout_width="200dp"
                 android:layout_height="38dp"

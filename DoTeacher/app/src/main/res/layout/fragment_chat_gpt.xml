@@ -84,16 +84,6 @@
                 app:layout_constraintStart_toStartOf="@+id/header"
                 app:layout_constraintEnd_toEndOf="@+id/header" />
 
-        <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:srcCompat="@drawable/top"
-                android:id="@+id/chat_to_home"
-                app:layout_constraintTop_toTopOf="@+id/header"
-                app:layout_constraintBottom_toBottomOf="@+id/header"
-                app:layout_constraintStart_toStartOf="@+id/header"
-                android:layout_marginStart="20dp" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

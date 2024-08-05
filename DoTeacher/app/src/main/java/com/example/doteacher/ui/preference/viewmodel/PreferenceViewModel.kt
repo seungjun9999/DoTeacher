@@ -33,7 +33,7 @@ class PreferenceViewModel @Inject constructor(
                 }) {
                     is ResultWrapper.Success -> {
                         val userData = response.data.data
-                        _userPreferences.value = userData?.preferences ?: emptyList()
+                        _userPreferences.value = userData.preferences ?: emptyList()
                         Timber.d("User preferences loaded: ${userData.preferences}")
                     }
                     is ResultWrapper.GenericError -> {
@@ -59,7 +59,7 @@ class PreferenceViewModel @Inject constructor(
                     userDataSource.updateUserPreferences(userId, preferences)
                 }) {
                     is ResultWrapper.Success -> {
-                        SingletonUtil.user = response.data.data
+                        SingletonUtil.user = SingletonUtil.user?.copy(preferences = preferences)
                         _preferencesUpdated.value = true
                         Timber.d("Preferences updated successfully: ${SingletonUtil.user?.preferences}")
                     }

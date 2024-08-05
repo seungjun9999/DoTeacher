@@ -66,9 +66,12 @@ class HomeViewModel @Inject constructor(
                     is ResultWrapper.Success -> {
                         val updatedUser = response.data.data
                         if (updatedUser != null) {
-                            SingletonUtil.user = updatedUser
+                            SingletonUtil.user = SingletonUtil.user?.copy(
+                                userTuto = updatedUser.userTuto,
+                                preferences = SingletonUtil.user?.preferences ?: updatedUser.preferences
+                            )
                             _userTutoUpdated.value = true
-                            Timber.d("UserTuto update success: ${updatedUser.userTuto}")
+                            Timber.d("UserTuto update success: ${SingletonUtil.user?.userTuto}, Preferences: ${SingletonUtil.user?.preferences}")
                         } else {
                             _userTutoUpdated.value = false
                             Timber.d("UserTuto update failed: user data is null")
@@ -86,6 +89,26 @@ class HomeViewModel @Inject constructor(
             } ?: run {
                 _userTutoUpdated.value = false
                 Timber.d("UserTuto update failed: user ID is null")
+            }
+        }
+    }
+
+    fun loadUserData(email: String) {
+        viewModelScope.launch {
+            when (val response = safeApiCall(Dispatchers.IO) {
+                userDataSource.getUserInfo(email)
+            }) {
+                is ResultWrapper.Success -> {
+                    val newUserData = response.data.data
+                    SingletonUtil.user = SingletonUtil.user?.copy(
+                        userTuto = newUserData.userTuto,
+                        preferences = SingletonUtil.user?.preferences ?: newUserData.preferences
+                    ) ?: newUserData
+                    Timber.d("User data reloaded in HomeViewModel: ${SingletonUtil.user}")
+                }
+                else -> {
+                    Timber.e("Failed to reload user data in HomeViewModel")
+                }
             }
         }
     }

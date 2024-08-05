@@ -1,19 +1,36 @@
 package com.dosunsang.dosunsang_server.controller;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.dosunsang.dosunsang_server.dto.ResultDto;
 import com.dosunsang.dosunsang_server.dto.UserDto;
 import com.dosunsang.dosunsang_server.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
+import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @Slf4j
 public class UserController {
+
+    @Autowired
+    private S3Client s3Client;
+
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucketName;
 
     @Autowired
     private UserService userService;
@@ -76,6 +93,34 @@ public class UserController {
             }
         } catch (Exception e) {
             return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
+        }
+    }
+
+    @GetMapping("/user/presigned-url")
+    @Operation(summary = "S3 Pre-signed URL 생성", description = "S3에 이미지를 업로드하기 위한 Pre-signed URL을 생성합니다.")
+    public ResultDto<Map<String, String>> getPresignedUrl(@RequestParam String fileType) {
+        try {
+            String key = "profiles/" + UUID.randomUUID() + "." + fileType;
+            PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                    .signatureDuration(Duration.ofMinutes(5))
+                    .putObjectRequest(PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .contentType("image/" + fileType)
+                            .build())
+                    .build();
+
+            PresignedPutObjectRequest presignedRequest = s3Client.presignPutObject(presignRequest);
+            String url = presignedRequest.url().toString();
+
+            Map<String, String> result = new HashMap<>();
+            result.put("url", url);
+            result.put("key", key);
+
+            return ResultDto.res(HttpStatus.OK, "성공", result);
+        } catch (Exception e) {
+            log.error("Pre-signed URL 생성 실패", e);
+            return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "Pre-signed URL 생성 실패: " + e.getMessage());
         }
     }
 }

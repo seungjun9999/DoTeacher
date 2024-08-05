@@ -86,8 +86,5 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(R.layout.fragment_c
     }
 
     private fun clickEventListener(){
-        binding.chatToHome.setOnClickListener {
-            view?.findNavController()?.popBackStack()
-        }
     }
 }

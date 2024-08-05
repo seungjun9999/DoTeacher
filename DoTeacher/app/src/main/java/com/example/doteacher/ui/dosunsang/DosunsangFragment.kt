@@ -1,11 +1,5 @@
-package com.example.doteacher.ui
+package com.example.doteacher.ui.dosunsang
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentDosunsangBinding
 import com.example.doteacher.ui.base.BaseFragment
@@ -25,9 +19,6 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
     }
 
     private fun clickEventListener(){
-        binding.dosunsangToHome.setOnClickListener {
-            view?.findNavController()?.popBackStack()
-        }
     }
 
     private fun initData(){

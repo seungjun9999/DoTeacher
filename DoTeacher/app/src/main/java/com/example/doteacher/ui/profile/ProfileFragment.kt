@@ -1,7 +1,11 @@
 package com.example.doteacher.ui.profile
 
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
+import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -22,6 +26,8 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
     private val profileViewModel: ProfileViewModel by viewModels()
+    private var rotateAnimation: ObjectAnimator? = null
+
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { selectedImageUri ->
@@ -49,8 +55,31 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
 
     override fun initView() {
         initData()
+        setupLoadingAnimation()
         clickEvent()
         observeViewModel()
+    }
+
+    @SuppressLint("Recycle")
+    private fun setupLoadingAnimation() {
+        if (rotateAnimation == null) {
+            rotateAnimation = ObjectAnimator.ofFloat(binding.loadingBird, View.ROTATION, 0f, 360f).apply {
+                duration = 2000
+                repeatCount = ObjectAnimator.INFINITE
+                interpolator = LinearInterpolator()
+            }
+        }
+    }
+
+    private fun showLoading() {
+        binding.loadingVisible = true
+        setupLoadingAnimation()
+        rotateAnimation?.start()
+    }
+
+    private fun hideLoading() {
+        binding.loadingVisible = false
+        rotateAnimation?.cancel()
     }
 
     private fun initData() {
@@ -91,6 +120,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
     private fun uploadImageToS3(imageUri: Uri) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
+                showLoading()
                 val imageUrl = withContext(Dispatchers.IO) {
                     S3Uploader.uploadImage(requireContext(), imageUri)
                 }
@@ -98,6 +128,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
             } catch (e: Exception) {
                 Log.e("ProfileFragment", "Image upload failed", e)
                 showToast("이미지 업로드에 실패했습니다. 다시 시도해주세요.")
+            } finally {
+                hideLoading()
             }
         }
     }
@@ -111,4 +143,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
+
+
 }

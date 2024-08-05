@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.sql.Time
+import java.util.Timer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -74,6 +77,7 @@ class LoginViewModel @Inject constructor(
             }) {
                 is ResultWrapper.Success -> {
                     val userData = response.data.data
+                    Timber.d("${response.data.data} user data")
                     if (userData != null) {
                         SingletonUtil.user = userData
                         userData.token?.let { token ->
