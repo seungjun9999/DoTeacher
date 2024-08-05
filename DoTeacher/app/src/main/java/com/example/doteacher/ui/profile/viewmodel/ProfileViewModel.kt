@@ -55,9 +55,13 @@ class ProfileViewModel @Inject constructor(
             }) {
                 is ResultWrapper.Success -> {
                     response.data.data?.let { updatedUser ->
-                        _userData.value = updatedUser
-                        SingletonUtil.user = updatedUser
-                        _updateResult.value = Event(true)
+                        val currentUser = SingletonUtil.user
+                        val newUser = currentUser?.copy(userImage = imageUrl)
+                        newUser?.let {
+                            _userData.value = it
+                            SingletonUtil.user = it
+                            _updateResult.value = Event(true)
+                        }
                     }
                     Timber.d("프로필 이미지 업데이트 성공")
                 }
