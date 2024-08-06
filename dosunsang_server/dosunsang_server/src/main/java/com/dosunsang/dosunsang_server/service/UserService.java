@@ -25,7 +25,9 @@ public class UserService {
 
     public UserDto findUser(String userEmail) {
         UserDao userDao = sqlSession.getMapper(UserDao.class);
-        return userDao.selectUser(userEmail);
+        UserDto user = userDao.selectUser(userEmail);
+        log.info("Found user: {}, preferences: {}", user, user.getPreferences());
+        return user;
     }
 
     public List<UserDto> getUsers() {
