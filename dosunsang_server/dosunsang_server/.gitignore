@@ -37,3 +37,4 @@ out/
 .vscode/
 
 application-private.properties
+application-privates.properties
