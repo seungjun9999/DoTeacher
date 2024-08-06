@@ -31,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user")
-    @Operation(summary = "유저 회원가입", description = "유저의 회원가입입니다")
+    @Operation(summary = "유저 회원가입", description = "유저의 회원가입입니니다")
     public ResultDto<UserDto> userAdd(@RequestBody UserDto user) {
         try {
             userService.addUser(user);
