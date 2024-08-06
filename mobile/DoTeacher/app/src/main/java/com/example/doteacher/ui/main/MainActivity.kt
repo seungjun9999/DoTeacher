@@ -1,28 +1,37 @@
 package com.example.doteacher.ui.main
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.View
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.doteacher.R
+import com.example.doteacher.databinding.ActivityMainBinding
+import com.example.doteacher.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main){
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    private lateinit var navHostFragment: NavHostFragment
+
+
+    override fun init() {
+        initNavigation()
+    }
+
+    fun hideBottomNavigation() {
+        binding.bottomNavigation.visibility = View.GONE
+    }
+
+    fun showBottomNavigation() {
+        binding.bottomNavigation.visibility = View.VISIBLE
+    }
+
+    private fun initNavigation() {
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
+        with(binding) {
+            bottomNavigation.setupWithNavController(navController)
+        }
     }
 }

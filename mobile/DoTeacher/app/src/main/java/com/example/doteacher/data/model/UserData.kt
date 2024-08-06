@@ -1,8 +1,13 @@
 package com.example.doteacher.data.model
 
+
 data class UserData(
     val id: Int,
-    val userEmail : String,
-    val userName : String,
-    val userImage : String
+    val userEmail: String,
+    val userName: String,
+    val userImage: String,
+    var preferences: List<String>,
+    var token: String,
+    val userTuto: Boolean,
+    val prefSelect : Boolean
 )

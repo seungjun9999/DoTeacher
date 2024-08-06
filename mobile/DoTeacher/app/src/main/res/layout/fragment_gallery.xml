@@ -31,17 +31,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_username_gallery" />
 
-        <ImageView
-                android:src="@drawable/arrow_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/btn_return_home"
-                android:backgroundTint="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="62dp"
-                android:layout_marginStart="20dp" />
-
         <androidx.cardview.widget.CardView
                 android:layout_width="110dp"
                 android:layout_height="110dp"
@@ -49,7 +38,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:cardCornerRadius="45dp"
-                android:layout_marginTop="110dp"
+                android:layout_marginTop="60dp"
                 android:id="@+id/cardView2">
 
             <ImageView
@@ -63,7 +52,7 @@
 
         <TextView
                 android:id="@+id/textView8"
-                android:text="아무거나"
+                android:text="@{userData.preferences.size() > 0 ? userData.preferences.get(0) : `아무`}"
                 android:textSize="12sp"
                 android:fontFamily="@font/poppins_bold"
                 android:background="@drawable/gallery_orange"
@@ -78,7 +67,7 @@
 
         <TextView
                 android:id="@+id/textView9"
-                android:text="아무거나"
+                android:text="@{userData.preferences.size() > 1 ? userData.preferences.get(1) : `아묵대`}"
                 android:textSize="12sp"
                 android:fontFamily="@font/poppins_bold"
                 android:background="@drawable/gallery_orange"
@@ -92,7 +81,7 @@
 
         <TextView
                 android:id="@+id/textView10"
-                android:text="아무거나"
+                android:text="@{userData.preferences.size() > 2 ? userData.preferences.get(2) : `아무거나`}"
                 android:textSize="12sp"
                 android:fontFamily="@font/poppins_bold"
                 android:background="@drawable/gallery_orange"
@@ -127,7 +116,7 @@
                 android:id="@+id/constraintLayout">
 
             <TextView
-                    android:id="@+id/tv_phtos_cnt"
+                    android:id="@+id/tv_photo_cnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10"
@@ -142,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Photos"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_phtos_cnt"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_photo_cnt"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:textColor="@color/white"

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doteacher.data.model.ProductData
+import com.example.doteacher.databinding.AllProductsItemsBinding
 import com.example.doteacher.databinding.ProductListItemBinding
 import com.example.doteacher.ui.util.DiffUtilCallback
 
@@ -13,16 +14,17 @@ class ProductAdapter :
 
    private var onItemClick:((ProductData)->Unit)? = null
 
-    class ViewHolder(private val binding: ProductListItemBinding) :
+    class ViewHolder(private val binding: AllProductsItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(productData: ProductData) {
             binding.productData = productData
+            binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val listItemBinding = ProductListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return ViewHolder(listItemBinding)
+        val binding = AllProductsItemsBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder:ViewHolder, position: Int) {

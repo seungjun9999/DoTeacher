@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            tools:context=".ui.preference.PreferenceFragment">
+
+
+        <ImageView
+                android:src="@drawable/ex_cute_cat"
+                android:layout_width="380dp"
+                android:layout_height="210dp"
+                android:scaleType="fitXY"
+                android:id="@+id/imageView18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="50dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

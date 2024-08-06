@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.doteacher.R
 import com.example.doteacher.data.model.ProductData
 import com.example.doteacher.databinding.FragmentProductBinding
@@ -25,8 +26,9 @@ class ProductFragment : BaseFragment<FragmentProductBinding>(R.layout.fragment_p
         initData()
         setupRecyclerView()
         initAdapter()
-        loadProducts()
         clickEventListener()
+        observeProductData()
+        productViewModel.getAllProducts()
     }
 
     private fun initData(){
@@ -35,14 +37,8 @@ class ProductFragment : BaseFragment<FragmentProductBinding>(R.layout.fragment_p
 
     private fun setupRecyclerView(){
         binding.allProductRecycle.apply {
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         }
-    }
-    private fun loadProducts() {
-        val products = List(10) {
-            ProductData("황소", R.drawable.hwangso,"황소임 ㅋㅋ")
-        }
-        productAdapter.submitList(products)
     }
 
     private fun initAdapter() {
@@ -64,11 +60,18 @@ class ProductFragment : BaseFragment<FragmentProductBinding>(R.layout.fragment_p
         }
     }
 
+    private fun observeProductData() {
+        productViewModel.allProducts.observe(viewLifecycleOwner){  allproduct ->
+            productAdapter.submitList(allproduct)
+        }
+    }
+
 
 
     override fun onResume() {
         super.onResume()
         initData()
+        //productViewModel.getAllProducts()
     }
 
 }

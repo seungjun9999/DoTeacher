@@ -9,42 +9,70 @@
                 type="com.example.doteacher.data.model.ProductData" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.product.detail.ProductDetailFragment"
-            android:background="@color/black">
+            android:fillViewport="true">
 
-        <ImageView
-                android:id="@+id/img_product_detail"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="5:4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:imageResId="@{productData.imageResId}"
-                tools:src="@tools:sample/avatars" />
-
-        <TextView
-                android:id="@+id/tv_product_detail_name"
-                android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_product_detail"
-                android:text="@{productData.name}" />
+                android:paddingBottom="16dp"
+                tools:context=".ui.product.detail.ProductDetailFragment"
+                android:background="@color/black">
 
-        <TextView
-                android:id="@+id/tv_product_detail_explain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_product_detail_name"
-                android:text="@{productData.explain}" />
+            <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/materialCardView"
+                    android:layout_marginTop="30dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                        android:id="@+id/img_product_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:imageUrl="@{productData.productUrl}"
+                        android:adjustViewBounds="true"
+                        tools:src="@tools:sample/avatars" />
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <TextView
+                    android:id="@+id/tv_product_detail_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textSize="36sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+                    android:text="@{productData.productName}" />
+
+            <TextView
+                    android:id="@+id/tv_product_detail_explain"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/poppins"
+                    android:textSize="20sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_product_detail_name"
+                    android:text="@{productData.productDesc}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 </layout>

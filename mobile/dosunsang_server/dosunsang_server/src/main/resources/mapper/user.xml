@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dosunsang.dosunsang_server.dao.UserDao">
+
+    <insert id="insertUser" parameterType="UserDto" useGeneratedKeys="true" keyProperty="id">
+        insert into user (id, useremail, username, userImage, token, userTuto, prefSelect, preferences)
+        values (0, #{userEmail}, #{userName}, #{userImage}, #{token}, #{userTuto}, #{prefSelect}, #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler})
+    </insert>
+
+    <select id="selectUser" parameterType="string" resultType="UserDto">
+        select id, useremail, username, userImage, token, userTuto, prefSelect,
+        preferences
+        from user
+        where useremail = #{userEmail}
+    </select>
+
+    <select id="selectUsers" resultType="userDto">
+        select id, useremail, username, userImage, token, userTuto, prefSelect,
+        preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
+        from user
+    </select>
+
+    <select id="selectUserId" parameterType ="int" resultType="UserDto">
+        select id, useremail, username, userImage, token, userTuto, prefSelect,
+        preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
+        from user
+        where id = #{userId}
+    </select>
+
+    <update id="updateUserPreferences">
+        UPDATE user
+        SET preferences = #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler},
+        prefSelect = true
+        WHERE id = #{userId}
+    </update>
+
+    <update id="updateUserTuto">
+        UPDATE user
+        SET userTuto = #{userTuto}
+        WHERE id = #{userId}
+    </update>
+
+    <update id="updateUserProfileImage">
+        UPDATE user
+        SET userImage = #{userImage}
+        WHERE id = #{userId}
+    </update>
+
+</mapper>

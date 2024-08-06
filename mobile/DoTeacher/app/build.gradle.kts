@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,12 +7,21 @@ plugins {
     kotlin("kapt")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
-    id("androidx.navigation.safeargs")
+    id("androidx.navigation.safeargs.kotlin")
 }
+
+
+fun getLocalProperty(key: String): String {
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").inputStream())
+    return properties.getProperty(key) ?: ""
+}
+
 
 android {
     namespace = "com.example.doteacher"
-    compileSdk = 34
+    compileSdk = 35
+    compileSdkPreview = "VanillaIceCream"
 
     defaultConfig {
         applicationId = "com.example.doteacher"
@@ -20,6 +31,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "AWS_BUCKET_NAME", "\"${getLocalProperty("aws.bucket.name")}\"")
+        buildConfigField("String", "AWS_ACCESS_KEY", "\"${getLocalProperty("aws.access.key")}\"")
+        buildConfigField("String", "AWS_SECRET_KEY", "\"${getLocalProperty("aws.secret.key")}\"")
+
     }
 
     buildTypes {
@@ -41,9 +57,11 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
         dataBinding = true
     }
 }
+
 
 dependencies {
 
@@ -102,4 +120,20 @@ dependencies {
 
     implementation (libs.androidx.core.ktx)
 
+    implementation ("androidx.biometric:biometric:1.2.0-alpha05")
+
+    implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+    implementation ("androidx.credentials:credentials:1.2.2")
+    implementation ("androidx.credentials:credentials-play-services-auth:1.2.2")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha03")
+    implementation("androidx.credentials:credentials:1.5.0-alpha03")
+
+    //coroutines
+    implementation (libs.kotlinx.coroutines.android)
+
+    //datastore
+    implementation ("androidx.datastore:datastore-preferences:1.1.1")
+
+    //s3
+    implementation (libs.aws.android.sdk.s3)
 }

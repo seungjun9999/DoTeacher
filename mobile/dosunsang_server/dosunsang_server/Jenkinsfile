@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'seungjun',
+                    url: 'https://lab.ssafy.com/s11-webmobile3-sub2/S11P12D102.git',
+                    credentialsId: 'dosunsang'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('dosunsang_server/dosunsang_server') {
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew clean build -x test'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                dir('dosunsang_server/dosunsang_server') {
+                    sh 'docker build -t dosunsang-server .'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'docker stop dosunsang-server || true'
+                sh 'docker rm dosunsang-server || true'
+                sh 'docker run -d --name dosunsang-server -p 8080:8080 dosunsang-server'
+            }
+        }
+    }
+}

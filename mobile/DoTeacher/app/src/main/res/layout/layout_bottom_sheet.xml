@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="565dp"
-            app:behavior_peekHeight="430dp"
+            android:layout_height="520dp"
+            app:behavior_peekHeight="410dp"
             app:behavior_hideable="false"
             app:behavior_expandedOffset="0dp"
             app:behavior_draggable="true"
@@ -19,6 +19,7 @@
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_myphoto_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="parent"
