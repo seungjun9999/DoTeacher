@@ -48,6 +48,7 @@ class LoginViewModel @Inject constructor(
 
     private suspend fun attemptAutoLogin(token: String, email: String) {
         _loginState.value = LoginState.Loading
+        Timber.d("Attempting auto login with email: $email")
         when (val response = safeApiCall(Dispatchers.IO) {
             userDataSource.getUserInfo(email)
         }) {
@@ -63,6 +64,7 @@ class LoginViewModel @Inject constructor(
                 }
             }
             else -> {
+                Timber.e("Auto login failed: $response")
                 tokenManager.deleteTokenAndEmail()
                 _loginState.value = LoginState.Error("자동 로그인 실패")
             }

@@ -41,7 +41,19 @@ public class UserController {
         }
     }
 
-    // 다른 메서드들은 그대로 유지
+    @GetMapping("/user/{userEmail}")
+    @Operation(summary = "유저 조회" , description = "특정 유저를 조회합니다.")
+    public ResultDto<UserDto> getUserInfo(@PathVariable String userEmail){
+        log.info("Received request for user info with email: {}", userEmail);
+        try {
+            UserDto user = userService.findUser(userEmail);
+            return ResultDto.res(HttpStatus.OK, "성공", user);
+        }catch (Exception e){
+            return ResultDto.res(HttpStatus.BAD_REQUEST,"실패");
+        }
+    }
+
+
 
     @PutMapping("/user/{userId}/preferences")
     @Operation(summary = "유저 취향 업데이트", description = "유저의 취향 정보를 업데이트합니다.")

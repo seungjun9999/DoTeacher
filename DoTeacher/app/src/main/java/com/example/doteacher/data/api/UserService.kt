@@ -14,8 +14,8 @@ interface UserService {
     @POST("user")
     suspend fun userSignUp(@Body userParam: UserParam): ResponseData<UserData>
 
-    @GET("user")
-    suspend fun getUserInfo(@Query("userId") userEmail: String): ResponseData<UserData>
+    @GET("user/{userEmail}")
+    suspend fun getUserInfo(@Path("userEmail") userEmail: String): ResponseData<UserData>
 
     @GET("users")
     suspend fun getUsers(): ResponseData<List<UserData>>
