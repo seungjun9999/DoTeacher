@@ -29,7 +29,7 @@
 
     <update id="updateUserPreferences">
         UPDATE user
-        SET preferences = #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler},
+        SET preferences = #{preferences}
         prefSelect = true
         WHERE id = #{userId}
     </update>
