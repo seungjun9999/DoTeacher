@@ -62,6 +62,7 @@ public class UserController {
             boolean updated = userService.updateUserPreferences(userId, preferences);
             if (updated) {
                 UserDto updatedUser = userService.findUserId(userId);
+                log.info("succeesssssssss");
                 return ResultDto.res(HttpStatus.OK, "성공", updatedUser);
             } else {
                 return ResultDto.res(HttpStatus.BAD_REQUEST, "업데이트 실패");

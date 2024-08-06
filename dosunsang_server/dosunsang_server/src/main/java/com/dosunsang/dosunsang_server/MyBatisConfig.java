@@ -33,13 +33,13 @@ public class MyBatisConfig {
     public SqlSessionFactory SqlSessionFactory(@Qualifier("dataSource") DataSource DataSource, ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(DataSource);
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources(mPath));
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.dosunsang.dosunsang_server.dto");
-
-        // TypeHandler 등록
         sqlSessionFactoryBean.setTypeHandlers(new TypeHandler[]{
                 new StringListTypeHandler()
         });
+        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources(mPath));
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.dosunsang.dosunsang_server.dto");
+
+
 
         return sqlSessionFactoryBean.getObject();
     }

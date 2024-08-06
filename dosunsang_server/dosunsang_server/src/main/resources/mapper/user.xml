@@ -9,7 +9,7 @@
 
     <select id="selectUser" parameterType="string" resultType="UserDto">
         select id, useremail, username, userImage, token, userTuto, prefSelect,
-        preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
+        preferences
         from user
         where useremail = #{userEmail}
     </select>
