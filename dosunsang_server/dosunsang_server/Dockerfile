@@ -13,6 +13,8 @@ RUN gradle build -x test --parallel
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
+-e TEMP_UPLOAD_DIR=/tmp/upload
+
 # 빌더 이미지에서 jar 파일만 복사
 COPY build/libs/*.jar app.jar
 
