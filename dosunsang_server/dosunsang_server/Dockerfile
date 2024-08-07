@@ -13,10 +13,14 @@ RUN gradle build -x test --parallel
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
--e TEMP_UPLOAD_DIR=/tmp/upload
+# 환경 변수 설정
+ENV TEMP_UPLOAD_DIR=/tmp/upload
+
+# 임시 업로드 디렉토리 생성 및 권한 설정
+RUN mkdir -p ${TEMP_UPLOAD_DIR} && chmod 777 ${TEMP_UPLOAD_DIR}
 
 # 빌더 이미지에서 jar 파일만 복사
-COPY build/libs/*.jar app.jar
+COPY --from=builder /build/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
