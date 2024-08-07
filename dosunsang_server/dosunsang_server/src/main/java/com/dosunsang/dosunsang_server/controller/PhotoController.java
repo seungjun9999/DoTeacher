@@ -27,7 +27,7 @@ public class PhotoController {
     private PhotoService photoService;
 
     @PostMapping(path = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "사진 업로드", description = "사진을 DB에 업로드 합니다")
+    @Operation(summary = "사진 업로드", description = "사진을 DB에 업로드 합니다!")
     public ResultDto<PhotoDto> uploadPhoto(
             @RequestParam("file") MultipartFile file,
             @RequestParam("description") String description,
