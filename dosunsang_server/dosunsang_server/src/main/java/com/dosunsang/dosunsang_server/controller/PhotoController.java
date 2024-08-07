@@ -35,8 +35,7 @@ public class PhotoController {
     ) {
         try {
             String fileName = file.getOriginalFilename();
-            String extend = fileName.substring(fileName.lastIndexOf("."));
-            String imageUrl = s3Service.upload(fileName, file, extend);
+            String imageUrl = s3Service.upload(fileName, file);
 
             PhotoDto photoDto = new PhotoDto();
             photoDto.setFileName(fileName);

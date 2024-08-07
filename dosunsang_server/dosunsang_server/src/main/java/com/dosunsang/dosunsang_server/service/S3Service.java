@@ -29,14 +29,14 @@ public class S3Service {
 
     private final String DIR_NAME = "pet_picture";
 
-    public String upload(String fileName, MultipartFile multipartFile, String extend) throws IOException {
+    public String upload(String fileName, MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-        return upload(fileName, uploadFile, extend);
+        return upload(fileName, uploadFile);
     }
 
-    private String upload(String fileName, File uploadFile, String extend) {
-        String newFileName = DIR_NAME + "/" + fileName + extend;
+    private String upload(String fileName, File uploadFile) {
+        String newFileName = DIR_NAME + "/" + fileName;
         String uploadImageUrl = putS3(uploadFile, newFileName);
         removeNewFile(uploadFile);
         return uploadImageUrl;
