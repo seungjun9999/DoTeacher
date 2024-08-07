@@ -22,7 +22,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("")
-    @Operation(summary = "전체 작품 조회입니다", description = "전체 작품을 조회합니다")
+    @Operation(summary = "전체 작품 조회입니다", description = "전체 작품을 조회합니다!")
     public ResultDto<List<ProductDto>> getAllProducts() {
         try {
             List<ProductDto> products = productService.getProducts();
