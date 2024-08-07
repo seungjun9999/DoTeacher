@@ -92,12 +92,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun handleLoginSuccess() {
         hideLoading()
-        if (SingletonUtil.user?.prefSelect == true) {
-            startActivity(Intent(this, MainActivity::class.java))
-        } else {
-            startActivity(Intent(this, PreferenceActivity::class.java))
+        val intent = when {
+            SingletonUtil.user?.prefSelect == true -> Intent(this, MainActivity::class.java)
+            else -> Intent(this, PreferenceActivity::class.java)
         }
-        finish()
+        startActivity(intent)
+
+        // PreferenceActivity로 이동할 때는 LoginActivity를 유지합니다.
+        if (SingletonUtil.user?.prefSelect == true) {
+            finish()
+        }
     }
 
     private fun handleLoginError(message: String) {

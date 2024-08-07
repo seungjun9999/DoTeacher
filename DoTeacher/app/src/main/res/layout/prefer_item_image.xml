@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+
+        <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/img_prefer_itemImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+        <View
+                android:id="@+id/selectedImageBordersmall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selected_border"
+                android:visibility="invisible">
+        </View>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+            android:id="@+id/selectionBorder"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/selected_border"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/cardView"
+            app:layout_constraintBottom_toBottomOf="@id/cardView"
+            app:layout_constraintStart_toStartOf="@id/cardView"
+            app:layout_constraintEnd_toEndOf="@id/cardView"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

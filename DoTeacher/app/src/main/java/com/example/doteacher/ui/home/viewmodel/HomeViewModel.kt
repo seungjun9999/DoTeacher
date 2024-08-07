@@ -102,12 +102,15 @@ class HomeViewModel @Inject constructor(
                     val newUserData = response.data.data
                     SingletonUtil.user = SingletonUtil.user?.copy(
                         userTuto = newUserData.userTuto,
-                        preferences = SingletonUtil.user?.preferences ?: newUserData.preferences
-                    ) ?: newUserData
+                        preferences = newUserData.preferences ?: emptyList()
+                    ) ?: newUserData.copy(preferences = newUserData.preferences ?: emptyList())
                     Timber.d("User data reloaded in HomeViewModel: ${SingletonUtil.user}")
                 }
-                else -> {
-                    Timber.e("Failed to reload user data in HomeViewModel")
+                is ResultWrapper.GenericError -> {
+                    Timber.e("Failed to reload user data in HomeViewModel: ${response.message}")
+                }
+                is ResultWrapper.NetworkError -> {
+                    Timber.e("Network error while reloading user data in HomeViewModel")
                 }
             }
         }
