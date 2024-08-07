@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'custom_tf'
+package_name = 'doteacher_backend'
 
 setup(
     name=package_name,
@@ -10,7 +10,6 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/custom_tf_launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -21,9 +20,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'custom_tf_node = custom_tf.custom_tf_node:main',
-            'custom_tf_slam_node = custom_tf.custom_tf_slam_node:main',
-            'custom_tf_base_node = custom_tf.custom_tf_base_node:main'
+            'client_backend_db_node = doteacher_backend.client_backend_db_node:main',
+            'client_backend_log_node = doteacher_backend.client_backend_log_node:main',
+            'server_backend_op_node = doteacher_backend.server_backend_op_node:main',
+            'client_backend_op_node = doteacher_backend.client_backend_op_node:main'
         ],
     },
 )
