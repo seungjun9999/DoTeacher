@@ -16,7 +16,7 @@ WORKDIR /app
 # 빌더 이미지에서 jar 파일만 복사
 COPY build/libs/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8081
 
 # root 대신 nobody 권한으로 실행
 USER nobody
