@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{userId}/tuto")
-    @Operation(summary = "유저 튜토리얼 완료", description = "유저의 튜토리얼 완료 상태를 업데이트합니다.")
+    @Operation(summary = "유저 튜토리얼 완료", description = "유저의 튜토리얼 완료 상태를 업데이트합니다")
     public ResultDto<UserDto> updateUserTutorial(@PathVariable int userId) {
         try {
             boolean updated = userService.updateUserTuto(userId, true);
