@@ -23,7 +23,7 @@
                 app:destination="@id/dosunsangFragment" />
         <action
                 android:id="@+id/action_mainFragment_to_preferenceActivity"
-                app:destination="@id/preferenceActivity" />
+                app:destination="@id/preferenceFragment" />
         <action
                 android:id="@+id/action_mainFragment_to_profileFragment"
                 app:destination="@id/profileFragment" />
@@ -112,39 +112,25 @@
                 app:destination="@id/profileFragment" />
         <action
                 android:id="@+id/action_mypageFragment_to_preferenceActivity"
-                app:destination="@id/preferenceActivity" />
+                app:destination="@id/preferenceFragment" />
         <action
                 android:id="@+id/action_mypageFragment_to_settingsFragment"
                 app:destination="@id/settingsFragment" />
     </fragment>
 
-    <activity
-            android:id="@+id/preferenceActivity"
-            android:name="com.example.doteacher.ui.preference.PreferenceActivity"
-            tools:layout="@layout/activity_preference">
+    <fragment
+            android:id="@+id/preferenceFragment"
+            android:name="com.example.doteacher.ui.preference.PreferenceFragment"
+            tools:layout="@layout/fragment_preference">
 
-    </activity>
+    </fragment>
 
     <activity
             android:id="@+id/loginActivity"
             android:name="com.example.doteacher.ui.login.LoginActivity"
             tools:layout="@layout/activity_login">
-        <action
-                android:id="@+id/action_loginactivity_to_accountActivity"
-                app:destination="@id/accountActivity">
-
-        </action>
     </activity>
 
-    <fragment
-            android:id="@+id/accountActivity"
-            android:name="com.example.doteacher.ui.account.AccountFragment"
-            tools:layout="@layout/activity_account">
-
-        <action
-                android:id="@+id/action_accountActivity_to_loginActivity"
-                app:destination="@id/loginActivity" />
-    </fragment>
 
 
 </navigation>

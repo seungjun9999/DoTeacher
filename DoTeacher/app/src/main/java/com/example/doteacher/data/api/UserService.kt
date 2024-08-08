@@ -39,7 +39,7 @@ interface UserService {
     ): ResponseData<UserData>
 
     @POST("authenticate")
-    suspend fun login(@Body authRequest: AuthenticationRequest): ResponseData<AuthenticationResponse>
+    suspend fun login(@Body authRequest: AuthenticationRequest): AuthenticationResponse
 
     @POST("register")
     suspend fun register(@Body userParam: UserParam): ResponseData<MessageResponse>

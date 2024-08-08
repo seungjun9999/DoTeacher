@@ -1,13 +1,14 @@
 package com.example.doteacher.core.di
 
 import com.example.doteacher.data.api.PhotoService
-import com.example.doteacher.data.api.ProductService
 import com.example.doteacher.ui.util.SingletonUtil
+import com.example.doteacher.ui.util.TokenManager
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -42,8 +43,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    @Named("AuthInterceptor")
-    fun provideInterceptor(): Interceptor =
+    @Named("GptAuthInterceptor")
+    fun provideGptAuthInterceptor(): Interceptor =
         Interceptor { chain ->
             with(chain) {
                 val newRequest = request().newBuilder()
@@ -57,23 +58,57 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(
+    @Named("JwtAuthInterceptor")
+    fun provideJwtAuthInterceptor(tokenManager: TokenManager): Interceptor =
+        Interceptor { chain ->
+            val original = chain.request()
+            val requestBuilder = original.newBuilder()
+
+            runBlocking {
+                tokenManager.getToken()?.let { token ->
+                    requestBuilder.addHeader("Authorization", "Bearer $token")
+                }
+            }
+
+            chain.proceed(requestBuilder.build())
+        }
+
+    @Singleton
+    @Provides
+    @Named("BaseOkHttpClient")
+    fun provideBaseOkHttpClient(
         @Named("LoggingInterceptor") loggingInterceptor: Interceptor,
-        @Named("AuthInterceptor") authInterceptor: Interceptor
+        @Named("JwtAuthInterceptor") jwtAuthInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(authInterceptor)
+            .addInterceptor(jwtAuthInterceptor)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    @Named("GptOkHttpClient")
+    fun provideGptOkHttpClient(
+        @Named("LoggingInterceptor") loggingInterceptor: Interceptor,
+        @Named("GptAuthInterceptor") gptAuthInterceptor: Interceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(gptAuthInterceptor)
             .build()
     }
 
     @Singleton
     @Provides
     @BaseRetrofit
-    fun provideBaseRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideBaseRetrofit(@Named("BaseOkHttpClient") okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
@@ -85,7 +120,7 @@ object NetworkModule {
     @Singleton
     @Provides
     @GptRetrofit
-    fun provideGptRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideGptRetrofit(@Named("GptOkHttpClient") okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))

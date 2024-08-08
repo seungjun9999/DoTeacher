@@ -105,44 +105,28 @@ class LoginViewModel @Inject constructor(
                 userDataSource.login(AuthenticationRequest(email, password))
             }) {
                 is ResultWrapper.Success -> {
-                    val authResponse = response.data.data
-                    Timber.d("auth $authResponse, re : ${response.data.data}")
-                    if (authResponse != null && authResponse.token.isNotBlank()) {
+                    val authResponse = response.data
+                    Timber.d("Auth response: $authResponse")
+                    if (authResponse.token.isNotBlank()) {
                         tokenManager.saveTokenAndEmail(authResponse.token, email)
-
-                        // 사용자 정보 가져오기
-                        when (val userInfoResponse = safeApiCall(Dispatchers.IO) {
-                            userDataSource.getUserInfo(email)
-                        }) {
-                            is ResultWrapper.Success -> {
-                                val userData = userInfoResponse.data.data
-                                if (userData != null) {
-                                    SingletonUtil.user = userData
-                                    _loginState.value = LoginState.Success
-                                } else {
-                                    _loginState.value = LoginState.Error("사용자 정보를 가져오는데 실패했습니다.")
-                                }
-                            }
-                            is ResultWrapper.GenericError -> {
-                                _loginState.value = LoginState.Error(userInfoResponse.message ?: "사용자 정보를 가져오는데 실패했습니다.")
-                            }
-                            is ResultWrapper.NetworkError -> {
-                                _loginState.value = LoginState.Error("네트워크 오류: 사용자 정보를 가져오는데 실패했습니다.")
-                            }
-                        }
+                        _loginState.value = LoginState.Success
                     } else {
-                        _loginState.value = LoginState.Error("로그인 실패: 유효하지 않은 토큰")
+                        Timber.e("Invalid auth response: $authResponse")
+                        _loginState.value = LoginState.Error("로그인 실패: 유효하지 않은 응답")
                     }
                 }
                 is ResultWrapper.GenericError -> {
+                    Timber.e("Login error: ${response.message}")
                     _loginState.value = LoginState.Error("로그인 오류: ${response.message}")
                 }
                 is ResultWrapper.NetworkError -> {
+                    Timber.e("Network error")
                     _loginState.value = LoginState.Error("네트워크 오류")
                 }
             }
         }
     }
+
 }
 
 sealed class LoginState {

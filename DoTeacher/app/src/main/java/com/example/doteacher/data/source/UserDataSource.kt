@@ -27,7 +27,7 @@ interface UserDataSource {
     // 프로필 이미지 업데이트
     suspend fun updateProfileImage(userId: Int, imageUrl: String): ResponseData<UserData>
 
-    suspend fun login(authRequest: AuthenticationRequest): ResponseData<AuthenticationResponse>
+    suspend fun login(authRequest: AuthenticationRequest): AuthenticationResponse
 
     suspend fun register(userParam: UserParam): ResponseData<MessageResponse>
 }

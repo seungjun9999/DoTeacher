@@ -37,7 +37,7 @@ class UserDataSourceImpl @Inject constructor(
         return userService.updateProfileImage(userId, imageUrl)
     }
 
-    override suspend fun login(authRequest: AuthenticationRequest): ResponseData<AuthenticationResponse> {
+    override suspend fun login(authRequest: AuthenticationRequest): AuthenticationResponse {
         return userService.login(authRequest)
     }
 

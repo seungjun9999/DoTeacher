@@ -1,5 +1,8 @@
 package com.dosunsang.dosunsang_server;
 
+import lombok.Getter;
+
+@Getter
 public class AuthenticationResponse {
     private final String token;
 
@@ -7,7 +10,4 @@ public class AuthenticationResponse {
         this.token = token;
     }
 
-    public String getToken() {
-        return token;
-    }
 }
