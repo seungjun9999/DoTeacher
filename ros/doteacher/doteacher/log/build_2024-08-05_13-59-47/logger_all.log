@@ -1,0 +1,104 @@
+[0.055s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'doteacher']
+[0.055s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=20, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['doteacher'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7bb5b2b2bd60>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7bb5b2c74520>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7bb5b2c74520>>, mixin_verb=('build',))
+[0.141s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.141s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.141s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.141s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.141s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.141s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.141s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/ssafy/ros2_ws/src/doteacher/doteacher'
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.142s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.149s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_cmake' and name 'doteacher'
+[0.149s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.149s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.149s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.149s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.149s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.166s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 12 installed packages in /home/ssafy/ros2_ws/install
+[0.167s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 403 installed packages in /opt/ros/humble
+[0.168s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'cmake_args' from command line to 'None'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'cmake_target' from command line to 'None'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'cmake_clean_cache' from command line to 'False'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'cmake_clean_first' from command line to 'False'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'cmake_force_configure' from command line to 'False'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'ament_cmake_args' from command line to 'None'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'catkin_cmake_args' from command line to 'None'
+[0.193s] Level 5:colcon.colcon_core.verb:set package 'doteacher' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.193s] DEBUG:colcon.colcon_core.verb:Building package 'doteacher' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher', 'merge_install': False, 'path': '/home/ssafy/ros2_ws/src/doteacher/doteacher', 'symlink_install': False, 'test_result_base': None}
+[0.193s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.194s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.194s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/ssafy/ros2_ws/src/doteacher/doteacher' with build type 'ament_cmake'
+[0.194s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/ssafy/ros2_ws/src/doteacher/doteacher'
+[0.196s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.196s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.196s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.202s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ssafy/ros2_ws/install/jetson_joystick_control:/home/ssafy/ros2_ws/install/doteacher_control:/home/ssafy/ros2_ws/install/xbox_controller:/home/ssafy/ros2_ws/install/joystick_control:/home/ssafy/ros2_ws/install/doteacher_teleops:/home/ssafy/ros2_ws/install/adaptive_motor_control:/opt/ros/humble /usr/bin/cmake /home/ssafy/ros2_ws/src/doteacher/doteacher -DCMAKE_INSTALL_PREFIX=/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher
+[0.547s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ssafy/ros2_ws/install/jetson_joystick_control:/home/ssafy/ros2_ws/install/doteacher_control:/home/ssafy/ros2_ws/install/xbox_controller:/home/ssafy/ros2_ws/install/joystick_control:/home/ssafy/ros2_ws/install/doteacher_teleops:/home/ssafy/ros2_ws/install/adaptive_motor_control:/opt/ros/humble /usr/bin/cmake /home/ssafy/ros2_ws/src/doteacher/doteacher -DCMAKE_INSTALL_PREFIX=/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher
+[0.548s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ssafy/ros2_ws/install/jetson_joystick_control:/home/ssafy/ros2_ws/install/doteacher_control:/home/ssafy/ros2_ws/install/xbox_controller:/home/ssafy/ros2_ws/install/joystick_control:/home/ssafy/ros2_ws/install/doteacher_teleops:/home/ssafy/ros2_ws/install/adaptive_motor_control:/opt/ros/humble /usr/bin/cmake --build /home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher -- -j20 -l20
+[0.570s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ssafy/ros2_ws/install/jetson_joystick_control:/home/ssafy/ros2_ws/install/doteacher_control:/home/ssafy/ros2_ws/install/xbox_controller:/home/ssafy/ros2_ws/install/joystick_control:/home/ssafy/ros2_ws/install/doteacher_teleops:/home/ssafy/ros2_ws/install/adaptive_motor_control:/opt/ros/humble /usr/bin/cmake --build /home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher -- -j20 -l20
+[0.588s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ssafy/ros2_ws/install/jetson_joystick_control:/home/ssafy/ros2_ws/install/doteacher_control:/home/ssafy/ros2_ws/install/xbox_controller:/home/ssafy/ros2_ws/install/joystick_control:/home/ssafy/ros2_ws/install/doteacher_teleops:/home/ssafy/ros2_ws/install/adaptive_motor_control:/opt/ros/humble /usr/bin/cmake --install /home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher
+[0.594s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(doteacher)
+[0.594s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ssafy/ros2_ws/install/jetson_joystick_control:/home/ssafy/ros2_ws/install/doteacher_control:/home/ssafy/ros2_ws/install/xbox_controller:/home/ssafy/ros2_ws/install/joystick_control:/home/ssafy/ros2_ws/install/doteacher_teleops:/home/ssafy/ros2_ws/install/adaptive_motor_control:/opt/ros/humble /usr/bin/cmake --install /home/ssafy/ros2_ws/src/doteacher/doteacher/build/doteacher
+[0.595s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher' for CMake module files
+[0.596s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher' for CMake config files
+[0.596s] Level 1:colcon.colcon_core.shell:create_environment_hook('doteacher', 'cmake_prefix_path')
+[0.596s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/hook/cmake_prefix_path.ps1'
+[0.596s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/hook/cmake_prefix_path.dsv'
+[0.596s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/hook/cmake_prefix_path.sh'
+[0.597s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/bin'
+[0.597s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/lib/pkgconfig/doteacher.pc'
+[0.597s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/lib/python3.10/site-packages'
+[0.597s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/bin'
+[0.597s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.ps1'
+[0.597s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.dsv'
+[0.598s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.sh'
+[0.598s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.bash'
+[0.598s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.zsh'
+[0.598s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/colcon-core/packages/doteacher)
+[0.610s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(doteacher)
+[0.610s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher' for CMake module files
+[0.611s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher' for CMake config files
+[0.611s] Level 1:colcon.colcon_core.shell:create_environment_hook('doteacher', 'cmake_prefix_path')
+[0.611s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/hook/cmake_prefix_path.ps1'
+[0.611s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/hook/cmake_prefix_path.dsv'
+[0.611s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/hook/cmake_prefix_path.sh'
+[0.611s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/bin'
+[0.611s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/lib/pkgconfig/doteacher.pc'
+[0.612s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/lib/python3.10/site-packages'
+[0.612s] Level 1:colcon.colcon_core.environment:checking '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/bin'
+[0.612s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.ps1'
+[0.612s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.dsv'
+[0.612s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.sh'
+[0.613s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.bash'
+[0.613s] INFO:colcon.colcon_core.shell:Creating package script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.zsh'
+[0.613s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/colcon-core/packages/doteacher)
+[0.613s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[0.613s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[0.613s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[0.613s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[0.617s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[0.617s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[0.617s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[0.624s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[0.624s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/local_setup.ps1'
+[0.624s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/_local_setup_util_ps1.py'
+[0.625s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/setup.ps1'
+[0.626s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/local_setup.sh'
+[0.626s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/_local_setup_util_sh.py'
+[0.626s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/setup.sh'
+[0.627s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/local_setup.bash'
+[0.627s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/setup.bash'
+[0.627s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/local_setup.zsh'
+[0.628s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ssafy/ros2_ws/src/doteacher/doteacher/install/setup.zsh'

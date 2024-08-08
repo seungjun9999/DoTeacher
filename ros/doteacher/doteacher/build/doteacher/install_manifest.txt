@@ -1,0 +1,15 @@
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/ament_index/resource_index/package_run_dependencies/doteacher
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/ament_index/resource_index/parent_prefix_path/doteacher
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/environment/ament_prefix_path.sh
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/environment/ament_prefix_path.dsv
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/environment/path.sh
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/environment/path.dsv
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/local_setup.bash
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/local_setup.sh
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/local_setup.zsh
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/local_setup.dsv
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.dsv
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/ament_index/resource_index/packages/doteacher
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/cmake/doteacherConfig.cmake
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/cmake/doteacherConfig-version.cmake
+/home/ssafy/ros2_ws/src/doteacher/doteacher/install/doteacher/share/doteacher/package.xml

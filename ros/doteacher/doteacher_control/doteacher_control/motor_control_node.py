@@ -29,7 +29,7 @@ class PWMThrottleHat:
 class MotorController(Node):
     def __init__(self):
         super().__init__('motor_controller')
-        self.subscription = self.create_subscription(Twist, 'cmd_vel', self.cmd_vel_callback, 10)
+        self.subscription = self.create_subscription(Twist, '/ackermann_cmd_vel', self.cmd_vel_callback, 10)
         
         i2c = busio.I2C(board.SCL, board.SDA)
         self.pca = PCA9685(i2c)

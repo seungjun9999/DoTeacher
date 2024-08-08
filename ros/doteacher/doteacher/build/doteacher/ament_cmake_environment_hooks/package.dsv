@@ -1,0 +1,4 @@
+source;share/doteacher/local_setup.bash
+source;share/doteacher/local_setup.dsv
+source;share/doteacher/local_setup.sh
+source;share/doteacher/local_setup.zsh

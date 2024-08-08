@@ -1,0 +1,145 @@
+# config/nav2_params.yaml
+
+# BT Navigator 설정
+bt_navigator:
+  ros__parameters:
+    bt_xml_filename: "install/doteacher_bringup/share/doteacher_bringup/behavior_trees/navigate_recovery_tree.xml"
+
+# 맵 서버 설정
+map_server:
+  ros__parameters:
+    yaml_filename: "install/doteacher_bringup/share/doteacher_bringup/config/map.yaml"
+
+# AMCL 설정 (로컬라이제이션)
+amcl:
+  ros__parameters:
+    use_sim_time: false
+    scan_topic: scan
+    min_particles: 500
+    max_particles: 2000
+    alpha_slow: 0.001
+    alpha_fast: 0.1
+    odom_frame_id: odom
+    base_frame_id: base_link
+    global_frame_id: map
+    update_min_d: 0.2
+    update_min_a: 0.2
+    resample_interval: 1
+    transform_tolerance: 0.5
+    laser_min_range: 0.1
+    laser_max_range: 30.0
+    laser_max_beams: 60
+    do_beamskip: true
+    beam_skip_distance: 0.5
+    beam_skip_threshold: 0.3
+    beam_skip_error_threshold: 0.9
+
+# 글로벌 비용 맵 설정
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      global_frame: map
+      robot_base_frame: base_link
+      update_frequency: 1.0
+      publish_frequency: 1.0
+      rolling_window: false
+      width: 50.0
+      height: 50.0
+      resolution: 0.05
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        observation_sources: scan
+        scan:
+          topic: /scan
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+
+# 로컬 비용 맵 설정
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      global_frame: odom
+      robot_base_frame: base_link
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      rolling_window: true
+      width: 10.0
+      height: 10.0
+      resolution: 0.05
+      plugins: ["obstacle_layer", "inflation_layer"]
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        observation_sources: scan
+        scan:
+          topic: /scan
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+
+# Planner Server 설정
+planner_server:
+  ros__parameters:
+    expected_planner_frequency: 20.0
+    use_sim_time: false
+    planner_plugins: ["GridBased"]
+    GridBased:
+      plugin: "nav2_navfn_planner/NavfnPlanner"
+      tolerance: 0.5
+      use_astar: false
+      allow_unknown: true
+      use_final_approach_orientation: true
+
+# Controller Server 설정
+controller_server:
+  ros__parameters:
+    controller_frequency: 20.0
+    min_velocity_x: 0.0
+    max_velocity_x: 0.26
+    min_velocity_y: 0.0
+    max_velocity_y: 0.0
+    min_velocity_theta: 0.0
+    max_velocity_theta: 1.82
+    acceleration_limit: 2.5
+    deceleration_limit: 2.5
+    plugin_names: ["FollowPath"]
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+      debug_trajectory_details: true
+      min_vel_x: 0.0
+      max_vel_x: 0.26
+      min_vel_y: 0.0
+      max_vel_y: 0.0
+      min_speed_xy: 0.0
+      max_speed_xy: 0.26
+      min_speed_theta: 0.0
+      max_speed_theta: 1.82
+      acc_lim_x: 2.5
+      acc_lim_y: 0.0
+      acc_lim_theta: 3.2
+      decel_lim_x: 2.5
+      decel_lim_y: 0.0
+      decel_lim_theta: 3.2
+      vx_samples: 20
+      vy_samples: 5
+      vtheta_samples: 20
+      sim_time: 1.7
+      sim_granularity: 0.05
+      angular_granularity: 0.025
+      use_dwa: true
+      path_distance_bias: 32.0
+      goal_distance_bias: 24.0
+      occdist_scale: 0.01
+      forward_point_distance: 0.325
+      stop_time_buffer: 0.2
+      scaling_speed: 0.25
+      max_scaling_factor: 0.2

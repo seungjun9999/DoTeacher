@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-		'teleops_joy_node = doteacher_teleops.teleops_joy_node:main'
+		    'teleops_joy_node = doteacher_teleops.teleops_joy_node:main'
         ],
     },
 )

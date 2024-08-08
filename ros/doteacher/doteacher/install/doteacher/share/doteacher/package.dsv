@@ -1,0 +1,8 @@
+source;share/doteacher/hook/cmake_prefix_path.ps1
+source;share/doteacher/hook/cmake_prefix_path.dsv
+source;share/doteacher/hook/cmake_prefix_path.sh
+source;share/doteacher/local_setup.bash
+source;share/doteacher/local_setup.dsv
+source;share/doteacher/local_setup.ps1
+source;share/doteacher/local_setup.sh
+source;share/doteacher/local_setup.zsh
