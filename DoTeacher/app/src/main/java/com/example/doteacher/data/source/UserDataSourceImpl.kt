@@ -1,8 +1,11 @@
 package com.example.doteacher.data.source
 
 import com.example.doteacher.data.api.UserService
+import com.example.doteacher.data.model.AuthenticationResponse
+import com.example.doteacher.data.model.MessageResponse
 import com.example.doteacher.data.model.ResponseData
 import com.example.doteacher.data.model.UserData
+import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
 import javax.inject.Inject
 
@@ -32,5 +35,13 @@ class UserDataSourceImpl @Inject constructor(
 
     override suspend fun updateProfileImage(userId: Int, imageUrl: String): ResponseData<UserData> {
         return userService.updateProfileImage(userId, imageUrl)
+    }
+
+    override suspend fun login(authRequest: AuthenticationRequest): ResponseData<AuthenticationResponse> {
+        return userService.login(authRequest)
+    }
+
+    override suspend fun register(userParam: UserParam): ResponseData<MessageResponse> {
+        return userService.register(userParam)
     }
 }

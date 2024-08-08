@@ -3,25 +3,25 @@
 <mapper namespace="com.dosunsang.dosunsang_server.dao.UserDao">
 
     <insert id="insertUser" parameterType="UserDto" useGeneratedKeys="true" keyProperty="id">
-        insert into user (id, useremail, username, userImage, token, userTuto, prefSelect, preferences)
-        values (0, #{userEmail}, #{userName}, #{userImage}, #{token}, #{userTuto}, #{prefSelect}, #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler})
+        insert into user (id, useremail, username, password, userImage, token, userTuto, prefSelect, preferences)
+        values (0, #{userEmail}, #{userName}, #{password}, #{userImage}, #{token}, #{userTuto}, #{prefSelect}, #{preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler})
     </insert>
 
     <select id="selectUser" parameterType="string" resultType="UserDto">
-        select id, useremail, username, userImage, token, userTuto, prefSelect,
+        select id, useremail, password,username, userImage, token, userTuto, prefSelect,
         preferences
         from user
         where useremail = #{userEmail}
     </select>
 
     <select id="selectUsers" resultType="userDto">
-        select id, useremail, username, userImage, token, userTuto, prefSelect,
+        select id, useremail, password,username, userImage, token, userTuto, prefSelect,
         preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
         from user
     </select>
 
     <select id="selectUserId" parameterType ="int" resultType="UserDto">
-        select id, useremail, username, userImage, token, userTuto, prefSelect,
+        select id, useremail, password,username, userImage, token, userTuto, prefSelect,
         preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
         from user
         where id = #{userId}
@@ -46,4 +46,17 @@
         WHERE id = #{userId}
     </update>
 
+    <select id="findByUserEmailJWT" parameterType="string" resultType="UserDto">
+        select id, useremail, username, password, userImage, token, userTuto, prefSelect,
+        preferences as "preferences,typeHandler=com.dosunsang.dosunsang_server.StringListTypeHandler"
+        from user
+        where useremail = #{userEmail}
+    </select>
+
+
+    <update id="updateUserToken">
+        UPDATE user
+        SET token = #{token}
+        WHERE useremail = #{userEmail}
+    </update>
 </mapper>

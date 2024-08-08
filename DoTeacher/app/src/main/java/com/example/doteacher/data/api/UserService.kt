@@ -1,7 +1,10 @@
 package com.example.doteacher.data.api
 
+import com.example.doteacher.data.model.AuthenticationResponse
+import com.example.doteacher.data.model.MessageResponse
 import com.example.doteacher.data.model.ResponseData
 import com.example.doteacher.data.model.UserData
+import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -34,4 +37,10 @@ interface UserService {
         @Path("userId") userId: Int,
         @Query("imageUrl") imageUrl: String
     ): ResponseData<UserData>
+
+    @POST("authenticate")
+    suspend fun login(@Body authRequest: AuthenticationRequest): ResponseData<AuthenticationResponse>
+
+    @POST("register")
+    suspend fun register(@Body userParam: UserParam): ResponseData<MessageResponse>
 }

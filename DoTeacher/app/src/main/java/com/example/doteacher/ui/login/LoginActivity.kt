@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.doteacher.R
 import com.example.doteacher.data.model.param.UserParam
 import com.example.doteacher.databinding.ActivityLoginBinding
+import com.example.doteacher.ui.account.AccountActivity
+import com.example.doteacher.ui.account.AccountFragment
 import com.example.doteacher.ui.base.BaseActivity
 import com.example.doteacher.ui.main.MainActivity
 import com.example.doteacher.ui.preference.PreferenceActivity
@@ -51,7 +53,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun setupClickListeners() {
         binding.googlelogin.setOnClickListener { initiateGoogleLogin() }
-        binding.guestlogin.setOnClickListener { initiateGuestLogin() }
+        binding.guestlogin.setOnClickListener { initiateEmailLogin() }
+        binding.tvSignup.setOnClickListener { navigateToSignUp() }
     }
 
     private fun observeLoginState() {
@@ -92,16 +95,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun handleLoginSuccess() {
         hideLoading()
-        val intent = when {
-            SingletonUtil.user?.prefSelect == true -> Intent(this, MainActivity::class.java)
-            else -> Intent(this, PreferenceActivity::class.java)
-        }
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-
-        // PreferenceActivity로 이동할 때는 LoginActivity를 유지합니다.
-        if (SingletonUtil.user?.prefSelect == true) {
-            finish()
-        }
+        finish()
     }
 
     private fun handleLoginError(message: String) {
@@ -109,17 +105,19 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun initiateGuestLogin() {
-        loginViewModel.signUp(
-            UserParam(
-                userEmail = "guest",
-                userName = "게스트",
-                userImage = null.toString(),
-                token = null,
-                userTuto = false,
-                prefSelect = false
-            )
-        )
+    private fun navigateToSignUp() {
+        val intent = Intent(this, AccountActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun initiateEmailLogin() {
+        val email = binding.editTextText.text.toString()
+        val password = binding.editTextText2.text.toString()
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            loginViewModel.login(email, password)
+        } else {
+            Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initiateGoogleLogin() {
@@ -168,6 +166,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                 UserParam(
                                     userEmail = it.email ?: "",
                                     userName = it.displayName ?: "",
+                                    password = "",
                                     userImage = it.photoUrl?.toString() ?: "",
                                     token = googleIdToken,
                                     userTuto = false,

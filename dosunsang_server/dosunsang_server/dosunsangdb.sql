@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS product;
 CREATE TABLE IF NOT EXISTS `user` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `useremail` VARCHAR(50) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     `username` VARCHAR(16) NOT NULL,
     `userImage` VARCHAR(200) NOT NULL,
     `token` VARCHAR(3000),
@@ -82,8 +83,9 @@ DESCRIBE `preference`;
 DESCRIBE `user_preference`;
 
 -- 데이터 확인 (선택사항)
-SELECT * FROM dosunsangdb.user;
+SELECT * FROM dosunsangdb. user;
 SELECT * FROM dosunsangdb.photo;
 SELECT * FROM dosunsangdb.product;
 SELECT * FROM dosunsangdb.preference;
 SELECT * FROM dosunsangdb.user_preference;
+select * from user;

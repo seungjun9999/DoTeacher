@@ -23,25 +23,23 @@ fun loadImage(view: ImageView, url: String?) {
         Glide.with(view.context)
             .load(url)
             .into(view)
-    }else{
+    } else {
         view.setImageResource(R.drawable.koka)
     }
 }
 
 @BindingAdapter("setCircleProfileImage")
 fun setCircleProfileImage(imageView: ImageView, src: String?) {
-    if(src.isNullOrEmpty()){
-        imageView.setImageResource(R.drawable.mimitaya)
-    }else{
-        src.let {
-            Glide.with(imageView).load(src)
-                .override(100.dpToPx,100.dpToPx)
-                .transform(CircleCrop())
-                .into(imageView)
-        }
+    src.let {
+        Glide.with(imageView).load(src)
+            .override(100.dpToPx, 100.dpToPx)
+            .transform(CircleCrop())
+            .into(imageView)
     }
 
+
 }
+
 @BindingAdapter("imageResId")
 fun bindImage(imageView: ImageView, resId: Int) {
     imageView.setImageResource(resId)

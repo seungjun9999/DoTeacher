@@ -2,6 +2,7 @@ package com.example.doteacher.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
 import com.example.doteacher.data.source.UserDataSource
 import com.example.doteacher.ui.util.SingletonUtil
@@ -15,8 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.sql.Time
-import java.util.Timer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,8 +24,8 @@ class LoginViewModel @Inject constructor(
     private val tokenManager: TokenManager
 ) : ViewModel() {
 
-    private val _loginState = MutableStateFlow<LoginState?>(null)
-    val loginState: StateFlow<LoginState?> = _loginState
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
+    val loginState: StateFlow<LoginState> = _loginState
 
     init {
         checkSavedCredentials()
@@ -58,7 +57,6 @@ class LoginViewModel @Inject constructor(
                     SingletonUtil.user = userData
                     _loginState.value = LoginState.Success
                 } else {
-                    // 토큰 불일치, 재로그인 필요
                     tokenManager.deleteTokenAndEmail()
                     _loginState.value = LoginState.Error("세션이 만료되었습니다. 다시 로그인해 주세요.")
                 }
@@ -87,7 +85,53 @@ class LoginViewModel @Inject constructor(
                         }
                         _loginState.value = LoginState.Success
                     } else {
-                        _loginState.value = LoginState.Error("로그인 실패: 사용자 데이터 없음")
+                        _loginState.value = LoginState.Error("회원가입 실패: 사용자 데이터 없음")
+                    }
+                }
+                is ResultWrapper.GenericError -> {
+                    _loginState.value = LoginState.Error("회원가입 오류: ${response.message}")
+                }
+                is ResultWrapper.NetworkError -> {
+                    _loginState.value = LoginState.Error("네트워크 오류")
+                }
+            }
+        }
+    }
+
+    fun login(email: String, password: String) {
+        viewModelScope.launch {
+            _loginState.value = LoginState.Loading
+            when (val response = safeApiCall(Dispatchers.IO) {
+                userDataSource.login(AuthenticationRequest(email, password))
+            }) {
+                is ResultWrapper.Success -> {
+                    val authResponse = response.data.data
+                    Timber.d("auth $authResponse, re : ${response.data.data}")
+                    if (authResponse != null && authResponse.token.isNotBlank()) {
+                        tokenManager.saveTokenAndEmail(authResponse.token, email)
+
+                        // 사용자 정보 가져오기
+                        when (val userInfoResponse = safeApiCall(Dispatchers.IO) {
+                            userDataSource.getUserInfo(email)
+                        }) {
+                            is ResultWrapper.Success -> {
+                                val userData = userInfoResponse.data.data
+                                if (userData != null) {
+                                    SingletonUtil.user = userData
+                                    _loginState.value = LoginState.Success
+                                } else {
+                                    _loginState.value = LoginState.Error("사용자 정보를 가져오는데 실패했습니다.")
+                                }
+                            }
+                            is ResultWrapper.GenericError -> {
+                                _loginState.value = LoginState.Error(userInfoResponse.message ?: "사용자 정보를 가져오는데 실패했습니다.")
+                            }
+                            is ResultWrapper.NetworkError -> {
+                                _loginState.value = LoginState.Error("네트워크 오류: 사용자 정보를 가져오는데 실패했습니다.")
+                            }
+                        }
+                    } else {
+                        _loginState.value = LoginState.Error("로그인 실패: 유효하지 않은 토큰")
                     }
                 }
                 is ResultWrapper.GenericError -> {

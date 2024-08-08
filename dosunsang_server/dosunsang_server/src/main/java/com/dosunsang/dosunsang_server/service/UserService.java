@@ -1,57 +1,81 @@
 package com.dosunsang.dosunsang_server.service;
 
 import com.dosunsang.dosunsang_server.dao.UserDao;
+import com.dosunsang.dosunsang_server.dto.UserDetailsImpl;
 import com.dosunsang.dosunsang_server.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
-public class UserService {
+public class UserService implements UserDetailsService {
+
+    private final UserDao userDao;
 
     @Autowired
-    @Qualifier("SessionTemplate")
-    private SqlSession sqlSession;
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     public boolean addUser(UserDto user) {
-        UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.insertUser(user);
     }
 
     public UserDto findUser(String userEmail) {
-        UserDao userDao = sqlSession.getMapper(UserDao.class);
         UserDto user = userDao.selectUser(userEmail);
-        log.info("Found user: {}, preferences: {}", user, user.getPreferences());
+        if (user != null) {
+            log.info("Found user: {}, preferences: {}", user, user.getPreferences());
+        } else {
+            log.info("User not found for email: {}", userEmail);
+        }
         return user;
     }
 
     public List<UserDto> getUsers() {
-        UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.selectUsers();
     }
 
-    public UserDto findUserId(int userId){
-        UserDao userDao = sqlSession.getMapper(UserDao.class);
+    public UserDto findUserId(int userId) {
         return userDao.selectUserId(userId);
     }
 
     public boolean updateUserPreferences(int userId, List<String> preferences) {
-        UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.updateUserPreferences(userId, preferences);
     }
 
     public boolean updateUserTuto(int userId, boolean userTuto) {
-        UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.updateUserTuto(userId, userTuto);
     }
 
     public boolean updateUserProfileImage(int userId, String imageUrl) {
-        UserDao userDao = sqlSession.getMapper(UserDao.class);
         return userDao.updateUserProfileImage(userId, imageUrl);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserDto user = findUser(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + username);
+        }
+        return new UserDetailsImpl(user);
+    }
+
+    public UserDetailsImpl loadUserByEmailJWT(String userEmail) throws UsernameNotFoundException {
+        UserDto user = findUser(userEmail);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + userEmail);
+        }
+        return new UserDetailsImpl(user);
+    }
+
+    public boolean updateUserToken(String userEmail, String token) {
+        return userDao.updateUserToken(userEmail, token);
     }
 }

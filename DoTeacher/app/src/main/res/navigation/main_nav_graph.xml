@@ -89,24 +89,23 @@
     </fragment>
 
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.doteacher.ui.profile.ProfileFragment"
-        tools:layout="@layout/fragment_profile"
-        android:label="ProfileFragment">
+            android:id="@+id/profileFragment"
+            android:name="com.example.doteacher.ui.profile.ProfileFragment"
+            tools:layout="@layout/fragment_profile"
+            android:label="ProfileFragment"></fragment>
+
+    <fragment
+            android:id="@+id/settingsFragment"
+            android:name="com.example.doteacher.ui.settings.SettingsFragment"
+            tools:layout="@layout/fragment_setting"
+            android:label="SettingsFragment">
+
     </fragment>
 
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.doteacher.ui.settings.SettingsFragment"
-        tools:layout="@layout/fragment_setting"
-        android:label="SettingsFragment">
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/mypageFragment"
-        android:name="com.example.doteacher.ui.mypage.MyPageFragment"
-        tools:layout="@layout/fragment_my_page"
+            android:id="@+id/mypageFragment"
+            android:name="com.example.doteacher.ui.mypage.MyPageFragment"
+            tools:layout="@layout/fragment_my_page"
             android:label="MyPageFragment">
         <action
                 android:id="@+id/action_mypageFragment_to_profileFragment"
@@ -130,7 +129,22 @@
             android:id="@+id/loginActivity"
             android:name="com.example.doteacher.ui.login.LoginActivity"
             tools:layout="@layout/activity_login">
+        <action
+                android:id="@+id/action_loginactivity_to_accountActivity"
+                app:destination="@id/accountActivity">
+
+        </action>
     </activity>
+
+    <fragment
+            android:id="@+id/accountActivity"
+            android:name="com.example.doteacher.ui.account.AccountFragment"
+            tools:layout="@layout/activity_account">
+
+        <action
+                android:id="@+id/action_accountActivity_to_loginActivity"
+                app:destination="@id/loginActivity" />
+    </fragment>
 
 
 </navigation>
