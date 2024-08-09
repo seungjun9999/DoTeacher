@@ -57,6 +57,10 @@
     <update id="updateUserToken">
         UPDATE user
         SET token = #{token}
-        WHERE useremail = #{userEmail}
+        WHERE id = #{userId}
     </update>
+
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM user WHERE id = #{userId}
+    </delete>
 </mapper>

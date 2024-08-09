@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.doteacher.data.model.ProductData
+import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.source.ProductDataSource
 import com.example.doteacher.data.source.UserDataSource
 import com.example.doteacher.ui.util.SingletonUtil
@@ -27,6 +28,9 @@ class HomeViewModel @Inject constructor(
 
     private val _userTutoUpdated = MutableLiveData<Boolean>()
     val userTutoUpdated: LiveData<Boolean> get() = _userTutoUpdated
+
+    private val _userData = MutableLiveData<UserData>()
+    val userData: LiveData<UserData> = _userData
 
     fun setProducts(value: List<ProductData>?) {
         value.let {
@@ -100,6 +104,7 @@ class HomeViewModel @Inject constructor(
             }) {
                 is ResultWrapper.Success -> {
                     val newUserData = response.data.data
+                    _userData.postValue(newUserData)
                     SingletonUtil.user = SingletonUtil.user?.copy(
                         userTuto = newUserData.userTuto,
                         preferences = newUserData.preferences ?: emptyList()

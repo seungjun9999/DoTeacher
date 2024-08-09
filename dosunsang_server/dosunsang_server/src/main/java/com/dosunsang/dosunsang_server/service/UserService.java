@@ -75,7 +75,14 @@ public class UserService implements UserDetailsService {
         return new UserDetailsImpl(user);
     }
 
-    public boolean updateUserToken(String userEmail, String token) {
-        return userDao.updateUserToken(userEmail, token);
+    public boolean updateUserToken(int userId, String token) {
+        return userDao.updateUserToken(userId, token);
     }
+
+
+    public boolean deleteUser(int userId) {
+        return userDao.deleteUser(userId);
+    }
+
+
 }

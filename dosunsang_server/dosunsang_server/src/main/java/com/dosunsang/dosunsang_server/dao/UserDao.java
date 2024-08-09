@@ -15,6 +15,6 @@ public interface UserDao{
     boolean updateUserPreferences(@Param("userId") int userId, @Param("preferences") List<String> preferences);
     boolean updateUserTuto(@Param("userId") int userId, @Param("userTuto") boolean userTuto);
     boolean updateUserProfileImage(@Param("userId") int userId, @Param("userImage") String userImage);
-    Optional<UserDto> findByUserEmailJWT(String userEmail);
-    boolean updateUserToken(String userEmail, String token);
+    boolean updateUserToken(int userId, String token);
+    boolean deleteUser(int userId);
 }

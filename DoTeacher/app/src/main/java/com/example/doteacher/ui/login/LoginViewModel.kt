@@ -27,6 +27,8 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
+    private var isManualLogin = false
+
     init {
         checkSavedCredentials()
     }
@@ -36,9 +38,10 @@ class LoginViewModel @Inject constructor(
             combine(tokenManager.tokenFlow, tokenManager.emailFlow) { token, email ->
                 Pair(token, email)
             }.collect { (token, email) ->
-                if (!token.isNullOrEmpty() && !email.isNullOrEmpty()) {
+                if (!isManualLogin && !token.isNullOrEmpty() && !email.isNullOrEmpty()) {
+                    Timber.d("token is $token, email $email")
                     attemptAutoLogin(token, email)
-                } else {
+                } else if (!isManualLogin) {
                     _loginState.value = LoginState.Idle
                 }
             }
@@ -46,6 +49,8 @@ class LoginViewModel @Inject constructor(
     }
 
     private suspend fun attemptAutoLogin(token: String, email: String) {
+        if (isManualLogin) return
+
         _loginState.value = LoginState.Loading
         Timber.d("Attempting auto login with email: $email")
         when (val response = safeApiCall(Dispatchers.IO) {
@@ -57,14 +62,14 @@ class LoginViewModel @Inject constructor(
                     SingletonUtil.user = userData
                     _loginState.value = LoginState.Success
                 } else {
-                    tokenManager.deleteTokenAndEmail()
-                    _loginState.value = LoginState.Error("세션이 만료되었습니다. 다시 로그인해 주세요.")
+                    tokenManager.clearAllData()
+                    _loginState.value = LoginState.Idle  // Error 대신 Idle 상태로 변경
                 }
             }
             else -> {
                 Timber.e("Auto login failed: $response")
-                tokenManager.deleteTokenAndEmail()
-                _loginState.value = LoginState.Error("자동 로그인 실패")
+                tokenManager.clearAllData()
+                _loginState.value = LoginState.Idle  // Error 대신 Idle 상태로 변경
             }
         }
     }
@@ -73,63 +78,134 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
             when (val response = safeApiCall(Dispatchers.IO) {
-                userDataSource.signUp(userParam)
+                userDataSource.getUserInfo(userParam.userEmail)
             }) {
                 is ResultWrapper.Success -> {
-                    val userData = response.data.data
-                    Timber.d("${response.data.data} user data")
-                    if (userData != null) {
-                        SingletonUtil.user = userData
-                        userData.token?.let { token ->
-                            tokenManager.saveTokenAndEmail(token, userData.userEmail)
-                        }
-                        _loginState.value = LoginState.Success
+                    // 사용자가 이미 존재하면 로그인을 진행합니다.
+                    val existingUser = response.data.data
+                    if (existingUser != null) {
+                        Timber.d("User already exists, proceeding with login")
+                        googlelogin(userParam.userEmail)
                     } else {
-                        _loginState.value = LoginState.Error("회원가입 실패: 사용자 데이터 없음")
+                        performSignUp(userParam)
                     }
                 }
                 is ResultWrapper.GenericError -> {
-                    _loginState.value = LoginState.Error("회원가입 오류: ${response.message}")
+                    Timber.d("User not found or error occurred, attempting signup")
+                    performSignUp(userParam)
                 }
                 is ResultWrapper.NetworkError -> {
                     _loginState.value = LoginState.Error("네트워크 오류")
                 }
+            }
+        }
+    }
+
+    private suspend fun googlelogin(userEmail:String){
+        when(val response = safeApiCall(Dispatchers.IO){
+            userDataSource.getUserInfo(userEmail)
+        }){
+            is ResultWrapper.Success -> {
+                val userData = response.data.data
+                if(userData !=null){
+                    SingletonUtil.user = userData
+                    userData.token?.let { token ->
+                        tokenManager.saveTokenAndEmail(token, userData.userEmail)
+                    }
+                    _loginState.value = LoginState.Success
+                }
+            }
+            is  ResultWrapper.GenericError -> {
+                _loginState.value = LoginState.Error("회원가입 실패 : 사용자 데이터 없음")
+            }
+            is ResultWrapper.NetworkError -> {
+                _loginState.value = LoginState.Error("네트워크 오류")
+            }
+        }
+    }
+
+    private suspend fun performSignUp(userParam: UserParam) {
+        when (val response = safeApiCall(Dispatchers.IO) {
+            userDataSource.signUp(userParam)
+        }) {
+            is ResultWrapper.Success -> {
+                val userData = response.data.data
+                if (userData != null) {
+                    SingletonUtil.user = userData
+                    userData.token?.let { token ->
+                        tokenManager.saveTokenAndEmail(token, userData.userEmail)
+                    }
+                    _loginState.value = LoginState.Success
+                } else {
+                    _loginState.value = LoginState.Error("회원가입 실패: 사용자 데이터 없음")
+                }
+            }
+            is ResultWrapper.GenericError -> {
+                _loginState.value = LoginState.Error("회원가입 오류: ${response.message}")
+            }
+            is ResultWrapper.NetworkError -> {
+                _loginState.value = LoginState.Error("네트워크 오류")
             }
         }
     }
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
+            isManualLogin = true
             _loginState.value = LoginState.Loading
-            when (val response = safeApiCall(Dispatchers.IO) {
-                userDataSource.login(AuthenticationRequest(email, password))
+
+            when (val userInfoResponse = safeApiCall(Dispatchers.IO) {
+                userDataSource.getUserInfo(email)
             }) {
                 is ResultWrapper.Success -> {
-                    val authResponse = response.data
-                    Timber.d("Auth response: $authResponse")
-                    if (authResponse.token.isNotBlank()) {
-                        val tokenWithBearer = "Bearer ${authResponse.token}"
-                        Timber.d("Saving token with Bearer: $tokenWithBearer")
-                        tokenManager.saveTokenAndEmail("Bearer ${authResponse.token}", email)
-                        fetchUserInfo(email)
+                    val userData = userInfoResponse.data.data
+                    if (userData != null) {
+                        performLogin(email, password)
                     } else {
-                        Timber.e("Invalid auth response: $authResponse")
-                        _loginState.value = LoginState.Error("로그인 실패: 유효하지 않은 응답")
+                        _loginState.value = LoginState.Error("사용자를 찾을 수 없습니다.")
                     }
                 }
                 is ResultWrapper.GenericError -> {
-                    Timber.e("Login error: ${response.message}")
-                    _loginState.value = LoginState.Error("로그인 오류: ${response.message}")
+                    _loginState.value = LoginState.Error(userInfoResponse.message ?: "사용자 정보를 가져오는데 실패했습니다.")
                 }
                 is ResultWrapper.NetworkError -> {
-                    Timber.e("Network error")
-                    _loginState.value = LoginState.Error("네트워크 오류")
+                    _loginState.value = LoginState.Error("네트워크 오류: 사용자 정보를 가져오는데 실패했습니다.")
                 }
+            }
+
+            isManualLogin = false
+        }
+    }
+
+    private suspend fun performLogin(email: String, password: String) {
+        when (val response = safeApiCall(Dispatchers.IO) {
+            userDataSource.login(AuthenticationRequest(email, password))
+        }) {
+            is ResultWrapper.Success -> {
+                val authResponse = response.data
+                Timber.d("Auth response: $authResponse")
+                if (authResponse.token.isNotBlank()) {
+                    val tokenWithBearer = "Bearer ${authResponse.token}"
+                    Timber.d("Saving token with Bearer: $tokenWithBearer")
+                    tokenManager.saveTokenAndEmail(tokenWithBearer, email)
+                    fetchUserInfo(email, authResponse.token)
+                } else {
+                    Timber.e("Invalid auth response: $authResponse")
+                    _loginState.value = LoginState.Error("로그인 실패: 유효하지 않은 응답")
+                }
+            }
+            is ResultWrapper.GenericError -> {
+                Timber.e("Login error: ${response.message}")
+                _loginState.value = LoginState.Error("로그인 오류: ${response.message}")
+            }
+            is ResultWrapper.NetworkError -> {
+                Timber.e("Network error")
+                _loginState.value = LoginState.Error("네트워크 오류")
             }
         }
     }
 
-    private suspend fun fetchUserInfo(email: String) {
+    private suspend fun fetchUserInfo(email: String, token: String) {
         when (val userInfoResponse = safeApiCall(Dispatchers.IO) {
             userDataSource.getUserInfo(email)
         }) {
@@ -137,6 +213,18 @@ class LoginViewModel @Inject constructor(
                 val userData = userInfoResponse.data.data
                 if (userData != null) {
                     SingletonUtil.user = userData
+                    SingletonUtil.user!!.token = token
+
+                    when (val updateTokenResponse = safeApiCall(Dispatchers.IO) {
+                        userDataSource.updateUserToken(userData.id, token)
+                    }) {
+                        is ResultWrapper.Success -> {
+                            Timber.d("Token updated in database successfully")
+                        }
+                        else -> {
+                            Timber.e("Failed to update token in database")
+                        }
+                    }
                     _loginState.value = LoginState.Success
                 } else {
                     _loginState.value = LoginState.Error("사용자 정보를 가져오는데 실패했습니다.")

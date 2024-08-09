@@ -7,6 +7,8 @@ import com.example.doteacher.data.model.ResponseData
 import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
+import com.example.doteacher.ui.util.server.ResultWrapper
+import com.example.doteacher.ui.util.server.safeApiCall
 import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(
@@ -44,4 +46,14 @@ class UserDataSourceImpl @Inject constructor(
     override suspend fun register(userParam: UserParam): ResponseData<MessageResponse> {
         return userService.register(userParam)
     }
+
+    override suspend fun deleteUser(userId: Int): ResponseData<Unit> {
+        return userService.deleteUser(userId)
+    }
+
+    override suspend fun updateUserToken(userId: Int, token: String): ResponseData<UserData> {
+        return  userService.updateUserToken(userId, token)
+    }
+
+
 }

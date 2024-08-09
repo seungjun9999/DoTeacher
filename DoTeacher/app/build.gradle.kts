@@ -136,4 +136,7 @@ dependencies {
 
     //s3
     implementation (libs.aws.android.sdk.s3)
+
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 }

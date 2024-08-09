@@ -4,6 +4,11 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View"/>
+        <variable
+                name="loadingVisible"
+                type="boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,36 +35,12 @@
                 app:layout_constraintTop_toBottomOf="@id/tvSettingsTitle"
                 android:layout_marginTop="20dp">
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                     android:id="@+id/item_logout"
+                    layout="@layout/my_page_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                <ImageView
-                        android:id="@+id/img_logout"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/logout_icon"
-                        app:tint="@android:color/holo_red_light"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                        android:id="@+id/tv_logout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="로그아웃"
-                        android:textColor="@android:color/holo_red_light"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toEndOf="@+id/img_logout"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginStart="20dp" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_marginTop="16dp" />
 
             <View
                     android:layout_width="match_parent"
@@ -68,36 +49,42 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/item_withdraw"
+            <include
+                    android:id="@+id/item_signout"
+                    layout="@layout/my_page_item"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:layout_height="wrap_content" />
 
-                <ImageView
-                        android:id="@+id/img_withdraw"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/logout_icon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp" />
 
-                <TextView
-                        android:id="@+id/tv_withdraw"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="회원탈퇴"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toEndOf="@+id/img_withdraw"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginStart="20dp" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/loadingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80000000"
+                android:visibility="@{loadingVisible ? View.VISIBLE : View.GONE}">
+
+
+            <ImageView
+                    android:id="@+id/loadingBird"
+                    android:layout_width="130dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/loading_bird"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="35dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

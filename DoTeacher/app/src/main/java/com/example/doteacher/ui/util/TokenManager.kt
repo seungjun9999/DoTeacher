@@ -33,10 +33,12 @@ class TokenManager @Inject constructor(private val context: Context) {
         .map { preferences -> preferences[PreferencesKeys.USER_EMAIL] }
 
     suspend fun deleteTokenAndEmail() {
+        Timber.d("Deleting token and email")
         context.dataStore.edit { preferences ->
             preferences.remove(PreferencesKeys.AUTH_TOKEN)
             preferences.remove(PreferencesKeys.USER_EMAIL)
         }
+        Timber.d("Token and email deleted successfully")
     }
 
     suspend fun getToken(): String? {
@@ -59,5 +61,11 @@ class TokenManager @Inject constructor(private val context: Context) {
 
     suspend fun isLoggedIn(): Boolean {
         return getToken() != null
+    }
+
+    suspend fun clearAllData() {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
     }
 }

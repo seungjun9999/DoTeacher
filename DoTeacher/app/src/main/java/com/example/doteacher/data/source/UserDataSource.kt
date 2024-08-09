@@ -6,6 +6,7 @@ import com.example.doteacher.data.model.ResponseData
 import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
+import com.example.doteacher.ui.util.server.ResultWrapper
 import timber.log.Timber
 
 interface UserDataSource {
@@ -31,5 +32,10 @@ interface UserDataSource {
     suspend fun login(authRequest: AuthenticationRequest): AuthenticationResponse
 
     suspend fun register(userParam: UserParam): ResponseData<MessageResponse>
+
+    suspend fun deleteUser(userId: Int) : ResponseData<Unit>
+
+    suspend fun updateUserToken(userId: Int, token: String): ResponseData<UserData>
+
 
 }

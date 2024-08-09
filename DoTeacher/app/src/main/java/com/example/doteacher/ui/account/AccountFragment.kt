@@ -18,11 +18,14 @@ import kotlinx.coroutines.launch
 class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_account) {
 
     private val viewModel: AccountViewModel by viewModels()
+    private var selectedImageUri: Uri? = null
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
+            selectedImageUri = it
             binding.imgAccountUser.setImageURI(it)
-            viewModel.setImageUrl(it.toString())
+            binding.imgAccountUser.visibility = View.VISIBLE
+            uploadImageToS3(it)
         }
     }
 
@@ -77,13 +80,22 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
                     }
                     is RegistrationState.Error -> {
                         hideLoading()
-                        Toast.makeText(context, "이미 사용중인 이메일 입니다", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+                    }
+                    is RegistrationState.ImageUploaded -> {
+                        hideLoading()
+                        //Toast.makeText(context, "이미지 업로드 성공", Toast.LENGTH_SHORT).show()
                     }
                     else -> hideLoading()
                 }
             }
         }
     }
+    private fun uploadImageToS3(imageUri: Uri) {
+        showLoading()
+        viewModel.uploadImageToS3(requireContext(), imageUri)
+    }
+
 
     private fun showLoading() {
         // 로딩 표시 구현

@@ -46,9 +46,11 @@ class DialogFragment : DialogFragment() {
         indicator = binding.indicator
 
         val imageList = listOf(
-            R.drawable.dosunbird,
-            R.drawable.ex_cute_cat,
-            R.drawable.ex_sky
+            R.drawable.tuto1,
+            R.drawable.tuto2,
+            R.drawable.tuto3,
+            R.drawable.tuto4,
+            R.drawable.tuto5
         )
 
         val adapter = DialogAdapter(imageList)

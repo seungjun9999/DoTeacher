@@ -5,6 +5,7 @@ import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentMyPageBinding
 import com.example.doteacher.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -38,6 +39,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 imgMypage.setImageResource(R.drawable.setting) // 설정 아이콘 리소스
                 tvMypageText.text = "설정"
                 root.setOnClickListener{
+                    Timber.d("setting button clicked")
                     findNavController().navigate(R.id.action_mypageFragment_to_settingsFragment)
                 }
             }

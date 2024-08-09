@@ -1,10 +1,12 @@
 package com.example.doteacher.ui.home
 
+import android.net.Uri
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentHomeBinding
 import com.example.doteacher.ui.base.BaseFragment
@@ -28,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         checkAndShowDialog()
         initAdapter()
         observeUserTutoUpdate()
+        loadProfileImage()
     }
 
     override fun onResume() {
@@ -40,6 +43,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         binding.userData = SingletonUtil.user
         binding.executePendingBindings()
         Timber.d("Home screen user data: ${SingletonUtil.user}")
+    }
+
+    private fun loadProfileImage() {
+        SingletonUtil.user?.userImage?.let { imageUrl ->
+            if (imageUrl.startsWith("content://") || imageUrl.startsWith("file://")) {
+                binding.imgProfile.setImageURI(Uri.parse(imageUrl))
+            } else {
+                Glide.with(this)
+                    .load(imageUrl)
+                    .into(binding.imgProfile)
+            }
+        }
     }
 
     private fun loadUserData() {
@@ -105,6 +120,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
     private fun observeData() {
         homeViewModel.randomProducts.observe(viewLifecycleOwner) { products ->
             homeAdapter.submitList(products)
+        }
+
+        homeViewModel.userData.observe(viewLifecycleOwner) { userData ->
+            binding.userData = userData
+            loadProfileImage()
         }
     }
 

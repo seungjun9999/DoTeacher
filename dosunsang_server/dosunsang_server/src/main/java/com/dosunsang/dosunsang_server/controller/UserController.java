@@ -178,5 +178,37 @@ public class UserController {
         return  ResponseEntity.ok("Jwt is....ok");
     }
 
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable int userId) {
+        try {
+            boolean deleted = userService.deleteUser(userId);
+            if (deleted) {
+                return ResponseEntity.ok(ResultDto.res(HttpStatus.OK, "회원 탈퇴 성공", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResultDto.res(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다", null));
+            }
+        } catch (Exception e) {
+            log.error("회원 탈퇴 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "회원 탈퇴 실패", null));
+        }
+    }
+
+    @PutMapping("/user/{userId}/token")
+    @Operation(summary = "유저 토큰 업데이트", description = "유저의 토큰을 업데이트합니다")
+    public ResultDto<UserDto> updateUserToken(@PathVariable int userId,  @RequestParam String token) {
+        try {
+            boolean updated = userService.updateUserToken(userId, token);
+            if (updated) {
+                UserDto updatedUser = userService.findUserId(userId);
+                return ResultDto.res(HttpStatus.OK, "성공", updatedUser);
+            } else {
+                return ResultDto.res(HttpStatus.BAD_REQUEST, "업데이트 실패");
+            }
+        } catch (Exception e) {
+            return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
+        }
+    }
+
+
 
 }

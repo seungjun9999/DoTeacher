@@ -100,11 +100,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             else -> Intent(this, PreferenceActivity::class.java)
         }
         startActivity(intent)
-
-        if (SingletonUtil.user?.prefSelect == true) {
-            finish()
-        }
-
         finish()
     }
 
@@ -174,7 +169,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                 UserParam(
                                     userEmail = it.email ?: "",
                                     userName = it.displayName ?: "",
-                                    password = "",
+                                    password = "google_login",
                                     userImage = it.photoUrl?.toString() ?: "",
                                     token = googleIdToken,
                                     userTuto = false,

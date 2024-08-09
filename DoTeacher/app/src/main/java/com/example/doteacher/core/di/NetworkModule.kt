@@ -67,19 +67,14 @@ object NetworkModule {
             val original = chain.request()
             val requestBuilder = original.newBuilder()
 
-            val path = original.url.encodedPath
-            Timber.d("Request path: $path")
+            val tokenRequiredEndpoints = listOf("/authenticate")
 
-            if (!path.endsWith("/user") && !path.endsWith("/register") && !path.endsWith("/authenticate")) {
+            if (tokenRequiredEndpoints.any { original.url.encodedPath.contains(it) }) {
                 runBlocking {
                     tokenManager.getToken()?.let { token ->
-                        Timber.d("Adding token to request: $token")
                         requestBuilder.addHeader("Authorization", "Bearer $token")
                     }
                 }
-            }
-            else {
-                Timber.d("Skipping token for path: $path")
             }
 
             chain.proceed(requestBuilder.build())
