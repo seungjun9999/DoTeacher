@@ -12,11 +12,11 @@ DROP TABLE IF EXISTS photo;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS product;
 
--- user 테이블 생성 (수정됨)
+-- user 테이블 생성
 CREATE TABLE IF NOT EXISTS `user` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `useremail` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255),
     `username` VARCHAR(16) NOT NULL,
     `userImage` VARCHAR(200) NOT NULL,
     `token` VARCHAR(3000),
