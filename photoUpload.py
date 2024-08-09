@@ -13,11 +13,11 @@ s3 = boto3.client('s3',
 
 # MySQL 데이터베이스 연결
 db = mysql.connector.connect(
-    host="127.0.0.1",
+    host="i11d102.p.ssafy.io",
     user="root",
-    password="ssafy",
+    password="ssafyd102wjdwo",
     database="dosunsangdb",
-    port=3306
+    port=3307
 )
 cursor = db.cursor()
 

@@ -15,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Qualifier
@@ -36,8 +37,10 @@ object NetworkModule {
     @Provides
     @Named("LoggingInterceptor")
     fun provideLoggingInterceptor(): Interceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+        return HttpLoggingInterceptor { message ->
+            Timber.d(message)
+        }.apply {
+            level = HttpLoggingInterceptor.Level.HEADERS
         }
     }
 
@@ -64,10 +67,19 @@ object NetworkModule {
             val original = chain.request()
             val requestBuilder = original.newBuilder()
 
-            runBlocking {
-                tokenManager.getToken()?.let { token ->
-                    requestBuilder.addHeader("Authorization", "Bearer $token")
+            val path = original.url.encodedPath
+            Timber.d("Request path: $path")
+
+            if (!path.endsWith("/user") && !path.endsWith("/register") && !path.endsWith("/authenticate")) {
+                runBlocking {
+                    tokenManager.getToken()?.let { token ->
+                        Timber.d("Adding token to request: $token")
+                        requestBuilder.addHeader("Authorization", "Bearer $token")
+                    }
                 }
+            }
+            else {
+                Timber.d("Skipping token for path: $path")
             }
 
             chain.proceed(requestBuilder.build())

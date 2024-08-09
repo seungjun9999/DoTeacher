@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentAccountBinding
 import com.example.doteacher.ui.base.BaseFragment
@@ -72,11 +73,11 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
                     is RegistrationState.Success -> {
                         hideLoading()
                         Toast.makeText(context, "회원가입 성공!", Toast.LENGTH_SHORT).show()
-                        //findNavController().navigate(R.id.action_accountFragment_to_loginActivity)
+                        findNavController().popBackStack()
                     }
                     is RegistrationState.Error -> {
                         hideLoading()
-                        Toast.makeText(context, "오류: ${state.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "이미 사용중인 이메일 입니다", Toast.LENGTH_SHORT).show()
                     }
                     else -> hideLoading()
                 }

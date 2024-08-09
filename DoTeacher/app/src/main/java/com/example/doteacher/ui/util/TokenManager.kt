@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,12 +20,12 @@ class TokenManager @Inject constructor(private val context: Context) {
     }
 
     suspend fun saveTokenAndEmail(token: String, email: String) {
+        Timber.d("Saving token: $token")
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.AUTH_TOKEN] = token
             preferences[PreferencesKeys.USER_EMAIL] = email
         }
     }
-
     val tokenFlow: Flow<String?> = context.dataStore.data
         .map { preferences -> preferences[PreferencesKeys.AUTH_TOKEN] }
 

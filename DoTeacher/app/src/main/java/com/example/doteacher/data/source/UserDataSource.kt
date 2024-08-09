@@ -6,6 +6,7 @@ import com.example.doteacher.data.model.ResponseData
 import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
+import timber.log.Timber
 
 interface UserDataSource {
 
@@ -30,4 +31,5 @@ interface UserDataSource {
     suspend fun login(authRequest: AuthenticationRequest): AuthenticationResponse
 
     suspend fun register(userParam: UserParam): ResponseData<MessageResponse>
+
 }

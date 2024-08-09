@@ -95,8 +95,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun handleLoginSuccess() {
         hideLoading()
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = when {
+            SingletonUtil.user?.prefSelect == true -> Intent(this, MainActivity::class.java)
+            else -> Intent(this, PreferenceActivity::class.java)
+        }
         startActivity(intent)
+
+        if (SingletonUtil.user?.prefSelect == true) {
+            finish()
+        }
+
         finish()
     }
 

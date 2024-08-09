@@ -34,7 +34,6 @@ import java.util.UUID;
 
 @RestController
 @Slf4j
-@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
 
@@ -124,7 +123,6 @@ public class UserController {
         }
     }
 
-
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
@@ -140,7 +138,6 @@ public class UserController {
 
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
-
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDto user) {
@@ -175,7 +172,7 @@ public class UserController {
             return message;
         }
     }
-
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/test")
     public ResponseEntity<String> testApi(){
         return  ResponseEntity.ok("Jwt is....ok");

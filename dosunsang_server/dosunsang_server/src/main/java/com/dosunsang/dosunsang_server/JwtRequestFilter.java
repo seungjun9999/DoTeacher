@@ -30,9 +30,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String requestTokenHeader = request.getHeader("Authorization");
+        String path = request.getServletPath();
+        logger.info("Request path: " + path);
+        logger.info("Authorization header: " + requestTokenHeader);
 
         // 회원가입과 로그인 경로에 대해서는 JWT 검증을 건너뜁니다.
-        if (request.getServletPath().equals("/register") || request.getServletPath().equals("/authenticate")) {
+        if (request.getServletPath().equals("/register") || request.getServletPath().equals("/authenticate") || request.getServletPath().equals("/user")) {
             chain.doFilter(request, response);
             return;
         }

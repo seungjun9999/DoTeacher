@@ -92,7 +92,8 @@
             android:id="@+id/profileFragment"
             android:name="com.example.doteacher.ui.profile.ProfileFragment"
             tools:layout="@layout/fragment_profile"
-            android:label="ProfileFragment"></fragment>
+            android:label="ProfileFragment">
+    </fragment>
 
     <fragment
             android:id="@+id/settingsFragment"
@@ -130,6 +131,7 @@
             android:name="com.example.doteacher.ui.login.LoginActivity"
             tools:layout="@layout/activity_login">
     </activity>
+
 
 
 
