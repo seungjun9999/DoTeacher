@@ -87,7 +87,7 @@
                     android:text="전체 작품"
                     android:background="@color/white"
                     android:textColor="#6b25ff"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     app:backgroundTint="@null"
                     app:drawableTint="#6b25ff"
                     app:drawableTintMode="src_in"

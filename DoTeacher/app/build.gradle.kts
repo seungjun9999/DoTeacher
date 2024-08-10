@@ -132,11 +132,14 @@ dependencies {
     implementation (libs.kotlinx.coroutines.android)
 
     //datastore
-    implementation ("androidx.datastore:datastore-preferences:1.1.1")
+    implementation (libs.androidx.datastore.preferences)
 
     //s3
     implementation (libs.aws.android.sdk.s3)
 
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    implementation (libs.glide)
+    annotationProcessor (libs.compiler)
+
+    implementation (libs.lottie)
+
 }

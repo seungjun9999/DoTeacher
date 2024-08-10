@@ -1,13 +1,9 @@
 package com.example.doteacher.ui.profile
 
-import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.animation.Animator
 import android.net.Uri
 import android.util.Log
 import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -23,13 +19,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
 
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
     private val profileViewModel: ProfileViewModel by viewModels()
-    private var rotateAnimation: ObjectAnimator? = null
 
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -58,31 +52,46 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
 
     override fun initView() {
         initData()
-        setupLoadingAnimation()
         clickEvent()
         observeViewModel()
+        binding.isLoading = false
     }
 
-    @SuppressLint("Recycle")
-    private fun setupLoadingAnimation() {
-        if (rotateAnimation == null) {
-            rotateAnimation = ObjectAnimator.ofFloat(binding.loadingBird, View.ROTATION, 0f, 360f).apply {
-                duration = 2000
-                repeatCount = ObjectAnimator.INFINITE
-                interpolator = LinearInterpolator()
-            }
-        }
-    }
 
     private fun showLoading() {
-        binding.loadingVisible = true
-        setupLoadingAnimation()
-        rotateAnimation?.start()
+        binding.isLoading = true
+        binding.startlottie.playAnimation()
+        binding.checklottie.visibility = View.GONE
+        binding.faillottie.visibility = View.GONE
     }
 
-    private fun hideLoading() {
-        binding.loadingVisible = false
-        rotateAnimation?.cancel()
+
+    private fun hideLoading(isSuccess: Boolean) {
+        binding.isLoading = false
+        binding.startlottie.cancelAnimation()
+        if (isSuccess) {
+            binding.checklottie.visibility = View.VISIBLE
+            binding.checklottie.playAnimation()
+            binding.checklottie.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    binding.checklottie.visibility = View.GONE
+                }
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        } else {
+            binding.faillottie.visibility = View.VISIBLE
+            binding.faillottie.playAnimation()
+            binding.faillottie.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    binding.faillottie.visibility = View.GONE
+                }
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        }
     }
 
     private fun initData() {
@@ -107,10 +116,11 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
 
         profileViewModel.updateResult.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { isSuccess ->
+                hideLoading(isSuccess)
                 if (isSuccess) {
-                    showToast("프로필 이미지가 성공적으로 업데이트되었습니다.")
+//                    showToast("프로필 이미지가 성공적으로 업데이트되었습니다.")
                 } else {
-                    showToast("프로필 이미지 업데이트에 실패했습니다.")
+//                    showToast("프로필 이미지 업데이트에 실패했습니다.")
                 }
             }
         }
@@ -130,9 +140,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
                 updateProfileImage(imageUrl)
             } catch (e: Exception) {
                 Log.e("ProfileFragment", "Image upload failed", e)
-                showToast("이미지 업로드에 실패했습니다. 다시 시도해주세요.")
-            } finally {
-                hideLoading()
+                hideLoading(false)
             }
         }
     }

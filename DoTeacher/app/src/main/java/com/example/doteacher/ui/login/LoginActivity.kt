@@ -1,10 +1,7 @@
 package com.example.doteacher.ui.login
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.credentials.CredentialManager
@@ -15,7 +12,6 @@ import com.example.doteacher.R
 import com.example.doteacher.data.model.param.UserParam
 import com.example.doteacher.databinding.ActivityLoginBinding
 import com.example.doteacher.ui.account.AccountActivity
-import com.example.doteacher.ui.account.AccountFragment
 import com.example.doteacher.ui.base.BaseActivity
 import com.example.doteacher.ui.main.MainActivity
 import com.example.doteacher.ui.preference.PreferenceActivity
@@ -43,7 +39,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     override fun init() {
         setupCredentialManager()
         setupClickListeners()
-        setupLoadingAnimation()
         observeLoginState()
     }
 
@@ -71,26 +66,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         }
     }
 
-    @SuppressLint("Recycle")
-    private fun setupLoadingAnimation() {
-        if (rotateAnimation == null) {
-            rotateAnimation = ObjectAnimator.ofFloat(binding.loadingBird, View.ROTATION, 0f, 360f).apply {
-                duration = 2000
-                repeatCount = ObjectAnimator.INFINITE
-                interpolator = LinearInterpolator()
-            }
-        }
-    }
 
     private fun showLoading() {
         binding.loadingVisible = true
-        setupLoadingAnimation()
         rotateAnimation?.start()
+        binding.startlottie.playAnimation()
     }
 
     private fun hideLoading() {
         binding.loadingVisible = false
         rotateAnimation?.cancel()
+        binding.startlottie.cancelAnimation()
     }
 
     private fun handleLoginSuccess() {

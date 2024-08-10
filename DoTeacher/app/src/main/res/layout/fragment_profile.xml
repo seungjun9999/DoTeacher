@@ -7,18 +7,56 @@
         <variable
                 name="userData"
                 type="com.example.doteacher.data.model.UserData" />
-        <import type="android.view.View"/>
         <variable
-                name="loadingVisible"
-                type="boolean" />
-
+                name="isLoading"
+                type="Boolean" />
+        <import type="android.view.View"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".ui.profile.ProfileFragment"
-            android:background="@color/black">
+            android:background="@color/white">
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/startlottie"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/anime_loading"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/checklottie"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/check"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                android:visibility="@{!isLoading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/faillottie"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/fail"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                android:visibility="@{!isLoading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
                 android:text="프로필 사진 수정"
@@ -46,9 +84,11 @@
 
         <ImageView
                 android:src="@drawable/arrow_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:id="@+id/btn_profile_to_home"
+                android:padding="5dp"
+                app:tint="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="20dp"
@@ -62,8 +102,8 @@
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/btn_profile_to_home"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="45dp"
-                android:textColor="@color/white"
+                android:layout_marginTop="48dp"
+                android:textColor="@color/black"
                 android:fontFamily="@font/poppins_semibold"
                 android:layout_marginStart="35dp" />
 
@@ -82,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView13"
-                    android:textColor="#999999"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
                     app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
                     android:layout_marginTop="5dp"
@@ -121,7 +161,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="5dp"
-                    android:textColor="#999999" />
+                    android:textColor="@color/black" />
 
             <EditText
 
@@ -155,7 +195,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="5dp"
-                    android:textColor="#999999" />
+                    android:textColor="@color/black" />
 
             <EditText
                     android:text="음"
@@ -168,28 +208,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView21"
                     app:layout_constraintBottom_toBottomOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/loadingLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#80000000"
-                android:visibility="@{loadingVisible ? View.VISIBLE : View.GONE}">
-
-
-            <ImageView
-                    android:id="@+id/loadingBird"
-                    android:layout_width="130dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/loading_bird"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginEnd="35dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

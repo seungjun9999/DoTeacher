@@ -155,30 +155,19 @@
                     android:layout_marginBottom="7dp"
                     android:layout_marginStart="18dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/loadingLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#80000000"
-                    android:visibility="@{loadingVisible ? View.VISIBLE : View.GONE}"
-                    tools:layout_editor_absoluteY="0dp"
-                    tools:layout_editor_absoluteX="0dp">
 
-
-                <ImageView
-                        android:id="@+id/loadingBird"
-                        android:layout_width="130dp"
-                        android:layout_height="100dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/loading_bird"
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/startlottie"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        app:lottie_rawRes="@raw/anime_loading"
+                        app:lottie_autoPlay="false"
+                        app:lottie_loop="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="35dp" />
+                        app:layout_constraintEnd_toEndOf="parent" />
 
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
