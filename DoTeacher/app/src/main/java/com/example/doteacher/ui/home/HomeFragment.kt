@@ -15,7 +15,6 @@ import com.example.doteacher.ui.home.viewmodel.HomeViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.sql.Time
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), DialogFragment.DialogListener {
@@ -132,7 +131,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         homeViewModel.userTutoUpdated.observe(viewLifecycleOwner) { updated ->
             if (updated) {
                 Timber.d("UserTuto updated successfully")
-                // UI 업데이트 또는 다른 필요한 작업 수행
             } else {
                 Timber.d("UserTuto update failed")
             }

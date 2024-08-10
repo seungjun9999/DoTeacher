@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.doteacher.R
 import com.example.doteacher.data.model.ProductData
 import com.example.doteacher.databinding.ProductListItemBinding
 import com.example.doteacher.ui.util.DiffUtilCallback
@@ -12,7 +11,6 @@ import com.example.doteacher.ui.util.DiffUtilCallback
 class HomeAdapter : ListAdapter<ProductData,HomeAdapter.ProductViewHolder>(
     DiffUtilCallback<ProductData>()
 ) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding = ProductListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

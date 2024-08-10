@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -36,16 +37,33 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
     }
 
     override fun initView() {
-        binding.button.setOnClickListener {
+        binding.btnNext.setOnClickListener {
             val email = binding.etvUseremail.text.toString()
             val password = binding.etvUserpass.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 viewModel.setEmailAndPassword(email, password)
-                showProfileFields()
+                (binding.root as MotionLayout).transitionToEnd()
             } else {
                 Toast.makeText(context, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.btnPrevious.setOnClickListener {
+            (binding.root as MotionLayout).transitionToStart()
+        }
+
+        (binding.root as MotionLayout).setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
+            override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                if (currentId == R.id.end) {
+                    showProfileFieldsWithAnimation()
+                } else if (currentId == R.id.start) {
+                    resetToInitialState()
+                }
+            }
+            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
+        })
 
         binding.btnAccount.setOnClickListener {
             val nickname = binding.etvNickname.text.toString()
@@ -61,12 +79,36 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         }
     }
 
-    private fun showProfileFields() {
+    private fun showProfileFieldsWithAnimation() {
+        binding.ctvProfileSetup.visibility = View.VISIBLE
         binding.imgAccountUser.visibility = View.VISIBLE
         binding.tvChooseProfile.visibility = View.VISIBLE
         binding.etvNickname.visibility = View.VISIBLE
         binding.btnAccount.visibility = View.VISIBLE
+        binding.btnNext.visibility = View.GONE
+        binding.btnPrevious.visibility = View.VISIBLE
+
+        binding.etvUseremail.isEnabled = false
+        binding.etvUserpass.isEnabled = false
+
+        binding.etvNickname.requestFocus()
     }
+
+    private fun resetToInitialState() {
+        binding.ctvProfileSetup.visibility = View.GONE
+        binding.imgAccountUser.visibility = View.GONE
+        binding.tvChooseProfile.visibility = View.GONE
+        binding.etvNickname.visibility = View.GONE
+        binding.btnAccount.visibility = View.GONE
+        binding.btnNext.visibility = View.VISIBLE
+        binding.btnPrevious.visibility = View.GONE
+
+        binding.etvUseremail.isEnabled = true
+        binding.etvUserpass.isEnabled = true
+
+        binding.etvUseremail.requestFocus()
+    }
+
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -91,11 +133,11 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
             }
         }
     }
+
     private fun uploadImageToS3(imageUri: Uri) {
         showLoading()
         viewModel.uploadImageToS3(requireContext(), imageUri)
     }
-
 
     private fun showLoading() {
         // 로딩 표시 구현

@@ -33,7 +33,7 @@
                 app:itemActiveIndicatorStyle="@null"
                 app:itemRippleColor="@android:color/transparent"
                 app:menu="@menu/menu_main"
-                android:background="@color/black"
+                android:background="@color/white"
                 app:labelVisibilityMode="labeled"
                 app:layout_constraintBottom_toBottomOf="parent">
         </com.google.android.material.bottomnavigation.BottomNavigationView>
