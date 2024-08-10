@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!-- 4 Wheel Robot with front steering and rear drive -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="doteacher_robot">
+
+  <xacro:arg name="use_ros2_control" default="true" />
+  <xacro:arg name="sim_mode" default="true" />
+
+  <xacro:arg name="prefix" default="" />
+
+  <xacro:include filename="$(find doteacher)/urdf/doteacher_description.urdf.xacro" />
+
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find doteacher)/urdf/doteacher.materials.xacro" />
+
+
+  <xacro:if value="$(arg use_ros2_control)">
+    <!-- Import carlikebot ros2_control description -->
+    <xacro:include filename="$(find doteacher)/ros2_control/carlikebot.ros2_control.xacro" />
+    <xacro:carlikebot_ros2_control name="CarlikeBot" prefix="$(arg prefix)" />
+  </xacro:if>
+  <xacro:unless value="$(arg use_ros2_control)">
+    <!-- Import carlikebot gazebo description -->
+    <xacro:include
+      filename="$(find doteacher)/gazebo_control/carlikebot.gazebo_control.xacro" />
+  </xacro:unless>
+
+
+  <xacro:carlikebot prefix="$(arg prefix)" />
+
+
+</robot>
