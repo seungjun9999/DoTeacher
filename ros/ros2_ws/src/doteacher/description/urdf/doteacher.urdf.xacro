@@ -12,6 +12,10 @@
   <xacro:ackermann prefix="$(arg prefix)" />
 
   <!-- Import Gazebo control -->
-   <xacro:include filename="$(find doteacher)/gazebo_control/gazebo_ros_ackermann_drive.xacro" />
+  <!-- <xacro:include filename="$(find doteacher)/gazebo_control/gazebo_ros_ackermann_drive.xacro"
+  /> -->
+
+  <!-- Import ros2 control -->
+  <xacro:include filename="$(find doteacher)/ros2_control/ros2_control_ackermann_drive.xacro" />
 
 </robot>

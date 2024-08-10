@@ -54,11 +54,25 @@ def generate_launch_description():
         arguments=['-topic', 'robot_description', '-entity', 'doteacher'],
         output='screen'
     )
+
+    ackermann_steering_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["ackermann_steering_controller"],
+    )
+
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster"],
+    )
     
     nodes = [
         rsp,
         gazebo,
         spawn_entity,
+        ackermann_steering_spawner,
+        joint_state_broadcaster_spawner,
         rviz_node,
     ]
 
