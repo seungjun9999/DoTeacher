@@ -1,14 +1,10 @@
 package com.example.doteacher.ui.settings
 
-import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentSettingBinding
 import com.example.doteacher.ui.base.BaseFragment
@@ -17,7 +13,6 @@ import com.example.doteacher.ui.main.MainActivity
 import com.example.doteacher.ui.mypage.setting.SettingsViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -26,11 +21,9 @@ class SettingsFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_
 
     private val settingsviewModel: SettingsViewModel by viewModels()
 
-    private var rotateAnimation: ObjectAnimator? = null
 
     override fun initView() {
         setupSettingsItems()
-        setupLoadingAnimation()
         observeWithdrawState()
     }
 
@@ -55,7 +48,7 @@ class SettingsFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_
     private fun setupSettingsItems() {
         with(binding) {
             itemLogout.apply {
-                imgMypage.setImageResource(R.drawable.logout_icon)
+                imgMypage.setImageResource(R.drawable.set_logout)
                 tvMypageText.text="로그아웃"
                 root.setOnClickListener {
                     Timber.d("Logout button clicked")
@@ -63,7 +56,7 @@ class SettingsFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_
                 }
             }
             itemSignout.apply {
-                imgMypage.setImageResource(R.drawable.logout_icon)
+                imgMypage.setImageResource(R.drawable.set_bye)
                 tvMypageText.text="회원탈퇴"
                 root.setOnClickListener {
                     Timber.d("탈퇴 button clicked")
@@ -101,26 +94,15 @@ class SettingsFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_
         }
     }
 
-    @SuppressLint("Recycle")
-    private fun setupLoadingAnimation() {
-        if (rotateAnimation == null) {
-            rotateAnimation = ObjectAnimator.ofFloat(binding.loadingBird, View.ROTATION, 0f, 360f).apply {
-                duration = 2000
-                repeatCount = ObjectAnimator.INFINITE
-                interpolator = LinearInterpolator()
-            }
-        }
-    }
 
     private fun showLoading() {
-        binding.loadingVisible = true
-        setupLoadingAnimation()
-        rotateAnimation?.start()
+        binding.logoutlottie.visibility = View.VISIBLE
+        binding.logoutlottie.playAnimation()
     }
 
     private fun hideLoading() {
-        binding.loadingVisible = false
-        rotateAnimation?.cancel()
+        binding.logoutlottie.visibility = View.GONE
+        binding.logoutlottie.cancelAnimation()
     }
 
     private fun navigateToLogin() {

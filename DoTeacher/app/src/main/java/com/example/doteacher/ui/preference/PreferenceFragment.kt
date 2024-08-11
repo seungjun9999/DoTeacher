@@ -15,7 +15,6 @@ import com.example.doteacher.ui.base.BaseFragment
 import com.example.doteacher.ui.main.MainActivity
 import com.example.doteacher.ui.preference.viewmodel.PreferenceViewModel
 import com.example.doteacher.ui.util.SingletonUtil
-import com.google.android.material.animation.AnimatorSetCompat.playTogether
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -26,13 +25,31 @@ class PreferenceFragment : BaseFragment<FragmentPreferenceBinding>(R.layout.frag
     private val viewModel: PreferenceViewModel by activityViewModels()
     private lateinit var preferenceAdapter: PreferenceAdapter
 
+    private val preferenceList = listOf(
+        Pair(R.drawable.dosunsang, "낭만주의"),
+        Pair(R.drawable.mimitaya, "인상주의"),
+        Pair(R.drawable.real_profile, "현실주의"),
+        Pair(R.drawable.robot_wifi, "풍경화"),
+        Pair(R.drawable.dosunsang, "인물화"),
+        Pair(R.drawable.pwd, "사물화"),
+        Pair(R.drawable.ex_sky, "동양 고전"),
+        Pair(R.drawable.baseline_wifi_24, "르네상스"),
+        Pair(R.drawable.tuto, "모더니즘")
+    )
+
     override fun initView() {
         init()
     }
 
     override fun onResume() {
         super.onResume()
+        hideBottomNavigation()
         loadUserPreferences()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        showBottomNavigation()
     }
 
     private fun init() {
@@ -40,22 +57,19 @@ class PreferenceFragment : BaseFragment<FragmentPreferenceBinding>(R.layout.frag
         setupSelectedImageView()
         clickEventListener()
         observePreferencesUpdate()
+        setInitialImage()
+    }
+
+    private fun hideBottomNavigation() {
+        (activity as? MainActivity)?.hideBottomNavigation()
+    }
+
+    private fun showBottomNavigation() {
+        (activity as? MainActivity)?.showBottomNavigation()
     }
 
     private fun setupRecyclerView() {
-        preferenceAdapter = PreferenceAdapter(
-            listOf(
-                Pair(R.drawable.dosunsang, "낭만주의"),
-                Pair(R.drawable.mimitaya, "인상주의"),
-                Pair(R.drawable.real_profile, "현실주의"),
-                Pair(R.drawable.robot_wifi, "풍경화"),
-                Pair(R.drawable.dosunsang, "인물화"),
-                Pair(R.drawable.pwd, "사물화"),
-                Pair(R.drawable.ex_sky, "동양 고전"),
-                Pair(R.drawable.baseline_wifi_24, "르네상스"),
-                Pair(R.drawable.tuto, "모더니즘"),
-            )
-        ) { imageResId, preferenceName ->
+        preferenceAdapter = PreferenceAdapter(preferenceList) { imageResId, preferenceName ->
             binding.selectedImageView.setImageResource(imageResId)
             binding.selectedImageView.tag = preferenceName
             updateSelectedImageBorder(preferenceName)
@@ -66,6 +80,15 @@ class PreferenceFragment : BaseFragment<FragmentPreferenceBinding>(R.layout.frag
     private fun loadUserPreferences() {
         viewModel.loadUserPreferences()
         observeUserPreferences()
+    }
+
+    private fun setInitialImage() {
+        if (preferenceList.isNotEmpty()) {
+            val (imageResId, preferenceName) = preferenceList.first()
+            binding.selectedImageView.setImageResource(imageResId)
+            binding.selectedImageView.tag = preferenceName
+            updateSelectedImageBorder(preferenceName)
+        }
     }
 
     private fun observeUserPreferences() {

@@ -10,15 +10,12 @@
                 type="com.example.doteacher.data.model.UserData" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/drawer_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.home.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                tools:context=".ui.home.HomeFragment">
 
             <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/img_profile"
@@ -117,9 +114,18 @@
                     android:layout_marginTop="70dp"
                     android:layout_marginStart="20dp" />
 
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/startlottie"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:lottie_rawRes="@raw/load_product"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_viewall" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.drawerlayout.widget.DrawerLayout>
-
 </layout>

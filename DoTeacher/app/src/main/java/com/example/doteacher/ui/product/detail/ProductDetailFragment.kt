@@ -1,12 +1,7 @@
 package com.example.doteacher.ui.product.detail
 
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.data.model.ProductData
 import com.example.doteacher.databinding.FragmentProductDetailBinding
@@ -29,6 +24,9 @@ class ProductDetailFragment : BaseFragment<FragmentProductDetailBinding>(R.layou
 
     override fun initView(){
         binding.productData = productData
+        binding.backProduct.setOnClickListener {
+            view?.findNavController()?.popBackStack()
+        }
     }
 
     companion object{

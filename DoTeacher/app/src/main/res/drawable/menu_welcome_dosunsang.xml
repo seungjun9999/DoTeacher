@@ -1,5 +1,5 @@
 <!-- brain_background.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#C6F432"/>
+    <solid android:color="#6b25ff"/>
     <corners android:radius="50dp" />
 </shape>

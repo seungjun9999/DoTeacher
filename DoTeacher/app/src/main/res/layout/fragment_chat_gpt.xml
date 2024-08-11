@@ -46,10 +46,10 @@
 
         <ImageView
                 android:id="@+id/img_send"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_margin="10dp"
-                android:background="@drawable/selector_ic_btn_sending"
+                android:background="@drawable/send_text"
                 app:layout_constraintBottom_toBottomOf="@+id/et_chat"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/et_chat" />
@@ -92,6 +92,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:srcCompat="@drawable/injeung"
+                android:id="@+id/imageView19"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@+id/bird"
+                app:layout_constraintBottom_toBottomOf="@+id/textView7"
+                android:layout_marginStart="4dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

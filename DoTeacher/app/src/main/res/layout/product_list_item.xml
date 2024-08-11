@@ -16,8 +16,8 @@
 
         <ImageView
                 android:id="@+id/img_product_back"
-                android:layout_width="211dp"
-                android:layout_height="286dp"
+                android:layout_width="181dp"
+                android:layout_height="256dp"
                 app:srcCompat="@drawable/product_backgroud"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +36,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/img_product_back"
                 android:layout_marginBottom="5dp"
                 android:textColor="@color/white"
-                android:fontFamily="@font/abhaya_libre_bold" />
+                android:fontFamily="@font/bmjua" />
 
         <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -52,16 +52,16 @@
                 android:id="@+id/cardView">
 
             <ImageView
-                    android:layout_width="180dp"
-                    android:layout_height="283dp"
+                    android:layout_width="150dp"
+                    android:layout_height="253dp"
                     android:scaleType="centerCrop"
                     app:imageUrl="@{productData.productUrl}"
                     android:id="@+id/imageView7" />
         </androidx.cardview.widget.CardView>
 
         <ImageView
-                android:layout_width="172dp"
-                android:layout_height="299dp"
+                android:layout_width="142dp"
+                android:layout_height="269dp"
                 app:srcCompat="@drawable/product_shadow"
                 android:id="@+id/imageView8"
                 app:layout_constraintStart_toStartOf="@+id/img_product_back"

@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.net.Uri
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -54,44 +53,53 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
         initData()
         clickEvent()
         observeViewModel()
-        binding.isLoading = false
     }
 
 
+
     private fun showLoading() {
-        binding.isLoading = true
-        binding.startlottie.playAnimation()
+        binding.imagelottie.visibility = View.VISIBLE
+        binding.imagelottie.playAnimation()
         binding.checklottie.visibility = View.GONE
         binding.faillottie.visibility = View.GONE
     }
 
 
     private fun hideLoading(isSuccess: Boolean) {
-        binding.isLoading = false
-        binding.startlottie.cancelAnimation()
+        binding.imagelottie.cancelAnimation()
+        binding.imagelottie.visibility = View.GONE
+
         if (isSuccess) {
-            binding.checklottie.visibility = View.VISIBLE
-            binding.checklottie.playAnimation()
-            binding.checklottie.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {}
-                override fun onAnimationEnd(animation: Animator) {
-                    binding.checklottie.visibility = View.GONE
-                }
-                override fun onAnimationCancel(animation: Animator) {}
-                override fun onAnimationRepeat(animation: Animator) {}
-            })
+            showSuccessAnimation()
         } else {
-            binding.faillottie.visibility = View.VISIBLE
-            binding.faillottie.playAnimation()
-            binding.faillottie.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {}
-                override fun onAnimationEnd(animation: Animator) {
-                    binding.faillottie.visibility = View.GONE
-                }
-                override fun onAnimationCancel(animation: Animator) {}
-                override fun onAnimationRepeat(animation: Animator) {}
-            })
+            showFailAnimation()
         }
+    }
+
+    private fun showSuccessAnimation() {
+        binding.checklottie.visibility = View.VISIBLE
+        binding.checklottie.playAnimation()
+        binding.checklottie.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                binding.checklottie.visibility = View.GONE
+            }
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+    }
+
+    private fun showFailAnimation() {
+        binding.faillottie.visibility = View.VISIBLE
+        binding.faillottie.playAnimation()
+        binding.faillottie.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                binding.faillottie.visibility = View.GONE
+            }
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
     }
 
     private fun initData() {
@@ -151,10 +159,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
         profileViewModel.updateProfileImage(userId, imageUrl)
     }
 
-
-    private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
 
 
 }

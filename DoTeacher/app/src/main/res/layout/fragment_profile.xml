@@ -4,13 +4,12 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
                 name="userData"
                 type="com.example.doteacher.data.model.UserData" />
-        <variable
-                name="isLoading"
-                type="Boolean" />
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,44 +18,6 @@
             tools:context=".ui.profile.ProfileFragment"
             android:background="@color/white">
 
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/startlottie"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:lottie_rawRes="@raw/anime_loading"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/checklottie"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:lottie_rawRes="@raw/check"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false"
-                android:visibility="@{!isLoading ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/faillottie"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:lottie_rawRes="@raw/fail"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false"
-                android:visibility="@{!isLoading ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
                 android:text="프로필 사진 수정"
@@ -210,8 +171,44 @@
                     app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/imagelottie"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/anime_loading"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/checklottie"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/checkk"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/faillottie"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/fail"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

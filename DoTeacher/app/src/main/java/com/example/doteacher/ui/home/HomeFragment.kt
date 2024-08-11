@@ -1,8 +1,8 @@
 package com.example.doteacher.ui.home
 
+import android.animation.Animator
 import android.net.Uri
-import androidx.activity.OnBackPressedCallback
-import androidx.core.view.GravityCompat
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,15 +23,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     override fun initView() {
         initData()
-        setupOnBackPressed()
+
         observeData()
         clickEventListener()
         checkAndShowDialog()
         initAdapter()
         observeUserTutoUpdate()
         loadProfileImage()
+        observeLoading()
     }
-
     override fun onResume() {
         super.onResume()
         loadUserData()
@@ -82,20 +82,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         homeViewModel.getRandomProducts()
     }
 
-    private fun setupOnBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                        binding.drawerLayout.closeDrawer(GravityCompat.START)
-                    } else {
-                        isEnabled = false
-                        requireActivity().onBackPressed()
-                    }
-                }
-            })
+
+
+    private fun observeLoading() {
+        homeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.startlottie.visibility = View.VISIBLE
+                binding.productRecycle.visibility = View.GONE
+                binding.startlottie.playAnimation()
+            } else {
+                playFinalAnimation()
+            }
+        }
     }
+
+    private fun playFinalAnimation() {
+        binding.startlottie.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+
+            override fun onAnimationEnd(animation: Animator) {
+                binding.startlottie.removeAllAnimatorListeners()
+                binding.startlottie.visibility = View.GONE
+                binding.productRecycle.visibility = View.VISIBLE
+                binding.startlottie.cancelAnimation()
+            }
+
+            override fun onAnimationCancel(animation: Animator) {}
+
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        binding.startlottie.speed = 2.0f
+        binding.startlottie.playAnimation()
+    }
+
+
 
     private fun checkAndShowDialog() {
         if (SingletonUtil.user?.userTuto == false) {

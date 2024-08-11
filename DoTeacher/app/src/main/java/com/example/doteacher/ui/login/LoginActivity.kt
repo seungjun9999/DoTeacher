@@ -1,7 +1,7 @@
 package com.example.doteacher.ui.login
 
-import android.animation.ObjectAnimator
 import android.content.Intent
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.credentials.CredentialManager
@@ -34,7 +34,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var credentialManager: CredentialManager
-    private var rotateAnimation: ObjectAnimator? = null
 
     override fun init() {
         setupCredentialManager()
@@ -68,15 +67,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
 
     private fun showLoading() {
-        binding.loadingVisible = true
-        rotateAnimation?.start()
-        binding.startlottie.playAnimation()
+        binding.loginlottie.visibility = View.VISIBLE
+        binding.loginlottie.playAnimation()
     }
 
     private fun hideLoading() {
-        binding.loadingVisible = false
-        rotateAnimation?.cancel()
-        binding.startlottie.cancelAnimation()
+        binding.loginlottie.visibility = View.GONE
+        binding.loginlottie.cancelAnimation()
     }
 
     private fun handleLoginSuccess() {

@@ -17,15 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".ui.product.ProductFragment"
-            android:background="@color/black">
+            android:background="@color/white">
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="D102 전시회 전체 작품"
                 android:textSize="24sp"
-                android:textColor="@color/white"
-                android:fontFamily="@font/oxygen_bold"
+                android:textColor="@color/black"
+                android:fontFamily="@font/bmjua"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -34,10 +34,9 @@
 
         <ImageView
                 android:src="@drawable/arrow_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:id="@+id/btn_return_home"
-                android:backgroundTint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="33dp"

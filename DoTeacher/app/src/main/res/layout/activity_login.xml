@@ -5,9 +5,6 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable
-                name="loadingVisible"
-                type="boolean" />
     </data>
 
     <FrameLayout
@@ -33,7 +30,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editTextText2"
-                    android:layout_marginTop="90dp" />
+                    android:layout_marginTop="60dp" />
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -52,6 +49,7 @@
                     android:paddingLeft="40dp"
                     android:hint="Email"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:fontFamily="@font/montserrat_semibold"
                     android:background="@drawable/login_text_round"
                     android:ems="10"
@@ -77,6 +75,7 @@
                     android:paddingLeft="40dp"
                     android:hint="Password"
                     android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:fontFamily="@font/montserrat_semibold"
                     android:background="@drawable/login_text_round"
                     android:ems="10"
@@ -157,12 +156,13 @@
 
 
                 <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/startlottie"
+                        android:id="@+id/loginlottie"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         app:lottie_rawRes="@raw/anime_loading"
                         app:lottie_autoPlay="false"
                         app:lottie_loop="true"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

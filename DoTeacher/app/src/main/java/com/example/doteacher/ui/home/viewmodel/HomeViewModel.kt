@@ -32,19 +32,22 @@ class HomeViewModel @Inject constructor(
     private val _userData = MutableLiveData<UserData>()
     val userData: LiveData<UserData> = _userData
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun setProducts(value: List<ProductData>?) {
-        value.let {
-            _randomProducts.value = it
-            if (it != null) {
-                Timber.d("Products set : ${it.size}")
-            }
+        value?.let {
+            _randomProducts.postValue(it)
+            Timber.d("Products set : ${it.size}")
         }
+        _isLoading.postValue(false)
     }
 
     fun getRandomProducts() {
+        _isLoading.value = true
         viewModelScope.launch {
             when (val response = safeApiCall(Dispatchers.IO) {
-                productDataSource.getRandomProducts(10)  // count 파라미터 추가
+                productDataSource.getRandomProducts(10)
             }) {
                 is ResultWrapper.Success -> {
                     setProducts(response.data.data)
@@ -52,9 +55,11 @@ class HomeViewModel @Inject constructor(
                 }
                 is ResultWrapper.GenericError -> {
                     Timber.d("작품 조회 에러 ${response.message}")
+                    _isLoading.postValue(false)
                 }
                 is ResultWrapper.NetworkError -> {
                     Timber.d("작품 조회 네트워크 에러")
+                    _isLoading.postValue(false)
                 }
             }
         }
