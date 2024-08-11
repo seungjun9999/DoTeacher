@@ -12,14 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef DOTEACHER__CARLIKEBOT_SYSTEM_HPP_
-#define DOTEACHER__CARLIKEBOT_SYSTEM_HPP_
+#ifndef ACKERMANN_JETSON_SYSTEM_HPP_
+#define ACKERMANN_JETSON_SYSTEM_HPP_
 
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <unistd.h>
 
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -34,31 +39,10 @@
 
 namespace doteacher
 {
-struct JointValue
-{
-  double position{0.0};
-  double velocity{0.0};
-  double effort{0.0};
-};
-
-struct Joint
-{
-  explicit Joint(const std::string & name) : joint_name(name)
-  {
-    state = JointValue();
-    command = JointValue();
-  }
-
-  Joint() = default;
-
-  std::string joint_name;
-  JointValue state;
-  JointValue command;
-};
-class CarlikeBotSystemHardware : public hardware_interface::SystemInterface
+class AckermannJetsonHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(AckermannJetsonHardware);
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
@@ -80,15 +64,15 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  // Parameters for the CarlikeBot simulation
-  double hw_start_sec_;
-  double hw_stop_sec_;
+  // pipe
+  std::ofstream pipe_;
+  const std::string pipe_name_ = "/tmp/steer_throttle_pipe";
 
-  // std::vector<std::tuple<std::string, double, double>>
-  //   hw_interfaces_;  // name of joint, state, command
-  std::map<std::string, Joint> hw_interfaces_;
+  bool openPipe();
+  void writePipe(float steer, float throttle);
+  void closePipe();
 };
 
 }  // namespace doteacher
 
-#endif  // DOTEACHER__CARLIKEBOT_SYSTEM_HPP_
+#endif  // ACKERMANN_JETSON_SYSTEM_HPP_

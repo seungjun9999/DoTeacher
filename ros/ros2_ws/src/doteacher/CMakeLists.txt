@@ -27,7 +27,7 @@ endforeach()
 add_library(
   doteacher
   SHARED
-  hardware/carlikebot_system.cpp
+  hardware/ackermann_jetson.cpp
 )
 
 target_compile_features(doteacher PUBLIC cxx_std_17)
