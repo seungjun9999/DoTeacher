@@ -50,4 +50,7 @@ interface UserService {
 
     @PUT("user/{userId}/token")
     suspend fun updateUserToken(@Path("userId") userId: Int, @Query("token") token: String): ResponseData<UserData>
+
+    @POST("recommend/{robotId}")
+    suspend fun recommend(@Body userParam: UserParam, @Path("robotId") robotId: Int) : ResponseData<UserData>
 }

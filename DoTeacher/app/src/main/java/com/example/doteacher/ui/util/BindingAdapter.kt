@@ -24,7 +24,7 @@ fun loadImage(view: ImageView, url: String?) {
             .load(url)
             .into(view)
     } else {
-        view.setImageResource(R.drawable.koka)
+        view.setImageResource(R.drawable.profile_icon)
     }
 }
 

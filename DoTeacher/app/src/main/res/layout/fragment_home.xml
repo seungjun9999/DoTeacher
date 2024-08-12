@@ -37,7 +37,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="53dp"
                     android:id="@+id/textView4"
-                    android:textSize="26sp"
+                    android:textSize="30sp"
                     android:fontFamily="@font/bmjua">
             </TextView>
 

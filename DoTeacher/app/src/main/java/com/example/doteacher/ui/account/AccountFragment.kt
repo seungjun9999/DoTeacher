@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentAccountBinding
@@ -46,6 +47,10 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
             } else {
                 Toast.makeText(context, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.imgTologin.setOnClickListener {
+            view?.findNavController()?.popBackStack()
         }
 
         binding.btnPrevious.setOnClickListener {

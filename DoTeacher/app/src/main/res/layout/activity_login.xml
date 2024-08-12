@@ -20,6 +20,7 @@
 
             <Button
                     android:text="로그인"
+                    android:textColor="@color/white"
                     android:layout_width="317dp"
                     android:layout_height="55dp"
                     android:fontFamily="@font/montserrat_semibold"

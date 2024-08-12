@@ -55,5 +55,9 @@ class UserDataSourceImpl @Inject constructor(
         return  userService.updateUserToken(userId, token)
     }
 
+    override suspend fun recommend(userParam: UserParam, robotId: Int): ResponseData<UserData> {
+        return userService.recommend(userParam,1)
+    }
+
 
 }
