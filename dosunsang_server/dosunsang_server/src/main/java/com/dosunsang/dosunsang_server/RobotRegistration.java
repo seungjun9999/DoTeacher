@@ -35,4 +35,9 @@ public class RobotRegistration {
             return null;
         }
     }
+
+
+    public void eraseSession(Integer id){
+        sessions.remove(id);
+    }
 }

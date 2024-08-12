@@ -14,10 +14,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         RobotRegistration robotRegistration = RobotRegistration.getInstance();
         if(!robotRegistration.registerRobot(robotId, session)){
-            session.sendMessage(new TextMessage(payload + "registration successed"));
+            session.sendMessage(new TextMessage(payload + " Connected"));
         }else{
-            // 클라이언트에게 응답 메시지 전송
-            session.sendMessage(new TextMessage(payload + "registration failed"));
+            session.sendMessage(new TextMessage(payload + " Disconnected"));
         }
     }
 }
