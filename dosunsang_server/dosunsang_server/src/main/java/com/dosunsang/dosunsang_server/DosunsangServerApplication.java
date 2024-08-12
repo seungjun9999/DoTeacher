@@ -16,5 +16,4 @@ public class DosunsangServerApplication {
 
 		SpringApplication.run(DosunsangServerApplication.class, args);
 	}
-
 }

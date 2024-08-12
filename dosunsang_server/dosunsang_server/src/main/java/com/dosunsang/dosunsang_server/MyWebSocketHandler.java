@@ -17,7 +17,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             session.sendMessage(new TextMessage(payload + "registration successed"));
         }else{
             // 클라이언트에게 응답 메시지 전송
-            session.sendMessage(new TextMessage(payload + "registration failed"));
+            session.sendMessage(new TextMessage(payload + "registration already exists"));
         }
     }
 }
