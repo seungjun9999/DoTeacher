@@ -22,7 +22,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "remap_odometry_tf",
-            default_value="false",
+            default_value="true",
             description="Remap odometry TF from the steering controller to the TF tree.",
         )
     )
@@ -92,6 +92,7 @@ def generate_launch_description():
         remappings=[
             ("~/robot_description", "/robot_description"),
             ("/bicycle_steering_controller/tf_odometry", "/tf"),
+            # ("/bicycle_steering_controller/odometry", "/odom"),
         ],
         condition=IfCondition(remap_odometry_tf),
     )
@@ -157,7 +158,7 @@ def generate_launch_description():
         robot_state_pub_bicycle_node,
         robot_bicycle_controller_spawner,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
+        # delay_rviz_after_joint_state_broadcaster_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

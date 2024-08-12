@@ -45,8 +45,8 @@ namespace doteacher
       // steer calc.
       float steer_deg = steer * (180.0 / M_PI); // 라디안을 도로 변환
 
-      // 90도를 기준으로 조향 각도 계산
-      float adjusted_steer_deg = 90.0 + steer_deg;
+      // 95도를 기준으로 조향 각도 계산
+      float adjusted_steer_deg = 100.0 - steer_deg;
 
       // ±30도 범위로 제한
       if (adjusted_steer_deg > 150.0)
@@ -60,10 +60,10 @@ namespace doteacher
 
       // speed_mps는 최대 속도로 제한됨, 방향은 부호로 표현
       float throttle_output = throttle / 2 / M_PI / gear_ratio_ / 8.8; // 기어비 및 제대로 된 계산 적용
-      RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f, %.6f", throttle_output, max_speed_mps_);
+      // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f, %.6f", throttle_output, max_speed_mps_);
 
       float throttle_ratio = throttle_output = throttle_output / max_speed_mps_; // -1 ~ 1 사이의 값
-      RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f", throttle_ratio);
+      // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f", throttle_ratio);
 
       // throttle_output을 -1 ~ 1 사이로 제한
       if (throttle_ratio > 1.0)
