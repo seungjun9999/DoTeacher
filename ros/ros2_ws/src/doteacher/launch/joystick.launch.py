@@ -30,8 +30,8 @@ def generate_launch_description():
     #     executable="twist_stamper",
     #     parameters=[{'use_sim_time': use_sim_time}],
     #     remappings=[
-    #         ("/cmd_vel_in", "/bicycle_steering_controller/cmd_vel_stamped"),
-    #         ("/cmd_vel_out", "/bicycle_steering_controller/reference"),
+    #         ("/cmd_vel_in", "/cmd_vel_joy"),
+    #         ("/cmd_vel_out", "/cmd_vel_joy_stamped"),
     #     ],
     # )
 
