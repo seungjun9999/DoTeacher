@@ -31,7 +31,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editTextText2"
-                    android:layout_marginTop="60dp" />
+                    android:layout_marginTop="30dp" />
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -49,16 +49,16 @@
                     android:inputType="text"
                     android:paddingLeft="40dp"
                     android:hint="Email"
+                    android:background="@drawable/login_edit_text"
                     android:textSize="14sp"
                     android:textColor="@color/black"
                     android:fontFamily="@font/montserrat_semibold"
-                    android:background="@drawable/login_text_round"
                     android:ems="10"
                     android:id="@+id/editTextText"
                     app:layout_constraintTop_toBottomOf="@+id/imageView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="40dp" />
+                    android:layout_marginTop="60dp" />
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -77,14 +77,14 @@
                     android:hint="Password"
                     android:textSize="14sp"
                     android:textColor="@color/black"
+                    android:background="@drawable/login_edit_text"
                     android:fontFamily="@font/montserrat_semibold"
-                    android:background="@drawable/login_text_round"
                     android:ems="10"
                     android:id="@+id/editTextText2"
                     app:layout_constraintTop_toBottomOf="@+id/editTextText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="40dp" />
+                    android:layout_marginTop="15dp" />
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/guestlogin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="40dp" />
+                    android:layout_marginTop="100dp" />
 
             <Button
                     android:text="Google로 로그인"

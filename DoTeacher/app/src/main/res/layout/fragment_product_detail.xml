@@ -14,7 +14,6 @@
             android:layout_height="match_parent"
             android:background="#F2F3F6">
 
-        <!-- Fixed back button -->
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/topBar"
                 android:layout_width="match_parent"
@@ -110,11 +109,13 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/bottom_cons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
-                        android:layout_marginTop="20dp">
+                        android:layout_marginTop="20dp"
+                        android:paddingBottom="50dp">
 
                     <TextView
                             android:text="작품 설명"
