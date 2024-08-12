@@ -4,4 +4,6 @@
     <string name="profile_format">%s님</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="marquee_text"> 작품에 가까이 가실 수 있지만, 만지지 말아주세요.\u00A0\u00A0\u00A0•••\u00A0\u00A0\u00A0플래시를 사용한 사진 촬영은 금지되어 있습니다.\u00A0\u00A0\u00A0•••\u00A0\u00A0\u00A0오늘 오후 3시에 작가와의 대화 시간이 2층 세미나실에서 진행됩니다.\u00A0\u00A0\u00A0•••\u00A0\u00A0\u00A0음식물 반입은 제한됩니다.\u00A0\u00A0\u00A0•••\u00A0\u00A0\u00A0오디오 가이드는 안내데스크에서 무료로 대여하실 수 있습니다.\u00A0\u00A0\u00A0</string>
 </resources>
