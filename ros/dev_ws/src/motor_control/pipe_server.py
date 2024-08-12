@@ -60,6 +60,10 @@ def start_pipe_server(pipe_name='/tmp/steer_throttle_pipe'):
                 steer, throttle = map(float, data.split(','))
                 driver.set_steer(steer)
                 driver.set_throttle(throttle)
+                
+                current_time_sec = time.time()
+                # current_time_ns = time.time_ns() % 1_000_000_000  # 나노초 단위 추출
+                print(f'[{current_time_sec:.9f}] Pipe server set steer: {steer} throttle: {throttle}')
             except Exception as e:
                 print(f'Error: {e}')
             time.sleep(0.05) # 20 Hz

@@ -6,3 +6,8 @@
 [submodule "ros/ros2_ws/src/ydlidar_ros2_driver"]
    path = ros/ros2_ws/src/ydlidar_ros2_driver
    url = https://github.com/YDLIDAR/ydlidar_ros2_driver.git
+   
+   
+[submodule "ros/ros2_ws/src/Simple-2D-LiDAR-Odometry"]
+   path = ros/ros2_ws/src/Simple-2D-LiDAR-Odometry
+   url = https://github.com/dawan0111/Simple-2D-LiDAR-Odometry.git
