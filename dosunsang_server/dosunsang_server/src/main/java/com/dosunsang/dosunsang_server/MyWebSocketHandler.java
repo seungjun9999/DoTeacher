@@ -16,6 +16,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         if(!robotRegistration.registerRobot(robotId, session)){
             session.sendMessage(new TextMessage(payload + " Connected"));
         }else{
+            robotRegistration.eraseSession(robotId);
             session.sendMessage(new TextMessage(payload + " Disconnected"));
         }
     }
