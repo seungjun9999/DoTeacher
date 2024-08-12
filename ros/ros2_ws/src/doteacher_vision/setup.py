@@ -25,6 +25,7 @@ setup(
         'console_scripts': [
             'camera_publisher = doteacher_vision.camera_publisher:main',
             'image_processor = doteacher_vision.image_processor:main',
+            'take_picture = doteacher_vision.take_picture:main',
         ],
     },
 )

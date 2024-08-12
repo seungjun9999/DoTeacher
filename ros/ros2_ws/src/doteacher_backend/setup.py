@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'doteacher_backend'
 
@@ -23,7 +25,10 @@ setup(
             'client_backend_db_node = doteacher_backend.client_backend_db_node:main',
             'client_backend_log_node = doteacher_backend.client_backend_log_node:main',
             'server_backend_op_node = doteacher_backend.server_backend_op_node:main',
-            'client_backend_op_node = doteacher_backend.client_backend_op_node:main'
+            'client_backend_op_node = doteacher_backend.client_backend_op_node:main',
+            'upload_picture = doteacher_backend.upload_picture:main',
+            'detect_pose_take_picture = doteacher_backend.detect_pose_take_picture:main',
+            'upload_picture_service = doteacher_backend.upload_picture_service:main',
         ],
     },
 )
