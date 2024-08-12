@@ -59,14 +59,14 @@ def generate_launch_description():
     robot_controllers = PathJoinSubstitution(
         [
             FindPackageShare("doteacher"),
-            "config",
+            "config/ros2_control",
             "doteacher_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
         [
             FindPackageShare("doteacher"),
-            "rviz",
+            "config/rviz",
             "doteacher.rviz",
         ]
     )

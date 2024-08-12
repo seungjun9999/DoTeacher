@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARLIKE_JETSON_SYSTEM_HPP_
-#define CARLIKE_JETSON_SYSTEM_HPP_
+#ifndef CARLIKE_JETSON__CARLIKEBOT_SYSTEM_HPP_
+#define CARLIKE_JETSON__CARLIKEBOT_SYSTEM_HPP_
 
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
+#include <cmath>
 
 #include <iostream>
 #include <fstream>
@@ -39,10 +40,31 @@
 
 namespace doteacher
 {
-class CarLikeJetsonHardware : public hardware_interface::SystemInterface
+struct JointValue
+{
+  double position{0.0};
+  double velocity{0.0};
+  double effort{0.0};
+};
+
+struct Joint
+{
+  explicit Joint(const std::string & name) : joint_name(name)
+  {
+    state = JointValue();
+    command = JointValue();
+  }
+
+  Joint() = default;
+
+  std::string joint_name;
+  JointValue state;
+  JointValue command;
+};
+class CarlikeBotSystemHardware : public hardware_interface::SystemInterface
 {
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(CarLikeJetsonHardware);
+  RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);
 
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
@@ -64,9 +86,23 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
+  // Parameters for the CarlikeBot simulation
+  double hw_start_sec_;
+  double hw_stop_sec_;
+
+  // std::vector<std::tuple<std::string, double, double>>
+  //   hw_interfaces_;  // name of joint, state, command
+  std::map<std::string, Joint> hw_interfaces_;
   // pipe
   std::ofstream pipe_;
   const std::string pipe_name_ = "/tmp/steer_throttle_pipe";
+  const float max_motor_rpm_ = 310.0; // 모터의 최대 RPM
+  const float gear_ratio_ = 30.0 / 54.0; // 기어비 (모터 측 / 바퀴 측)
+  const float wheel_diameter_m_ = 65.0 / 1000.0; // 바퀴의 지름 (m)
+  const float wheel_circumference_m_ = M_PI * wheel_diameter_m_; // 바퀴의 둘레 (m)
+
+  // 최대 차량 속도 (m/s)
+  const float max_speed_mps_ = (max_motor_rpm_ / 60.0) * gear_ratio_ * wheel_circumference_m_;
 
   bool openPipe();
   void writePipe(float steer, float throttle);
@@ -75,4 +111,4 @@ private:
 
 }  // namespace doteacher
 
-#endif  // CARLIKE_JETSON_SYSTEM_HPP_
+#endif  // CARLIKE_JETSON__CARLIKEBOT_SYSTEM_HPP_

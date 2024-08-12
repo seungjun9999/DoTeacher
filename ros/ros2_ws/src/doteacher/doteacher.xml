@@ -1,6 +1,6 @@
 <library path="doteacher">
-    <class name="doteacher/CarLikeJetsonHardware"
-        type="doteacher::CarLikeJetsonHardware"
+    <class name="doteacher/CarlikeBotSystemHardware"
+        type="doteacher::CarlikeBotSystemHardware"
         base_class_type="hardware_interface::SystemInterface">
         <description>
             The ros2_control CarlikeBot example using a system hardware interface-type. It uses
