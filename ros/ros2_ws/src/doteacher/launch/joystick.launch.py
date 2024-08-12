@@ -12,28 +12,28 @@ def generate_launch_description():
     joy_params = os.path.join(get_package_share_directory('doteacher'),'config','joystick.yaml')
 
     joy_node = Node(
-            package='joy',
-            executable='joy_node',
-            parameters=[joy_params, {'use_sim_time': use_sim_time}],
-         )
+        package='joy',
+        executable='joy_node',
+        parameters=[joy_params, {'use_sim_time': use_sim_time}],
+    )
 
     teleop_node = Node(
-            package='teleop_twist_joy',
-            executable='teleop_node',
-            name='teleop_node',
-            parameters=[joy_params, {'use_sim_time': use_sim_time}],
-            remappings=[('/cmd_vel','/cmd_vel_joy')]
-         )
-
-    twist_stamper_node = Node(
-        package="twist_stamper",
-        executable="twist_stamper",
-        parameters=[{'use_sim_time': use_sim_time}],
-        remappings=[
-            ("/cmd_vel_in", "/bicycle_steering_controller/cmd_vel_stamped"),
-            ("/cmd_vel_out", "/bicycle_steering_controller/reference"),
-        ],
+        package='teleop_twist_joy',
+        executable='teleop_node',
+        name='teleop_node',
+        parameters=[joy_params, {'use_sim_time': use_sim_time}],
+        remappings=[('/cmd_vel','/cmd_vel_joy')]
     )
+
+    # twist_stamper_node = Node(
+    #     package="twist_stamper",
+    #     executable="twist_stamper",
+    #     parameters=[{'use_sim_time': use_sim_time}],
+    #     remappings=[
+    #         ("/cmd_vel_in", "/bicycle_steering_controller/cmd_vel_stamped"),
+    #         ("/cmd_vel_out", "/bicycle_steering_controller/reference"),
+    #     ],
+    # )
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -42,5 +42,5 @@ def generate_launch_description():
             description='Use sim time if true'),
         joy_node,
         teleop_node,
-        twist_stamper_node       
+        # twist_stamper_node
     ])

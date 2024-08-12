@@ -27,7 +27,7 @@ endforeach()
 add_library(
   doteacher
   SHARED
-  hardware/carlikebot_system.cpp
+  hardware/ackermann_jetson.cpp
 )
 
 target_compile_features(doteacher PUBLIC cxx_std_17)
@@ -41,7 +41,7 @@ ament_target_dependencies(
 )
 
 # Export hardware plugins
-pluginlib_export_plugin_description_file(hardware_interface doteacher.xml)
+pluginlib_export_plugin_description_file(hardware_interface doteacher_carlike.xml)
 
 # INSTALL
 install(
