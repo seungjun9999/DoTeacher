@@ -41,7 +41,7 @@ ament_target_dependencies(
 )
 
 # Export hardware plugins
-pluginlib_export_plugin_description_file(hardware_interface doteacher.xml)
+pluginlib_export_plugin_description_file(hardware_interface doteacher_carlike.xml)
 
 # INSTALL
 install(

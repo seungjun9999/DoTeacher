@@ -16,12 +16,12 @@
 
   <xacro:if value="$(arg use_ros2_control)">
     <!-- Import ros2 control -->
-    <xacro:include filename="$(find doteacher)/ros2_control/ros2_control_carlike_drive.xacro" />
+    <xacro:include filename="$(find doteacher)/ros2_control/ros2_control_ackermann_drive.xacro" />
   </xacro:if>
 
   <xacro:unless value="$(arg use_ros2_control)">
     <!-- Import Gazebo control -->
-    <xacro:include filename="$(find doteacher)/gazebo_control/gazebo_ros_carlike_drive.xacro" />
+    <xacro:include filename="$(find doteacher)/gazebo_control/gazebo_ros_ackermann_drive.xacro" />
   </xacro:unless>
 
 
