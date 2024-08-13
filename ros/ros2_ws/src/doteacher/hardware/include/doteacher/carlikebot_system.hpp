@@ -96,6 +96,8 @@ private:
   // pipe
   std::ofstream pipe_;
   const std::string pipe_name_ = "/tmp/steer_throttle_pipe";
+
+  const float steer_adjust_ = 1.4; // 조향 보정
   const float max_motor_rpm_ = 310.0; // 모터의 최대 RPM
   const float gear_ratio_ = 30.0 / 54.0; // 기어비 (모터 측 / 바퀴 측)
   const float wheel_diameter_m_ = 65.0 / 1000.0; // 바퀴의 지름 (m)

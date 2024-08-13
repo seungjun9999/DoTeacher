@@ -43,7 +43,8 @@ namespace doteacher
     if (pipe_.is_open())
     {
       // steer calc.
-      float steer_deg = steer * (180.0 / M_PI); // 라디안을 도로 변환
+      
+      float steer_deg = steer * (180.0 / M_PI) * steer_adjust_; // 라디안을 도로 변환
 
       // 95도를 기준으로 조향 각도 계산
       float adjusted_steer_deg = 100.0 - steer_deg;
@@ -59,7 +60,7 @@ namespace doteacher
       }
 
       // speed_mps는 최대 속도로 제한됨, 방향은 부호로 표현
-      float throttle_output = throttle / 2 / M_PI / gear_ratio_ / 8.8; // 기어비 및 제대로 된 계산 적용
+      float throttle_output = throttle / 2 / M_PI / gear_ratio_ / 4.7; // 기어비 및 제대로 된 계산 적용 // 8.8
       // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f, %.6f", throttle_output, max_speed_mps_);
 
       float throttle_ratio = throttle_output = throttle_output / max_speed_mps_; // -1 ~ 1 사이의 값
@@ -386,7 +387,6 @@ namespace doteacher
         rclcpp::get_logger("CarlikeBotSystemHardware"), "Got velocity command: %.2f for joint '%s'.",
         hw_interfaces_["traction"].command.velocity, hw_interfaces_["traction"].joint_name.c_str());
 
-    rclcpp::get_logger("Hello?");
     writePipe(hw_interfaces_["steering"].command.position, hw_interfaces_["traction"].command.velocity);
 
     // END: This part here is for exemplary purposes - Please do not copy to your production code

@@ -66,7 +66,7 @@ def start_pipe_server(pipe_name='/tmp/steer_throttle_pipe'):
                 print(f'[{current_time_sec:.9f}] Pipe server set steer: {steer} throttle: {throttle}')
             except Exception as e:
                 print(f'Error: {e}')
-            time.sleep(0.05) # 20 Hz
+            time.sleep(0.033) # 30 Hz
 
 if __name__ == '__main__':
     start_pipe_server()
