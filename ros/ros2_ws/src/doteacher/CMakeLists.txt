@@ -68,7 +68,7 @@ install(TARGETS doteacher
 )
 
 install(
-  DIRECTORY worlds
+  DIRECTORY worlds maps
   DESTINATION share/doteacher
 )
 
