@@ -1,47 +1,42 @@
 package com.example.doteacher.ui.util.server
 
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 
-suspend fun <T> safeApiCall(
-    dispatcher: CoroutineDispatcher,
-    apiCall: suspend () -> T
-): ResultWrapper<T> {
+suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher, apiCall: suspend () -> T): ResultWrapper<T> {
     return withContext(dispatcher) {
         try {
             ResultWrapper.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
                 is IOException -> ResultWrapper.NetworkError
+                is JsonSyntaxException -> {
+                    Timber.e("JSON Parsing Error: ${throwable.message}")
+                    ResultWrapper.GenericError(null, "서버 응답 형식 오류")
+                }
                 is HttpException -> {
                     val code = throwable.code()
-                    var message = ""
-                    val errorBody = Gson().fromJson(
-                        throwable.response()?.errorBody()?.string(),
-                        ErrorBody::class.java
-                    )
-                    Timber.d("에러 바디 에러 $errorBody")
-                    if (errorBody != null) {
-//                        message = errorBody.data.message.ifEmpty { "" }
-
-                    }
-                    Timber.d("에러 바디 데이터 확인 $message")
-
-
-                    ResultWrapper.GenericError(code, message)
+                    val errorResponse = convertErrorBody(throwable)
+                    ResultWrapper.GenericError(code, errorResponse)
                 }
-
                 else -> {
-
-                    Timber.d("에러 바디 확인쓰 Generic ${throwable}")
-                    ResultWrapper.GenericError(null, throwable.toString())
+                    Timber.e(throwable, "Unexpected error occurred")
+                    ResultWrapper.GenericError(null, throwable.message)
                 }
             }
         }
     }
+}
 
+private fun convertErrorBody(throwable: HttpException): String? {
+    return try {
+        throwable.response()?.errorBody()?.string()
+    } catch (exception: Exception) {
+        null
+    }
 }

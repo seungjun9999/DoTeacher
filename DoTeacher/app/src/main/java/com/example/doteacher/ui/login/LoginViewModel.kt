@@ -196,7 +196,11 @@ class LoginViewModel @Inject constructor(
             }
             is ResultWrapper.GenericError -> {
                 Timber.e("Login error: ${response.message}")
-                _loginState.value = LoginState.Error("로그인 오류: ${response.message}")
+                when (response.code) {
+                    401 -> _loginState.value = LoginState.Error("비밀번호가 올바르지 않습니다.")
+                    404 -> _loginState.value = LoginState.Error("등록되지 않은 이메일입니다.")
+                    else -> _loginState.value = LoginState.Error("로그인 오류: ${response.message}")
+                }
             }
             is ResultWrapper.NetworkError -> {
                 Timber.e("Network error")

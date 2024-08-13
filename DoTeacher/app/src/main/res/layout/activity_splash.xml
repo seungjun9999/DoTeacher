@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+
         <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
@@ -19,10 +20,11 @@
                 android:text="도 선생\n도 쌤\n도 티처"
                 android:textSize="42sp"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/pretendard_black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:fontFamily="@font/poppins_semibold" />
+                app:layout_constraintBottom_toBottomOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

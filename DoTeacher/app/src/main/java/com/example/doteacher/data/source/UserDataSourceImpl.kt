@@ -59,5 +59,9 @@ class UserDataSourceImpl @Inject constructor(
         return userService.recommend(userParam,1)
     }
 
+    override suspend fun userDescription(userId: Int, userDes: Int): ResponseData<UserData> {
+        return userService.userDescription(userId, userDes)
+    }
+
 
 }

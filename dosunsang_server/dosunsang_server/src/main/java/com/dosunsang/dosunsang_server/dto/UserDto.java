@@ -17,4 +17,5 @@ public class UserDto {
     public boolean userTuto;
     public boolean prefSelect;
     public List<String> preferences;
+    public int userDes;
 }

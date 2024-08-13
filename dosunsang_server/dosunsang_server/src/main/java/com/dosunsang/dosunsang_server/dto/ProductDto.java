@@ -9,6 +9,7 @@ public class ProductDto {
     String productName;
     String productDesc;
     String productUrl;
+    String productWriter;
     int pos_x;
     int pos_y;
 }

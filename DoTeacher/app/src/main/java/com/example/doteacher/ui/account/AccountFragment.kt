@@ -1,5 +1,6 @@
 package com.example.doteacher.ui.account
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentAccountBinding
 import com.example.doteacher.ui.base.BaseFragment
+import com.example.doteacher.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -123,7 +125,11 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
                     is RegistrationState.Success -> {
                         hideLoading()
                         Toast.makeText(context, "회원가입 성공!", Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack()
+                        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        startActivity(intent)
+                        requireActivity().finish()
                     }
                     is RegistrationState.Error -> {
                         hideLoading()

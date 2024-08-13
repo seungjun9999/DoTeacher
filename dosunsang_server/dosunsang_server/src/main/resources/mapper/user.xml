@@ -34,6 +34,12 @@
         WHERE id = #{userId}
     </update>
 
+    <update id="updateUserDescription">
+        UPDATE user
+        SET userDes = #{userDes}
+        WHERE id = #{userId}
+    </update>
+
     <update id="updateUserTuto">
         UPDATE user
         SET userTuto = #{userTuto}

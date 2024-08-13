@@ -54,6 +54,10 @@ public class UserService implements UserDetailsService {
         return userDao.updateUserTuto(userId, userTuto);
     }
 
+    public boolean updateUserDescription(int userId, int userDes){
+        return userDao.updateUserDescription(userId,userDes);
+    }
+
     public boolean updateUserProfileImage(int userId, String imageUrl) {
         return userDao.updateUserProfileImage(userId, imageUrl);
     }

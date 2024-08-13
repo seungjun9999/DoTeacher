@@ -107,6 +107,22 @@ public class UserController {
         }
     }
 
+    @PutMapping("/user/{userId}/prodDes")
+    @Operation(summary = "유저 작품 설명" , description = "현재 유저가 보고 있는 작품을 설명합니다")
+    public ResultDto<UserDto> updateUserDescription(@PathVariable int userId,@RequestParam int userDes){
+        try {
+            boolean updated = userService.updateUserDescription(userId,userDes);
+            if(updated){
+                UserDto updateUser = userService.findUserId(userId);
+                return ResultDto.res(HttpStatus.OK,"성공", updateUser);
+            }else{
+                return ResultDto.res(HttpStatus.BAD_REQUEST,"업데이트 실패");
+            }
+        }catch (Exception e){
+            return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR,"서버 오류");
+        }
+    }
+
     @PutMapping("/user/{userId}/profile-image")
     @Operation(summary = "유저 프로필 이미지 업데이트", description = "유저의 프로필 이미지 URL을 업데이트합니다.")
     public ResultDto<UserDto> updateUserProfileImage(@PathVariable int userId, @RequestParam String imageUrl) {

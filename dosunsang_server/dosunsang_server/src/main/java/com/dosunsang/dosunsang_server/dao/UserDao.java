@@ -17,4 +17,5 @@ public interface UserDao{
     boolean updateUserProfileImage(@Param("userId") int userId, @Param("userImage") String userImage);
     boolean updateUserToken(int userId, String token);
     boolean deleteUser(int userId);
+    boolean updateUserDescription(int userId,int userDes);
 }

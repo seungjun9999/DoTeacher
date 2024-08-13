@@ -8,5 +8,6 @@ data class UserParam(
     val preferences: List<String>? = null,
     var token: String? = null,
     val userTuto: Boolean,
-    val prefSelect: Boolean
+    val prefSelect: Boolean,
+    val userProduct : Int? =null
 )

@@ -94,7 +94,7 @@
                             android:layout_marginTop="25dp" />
 
                     <TextView
-                            android:text="박재영"
+                            android:text="@{productData.productWriter}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/textView24"
@@ -115,7 +115,7 @@
                         android:background="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
                         android:layout_marginTop="20dp"
-                        android:paddingBottom="50dp">
+                        android:paddingBottom="100dp">
 
                     <TextView
                             android:text="작품 설명"
@@ -136,6 +136,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_product_detail_explain"
                             android:textSize="24sp"
+                            android:fontFamily="@font/pretendard_light"
                             android:textColor="@color/black"
                             app:layout_constraintTop_toBottomOf="@+id/textView25"
                             app:layout_constraintStart_toStartOf="parent"

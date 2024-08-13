@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DoTeacher</string>
+    <string name="app_name">도선생</string>
     <string name="greeting_format">%s님 안녕하세요!👋</string>
     <string name="profile_format">%s님</string>
     <!-- TODO: Remove or change this placeholder text -->

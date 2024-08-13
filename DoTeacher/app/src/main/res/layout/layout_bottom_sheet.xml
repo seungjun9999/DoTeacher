@@ -42,7 +42,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_semibold"
-                android:textColor="#f7b84b"
+                android:textColor="#63ADFF"
                 android:layout_marginTop="25dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

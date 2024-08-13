@@ -1,9 +1,18 @@
 package com.example.doteacher.ui.gallery
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentGalleryBinding
 import com.example.doteacher.ui.base.BaseFragment
@@ -11,6 +20,7 @@ import com.example.doteacher.ui.gallery.viewmodel.GalleryViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.security.MessageDigest
 
 @AndroidEntryPoint
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {
@@ -21,7 +31,6 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     override fun initView() {
         initData()
         initAdapter()  // 여기로 이동
-        clickEventListener()
         observePhotoData()
         observeUserData()
     }
@@ -38,9 +47,11 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     }
 
 
+
     private fun loadUserPhotos() {
         SingletonUtil.user?.id?.let { galleryViewModel.getUserPhotos(it) }
     }
+
     private fun loadUserData(){
         SingletonUtil.user?.userEmail?.let { email ->
             galleryViewModel.loadUserData(email)
@@ -49,23 +60,6 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
         }
     }
 
-    private fun clickEventListener() {
-        binding.bottomSheetLayout.btnPhotoList.setOnClickListener {
-            togglePhotoListBtn()
-        }
-    }
-
-    private fun togglePhotoListBtn() {
-        isPhotoListActive = !isPhotoListActive
-
-        if (isPhotoListActive) {
-            binding.bottomSheetLayout.btnPhotoList.setBackgroundResource(R.drawable.gallery_orange_btn)
-            binding.bottomSheetLayout.btnPhotoList.setTextColor(Color.parseColor("#f7b84b"))
-        } else {
-            binding.bottomSheetLayout.btnPhotoList.background = null
-            binding.bottomSheetLayout.btnPhotoList.setTextColor(Color.parseColor("#88878a"))
-        }
-    }
 
     private fun initAdapter() {
         galleryAdapter = GalleryAdapter()
@@ -93,9 +87,9 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
                 binding.userData = user
                 binding.executePendingBindings()
                 Timber.d("여기가 전혀 안찍히네 $it")
-
             }
-
         }
     }
+
+
 }

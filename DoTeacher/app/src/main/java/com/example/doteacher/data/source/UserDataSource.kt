@@ -39,4 +39,6 @@ interface UserDataSource {
 
     suspend fun recommend(userParam: UserParam, robotId : Int) : ResponseData<UserData>
 
+    suspend fun userDescription(userId: Int, userDes: Int) : ResponseData<UserData>
+
 }

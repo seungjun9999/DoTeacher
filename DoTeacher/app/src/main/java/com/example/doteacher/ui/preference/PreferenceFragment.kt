@@ -26,15 +26,15 @@ class PreferenceFragment : BaseFragment<FragmentPreferenceBinding>(R.layout.frag
     private lateinit var preferenceAdapter: PreferenceAdapter
 
     private val preferenceList = listOf(
-        Pair(R.drawable.dosunsang, "낭만주의"),
-        Pair(R.drawable.mimitaya, "인상주의"),
-        Pair(R.drawable.real_profile, "현실주의"),
-        Pair(R.drawable.robot_wifi, "풍경화"),
-        Pair(R.drawable.dosunsang, "인물화"),
-        Pair(R.drawable.pwd, "사물화"),
-        Pair(R.drawable.ex_sky, "동양 고전"),
-        Pair(R.drawable.baseline_wifi_24, "르네상스"),
-        Pair(R.drawable.tuto, "모더니즘")
+        Pair(R.drawable.daesundang, "낭만주의"),
+        Pair(R.drawable.paris_load, "인상주의"),
+        Pair(R.drawable.dolpeople, "사실주의"),
+        Pair(R.drawable.gosung, "풍경화"),
+        Pair(R.drawable.opera, "인물화"),
+        Pair(R.drawable.sunflower, "사물화"),
+        Pair(R.drawable.gosansu, "동양 고전"),
+        Pair(R.drawable.bubu, "르네상스"),
+        Pair(R.drawable.piano, "모더니즘")
     )
 
     override fun initView() {

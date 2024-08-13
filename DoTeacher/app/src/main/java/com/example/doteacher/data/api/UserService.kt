@@ -48,6 +48,9 @@ interface UserService {
     @DELETE("user/{userId}")
     suspend fun deleteUser(@Path ("userId") userId: Int) : ResponseData<Unit>
 
+    @PUT("user/{userId}/prodDes")
+    suspend fun userDescription(@Path("userId") userId: Int,@Query("userDes") userDes : Int) : ResponseData<UserData>
+
     @PUT("user/{userId}/token")
     suspend fun updateUserToken(@Path("userId") userId: Int, @Query("token") token: String): ResponseData<UserData>
 
