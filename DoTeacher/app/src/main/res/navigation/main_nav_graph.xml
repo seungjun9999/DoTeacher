@@ -72,13 +72,17 @@
             android:id="@+id/chatgptFragment"
             android:name="com.example.doteacher.ui.chatgpt.ChatGptFragment"
             tools:layout="@layout/fragment_chat_gpt"
-            android:label="ChatGptFragment"></fragment>
+            android:label="ChatGptFragment">
+    </fragment>
+
+
 
     <fragment
             android:id="@+id/dosunsangFragment"
             android:name="com.example.doteacher.ui.dosunsang.DosunsangFragment"
             tools:layout="@layout/fragment_dosunsang"
-            android:label="DosunsangFragment"></fragment>
+            android:label="DosunsangFragment">
+    </fragment>
 
     <fragment
             android:id="@+id/photodetailFragment"

@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.dosunsang.dosunsang_server.AuthenticationRequest;
 import com.dosunsang.dosunsang_server.AuthenticationResponse;
 import com.dosunsang.dosunsang_server.JwtUtil;
+import com.dosunsang.dosunsang_server.dto.PhotoDto;
 import com.dosunsang.dosunsang_server.dto.ResultDto;
 import com.dosunsang.dosunsang_server.dto.UserDetailsImpl;
 import com.dosunsang.dosunsang_server.dto.UserDto;
@@ -222,6 +223,16 @@ public class UserController {
             }
         } catch (Exception e) {
             return ResultDto.res(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
+        }
+    }
+
+    @GetMapping("/user/{userId}/state")
+    public ResultDto<Integer> getUserRobotState(@PathVariable int userId) {
+        try {
+            int user = userService.getUserRobotState(userId);
+            return ResultDto.res(HttpStatus.OK, "성공", user);
+        } catch (Exception e) {
+            return ResultDto.res(HttpStatus.BAD_REQUEST, "실패: " + e.getMessage());
         }
     }
 

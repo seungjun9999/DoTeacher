@@ -70,4 +70,7 @@ interface UserService {
 
     @POST("socket/next/{robotId}")
     suspend fun goNext( @Path("robotId") robotId: Int) : ResponseData<MessageResponse>
+
+    @GET("user/{userId}/state")
+    suspend fun getUserRobotState(@Path("userId") userId: Int) : ResponseData<Int>
 }

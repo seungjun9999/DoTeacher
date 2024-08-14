@@ -10,9 +10,13 @@
 
     </data>
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:context=".ui.dosunsang.DosunsangFragment"
             android:background="@color/white">
 
@@ -43,6 +47,8 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
+
+
                     <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/robotlottie"
                             android:layout_width="match_parent"
@@ -60,9 +66,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             app:lottie_rawRes="@raw/slepp"
-                            app:lottie_autoPlay="true"
+                            app:lottie_autoPlay="false"
                             app:lottie_loop="true"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -72,13 +78,16 @@
                             android:id="@+id/loadinglottie"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:lottie_rawRes="@raw/anime_loading"
+                            app:lottie_rawRes="@raw/logout"
+                            app:lottie_autoPlay="true"
                             app:lottie_loop="true"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
+
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -120,10 +120,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
         binding.tvProfileChange.setOnClickListener {
             openImageChooser()
         }
-
-        binding.editname.setOnClickListener{
-            
-        }
     }
 
     private fun observeViewModel() {

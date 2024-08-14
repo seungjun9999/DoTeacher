@@ -4,7 +4,9 @@ import com.dosunsang.dosunsang_server.dao.UserDao;
 import com.dosunsang.dosunsang_server.dto.UserDetailsImpl;
 import com.dosunsang.dosunsang_server.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +20,10 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final UserDao userDao;
+
+    @Autowired
+    @Qualifier("SessionTemplate")
+    private SqlSession sqlSession;
 
     @Autowired
     public UserService(UserDao userDao) {
@@ -88,5 +94,9 @@ public class UserService implements UserDetailsService {
         return userDao.deleteUser(userId);
     }
 
+    public int getUserRobotState(int userId){
+        UserDao userDao = sqlSession.getMapper(UserDao.class);
+        return userDao.getUserRobotState(userId);
+    }
 
 }

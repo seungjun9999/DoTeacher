@@ -6,8 +6,6 @@ import com.example.doteacher.data.model.ResponseData
 import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
-import com.example.doteacher.ui.util.server.ResultWrapper
-import timber.log.Timber
 
 interface UserDataSource {
 
@@ -46,4 +44,6 @@ interface UserDataSource {
     suspend fun goNext(robotId: Int) : ResponseData<MessageResponse>
 
     suspend fun updateUserName(userId: Int, userName : String) : ResponseData<UserData>
+
+    suspend fun getUserRobotState(userId: Int) : ResponseData<Int>
 }

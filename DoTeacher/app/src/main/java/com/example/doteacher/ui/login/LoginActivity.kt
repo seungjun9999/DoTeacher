@@ -156,7 +156,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                     userImage = it.photoUrl?.toString() ?: "",
                                     token = googleIdToken,
                                     userTuto = false,
-                                    prefSelect = false
+                                    prefSelect = false,
+                                    userProduct = 0
                                 )
                             )
                         }

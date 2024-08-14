@@ -10,5 +10,5 @@ data class UserData(
     var token: String,
     val userTuto: Boolean,
     val prefSelect: Boolean,
-    val userProduct : Int? =null
+    val userProduct : Int=0
 )

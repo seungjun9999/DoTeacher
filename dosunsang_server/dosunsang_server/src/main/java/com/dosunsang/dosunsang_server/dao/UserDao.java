@@ -18,4 +18,5 @@ public interface UserDao{
     boolean updateUserToken(int userId, String token);
     boolean deleteUser(int userId);
     boolean updateUserDescription(int userId,int userDes);
+    int getUserRobotState(int userId);
 }

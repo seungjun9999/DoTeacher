@@ -8,11 +8,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import android.Manifest
 import android.widget.Toast
 import com.example.doteacher.R
-import com.example.doteacher.data.model.param.UserParam
 import com.example.doteacher.databinding.FragmentDosunsangBinding
 import com.example.doteacher.ui.base.BaseFragment
 import com.example.doteacher.ui.dosunsang.viewmodel.DosunsangViewModel
@@ -28,21 +26,40 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
 
     private val dosunsangViewModel: DosunsangViewModel by viewModels()
     private val CAMERA_PERMISSION_REQUEST_CODE = 100
-    private var number: Int? = null
-    private lateinit var robotName: String
 
     override fun initView() {
         initData()
         clickEventListener()
         setTodayDate()
-        observeConnectionState()
+        observeViewModel()
     }
 
     override fun onResume() {
         super.onResume()
+        SingletonUtil.user?.id?.let { dosunsangViewModel.getUserRobotState(it) }
         initData()
         setTodayDate()
     }
+
+    private fun observeViewModel() {
+        dosunsangViewModel.robotName.observe(viewLifecycleOwner) { name ->
+            binding.robotD.text = name
+        }
+
+        dosunsangViewModel.connectionState.observe(viewLifecycleOwner) { state ->
+            Timber.d("Connection state changed to: $state")
+            updateUIBasedOnState(state)
+        }
+    }
+
+    private fun updateUIBasedOnState(state: DosunsangViewModel.ConnectionState) {
+        when (state) {
+            DosunsangViewModel.ConnectionState.DISCONNECTED -> showDisconnectedState()
+            DosunsangViewModel.ConnectionState.LOADING -> showLoadingState()
+            DosunsangViewModel.ConnectionState.CONNECTED -> showConnectedState()
+        }
+    }
+
 
     private fun clickEventListener() {
         binding.noconnect.setOnClickListener {
@@ -113,12 +130,15 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
                 // 스캔된 내용을 쉼표로 분리
                 val parts = scannedContent.split(",")
                 if (parts.size == 2) {
-                    robotName = parts[0].trim()
-                    number = parts[1].trim().toIntOrNull()
+                    val robotName = parts[0].trim()
+                    val number = parts[1].trim().toIntOrNull()
 
-                    binding.robotD.text = robotName
-                    Toast.makeText(context, "로봇 ID: $robotName, 번호: $number", Toast.LENGTH_LONG).show()
-
+                    if (number != null) {
+                        dosunsangViewModel.setRobotInfo(robotName, number)
+                        Toast.makeText(context, "로봇 ID: $robotName, 번호: $number", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(context, "잘못된 QR 코드 형식입니다.", Toast.LENGTH_LONG).show()
+                    }
                 } else {
                     Toast.makeText(context, "잘못된 QR 코드 형식입니다.", Toast.LENGTH_LONG).show()
                 }
@@ -129,23 +149,18 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
     }
 
     private fun startRecommendation() {
-        if(number !=null){
-            SingletonUtil.user?.let { dosunsangViewModel.recommend(number!!, it.userEmail) }
-        }
-
-    }
-
-    private fun observeConnectionState() {
-        dosunsangViewModel.connectionState.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                DosunsangViewModel.ConnectionState.DISCONNECTED -> showDisconnectedState()
-                DosunsangViewModel.ConnectionState.LOADING -> showLoadingState()
-                DosunsangViewModel.ConnectionState.CONNECTED -> showConnectedState()
+        dosunsangViewModel.robotNumber.value?.let { robotNumber ->
+            SingletonUtil.user?.let { user ->
+                dosunsangViewModel.recommend(robotNumber, user.userEmail)
             }
-        })
+        } ?: run {
+            Toast.makeText(context, "로봇 번호가 없습니다. QR 코드를 스캔해주세요.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showDisconnectedState() {
+        binding.photo.isClickable = false
+        binding.gonext.isClickable=false
         binding.connect.visibility = View.GONE
         binding.noconnect.visibility = View.VISIBLE
         binding.robotlottie.pauseAnimation()
@@ -168,6 +183,8 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
     }
 
     private fun showConnectedState() {
+        binding.photo.isClickable = true
+        binding.gonext.isClickable=true
         binding.connect.visibility = View.VISIBLE
         binding.noconnect.visibility = View.GONE
         binding.sleeplottie.pauseAnimation()
@@ -182,6 +199,8 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
         binding.userData = SingletonUtil.user
         binding.marquee.isSelected = true
         binding.marquee.requestFocus()
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

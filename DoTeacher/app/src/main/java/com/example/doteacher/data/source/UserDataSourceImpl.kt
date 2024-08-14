@@ -7,8 +7,6 @@ import com.example.doteacher.data.model.ResponseData
 import com.example.doteacher.data.model.UserData
 import com.example.doteacher.data.model.param.AuthenticationRequest
 import com.example.doteacher.data.model.param.UserParam
-import com.example.doteacher.ui.util.server.ResultWrapper
-import com.example.doteacher.ui.util.server.safeApiCall
 import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(
@@ -73,6 +71,10 @@ class UserDataSourceImpl @Inject constructor(
 
     override suspend fun updateUserName(userId: Int, userName: String): ResponseData<UserData> {
         return userService.updateUserName(userId,userName)
+    }
+
+    override suspend fun getUserRobotState(userId: Int): ResponseData<Int> {
+        return userService.getUserRobotState(userId)
     }
 
 }

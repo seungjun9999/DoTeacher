@@ -9,5 +9,5 @@ data class UserParam(
     var token: String? = null,
     val userTuto: Boolean,
     val prefSelect: Boolean,
-    val userProduct : Int? =null
+    val userProduct : Int =0
 )

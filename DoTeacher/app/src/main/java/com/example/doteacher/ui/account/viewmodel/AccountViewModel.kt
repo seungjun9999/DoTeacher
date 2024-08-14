@@ -115,7 +115,8 @@ class AccountViewModel @Inject constructor(
                     password = password,
                     userImage = imageUrl,
                     userTuto = false,
-                    prefSelect = false
+                    prefSelect = false,
+                    userProduct = 0
                 )
                 when (val response = safeApiCall(Dispatchers.IO) {
                     userDataSource.register(userParam)
