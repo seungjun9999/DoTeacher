@@ -50,7 +50,7 @@
                 android:layout_marginStart="0dp"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:id="@+id/textView23" />
         <Constraint
                 android:layout_width="23dp"
