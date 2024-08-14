@@ -43,8 +43,8 @@ namespace doteacher
     if (pipe_.is_open())
     {
       // steer calc.
-      
-      float steer_deg = steer * (180.0 / M_PI) * steer_adjust_; // 라디안을 도로 변환
+
+      float steer_deg = steer * (180.0 / M_PI) * config_.adj_steer; // radian을 degree로 변환
 
       // 95도를 기준으로 조향 각도 계산
       float adjusted_steer_deg = 100.0 - steer_deg;
@@ -59,9 +59,77 @@ namespace doteacher
         adjusted_steer_deg = 30.0; // 최소 조향 각도로 제한
       }
 
+      float adj_throttle = 0;
+
       // speed_mps는 최대 속도로 제한됨, 방향은 부호로 표현
-      float throttle_output = throttle / 2 / M_PI / gear_ratio_ / 4.7; // 기어비 및 제대로 된 계산 적용 // 8.8
-      // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f, %.6f", throttle_output, max_speed_mps_);
+      float throttle_abs = abs(throttle);
+      if (throttle_abs > 5.0)
+      {
+        adj_throttle = config_.adj_throttle_8_0;
+      }
+      else if (throttle_abs > 5.0)
+      {
+        adj_throttle = config_.adj_throttle_5_0;
+      }
+      else if (throttle_abs > 3.0)
+      {
+        adj_throttle = config_.adj_throttle_3_0;
+      }
+      else if (throttle_abs > 2.0)
+      {
+        adj_throttle = config_.adj_throttle_2_0;
+      }
+      else if (throttle_abs > 1.2)
+      {
+        adj_throttle = config_.adj_throttle_1_2;
+      }
+      else if (throttle_abs > 1.0)
+      {
+        adj_throttle = config_.adj_throttle_1_0;
+      }
+      else if (throttle_abs > 0.9)
+      {
+        adj_throttle = config_.adj_throttle_0_9;
+      }
+      else if (throttle_abs > 0.8)
+      {
+        adj_throttle = config_.adj_throttle_0_8;
+      }
+      else if (throttle_abs > 0.7)
+      {
+        adj_throttle = config_.adj_throttle_0_7;
+      }
+      else if (throttle_abs > 0.6)
+      {
+        adj_throttle = config_.adj_throttle_0_6;
+      }
+      else if (throttle_abs > 0.5)
+      {
+        adj_throttle = config_.adj_throttle_0_5;
+      }
+      else if (throttle_abs > 0.4)
+      {
+        adj_throttle = config_.adj_throttle_0_4;
+      }
+      else if (throttle_abs > 0.3)
+      {
+        adj_throttle = config_.adj_throttle_0_3;
+      }
+      else if (throttle_abs > 0.2)
+      {
+        adj_throttle = config_.adj_throttle_0_2;
+      }
+      else if (throttle_abs > 0.1)
+      {
+        adj_throttle = config_.adj_throttle_0_1;
+      }
+      else
+      {
+        adj_throttle = config_.adj_throttle_0_0;
+      }
+
+      float throttle_output = throttle / 2 / M_PI / gear_ratio_ / adj_throttle; // 기어비 및 제대로 된 계산 적용 // 8.8
+      // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f, %.6f", throttle, throttle_output);
 
       float throttle_ratio = throttle_output = throttle_output / max_speed_mps_; // -1 ~ 1 사이의 값
       // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "%.6f", throttle_ratio);
@@ -217,6 +285,23 @@ namespace doteacher
     // code
     hw_start_sec_ = std::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
     hw_stop_sec_ = std::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
+    config_.adj_steer = std::stof(info_.hardware_parameters["adj_steer"]);
+    config_.adj_throttle_8_0 = std::stof(info_.hardware_parameters["adj_throttle_8_0"]);
+    config_.adj_throttle_5_0 = std::stof(info_.hardware_parameters["adj_throttle_5_0"]);
+    config_.adj_throttle_3_0 = std::stof(info_.hardware_parameters["adj_throttle_3_0"]);
+    config_.adj_throttle_2_0 = std::stof(info_.hardware_parameters["adj_throttle_2_0"]);
+    config_.adj_throttle_1_2 = std::stof(info_.hardware_parameters["adj_throttle_1_2"]);
+    config_.adj_throttle_1_0 = std::stof(info_.hardware_parameters["adj_throttle_1_0"]);
+    config_.adj_throttle_0_9 = std::stof(info_.hardware_parameters["adj_throttle_0_9"]);
+    config_.adj_throttle_0_8 = std::stof(info_.hardware_parameters["adj_throttle_0_8"]);
+    config_.adj_throttle_0_7 = std::stof(info_.hardware_parameters["adj_throttle_0_7"]);
+    config_.adj_throttle_0_6 = std::stof(info_.hardware_parameters["adj_throttle_0_6"]);
+    config_.adj_throttle_0_5 = std::stof(info_.hardware_parameters["adj_throttle_0_5"]);
+    config_.adj_throttle_0_4 = std::stof(info_.hardware_parameters["adj_throttle_0_4"]);
+    config_.adj_throttle_0_3 = std::stof(info_.hardware_parameters["adj_throttle_0_3"]);
+    config_.adj_throttle_0_2 = std::stof(info_.hardware_parameters["adj_throttle_0_2"]);
+    config_.adj_throttle_0_1 = std::stof(info_.hardware_parameters["adj_throttle_0_1"]);
+    config_.adj_throttle_0_0 = std::stof(info_.hardware_parameters["adj_throttle_0_0"]);
     // // END: This part here is for exemplary purposes - Please do not copy to your production code
 
     hw_interfaces_["steering"] = Joint("virtual_front_wheel_joint");

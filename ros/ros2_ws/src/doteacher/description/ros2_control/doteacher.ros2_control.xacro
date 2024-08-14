@@ -8,6 +8,23 @@
         <plugin>doteacher/CarlikeBotSystemHardware</plugin>
         <param name="example_param_hw_start_duration_sec">0</param>
         <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="adj_steer">3</param>
+        <param name="adj_throttle_8_0">8.0</param>
+        <param name="adj_throttle_5_0">6.0</param>
+        <param name="adj_throttle_3_0">5.0</param>
+        <param name="adj_throttle_2_0">4.0</param>
+        <param name="adj_throttle_1_2">3.5</param>
+        <param name="adj_throttle_1_0">3.0</param>
+        <param name="adj_throttle_0_9">2.8</param>
+        <param name="adj_throttle_0_8">2.4</param>
+        <param name="adj_throttle_0_7">2.2</param>
+        <param name="adj_throttle_0_6">2.0</param>
+        <param name="adj_throttle_0_5">1.8</param>
+        <param name="adj_throttle_0_4">1.6</param>
+        <param name="adj_throttle_0_3">1.4</param>
+        <param name="adj_throttle_0_2">1.2</param>
+        <param name="adj_throttle_0_1">0.8</param>
+        <param name="adj_throttle_0_0">0.6</param>
       </hardware>
       <joint name="${prefix}virtual_front_wheel_joint">
         <command_interface name="position"/>

@@ -8,7 +8,7 @@
     <xacro:property name="base_mass" value="1.5" /> <!-- arbitrary value for base mass -->
     <xacro:property name="base_width" value="0.125" />
     <xacro:property name="base_length" value="0.29" />
-    <xacro:property name="base_height" value="0.21" />
+    <xacro:property name="base_height" value="0.14" />
     <xacro:property name="wheelbase" value="0.135" />
     <xacro:property name="wheel_mass" value="0.05" /> <!-- arbitrary value for wheel mass -->
     <xacro:property name="wheel_len" value="0.02" />
@@ -26,21 +26,21 @@
     <joint name="${prefix}base_footprint_joint" type="fixed">
       <parent link="${prefix}base_link" />
       <child link="${prefix}base_footprint" />
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 -${wheel_radius}" rpy="0 0 0" />
       <axis xyz="0 0 1" />
     </joint>
 
     <!-- Chassis -->
     <link name="${prefix}chassis_link">
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="${base_length/2-0.01} 0 ${base_height/2}" rpy="0 0 0" />
         <geometry>
           <box size="${base_length} ${base_width} ${base_height}" />
-        </geometry>
+        </geometry>   
       </collision>
 
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="${base_length/2-0.01} 0 ${base_height/2}" rpy="0 0 0" />
         <geometry>
           <box size="${base_length} ${base_width} ${base_height}" />
         </geometry>
@@ -60,7 +60,7 @@
     <joint name="${prefix}chassis_joint" type="fixed">
       <parent link="${prefix}base_link" />
       <child link="${prefix}chassis_link" />
-      <origin xyz="0 0 ${base_height/2 + wheel_radius}" rpy="0 0 0" />
+      <origin xyz="-0.090 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <dynamics damping="0.2" />
     </joint>
@@ -79,9 +79,9 @@
     </link>
 
     <joint name="${prefix}virtual_rear_wheel_joint" type="continuous">
-      <parent link="${prefix}chassis_link" />
+      <parent link="${prefix}base_link" />
       <child link="${prefix}virtual_rear_wheel" />
-      <origin xyz="-${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}" />
+      <origin xyz="-${wheelbase/2} 0 0" rpy="0 0 ${PI/2}" />
       <axis xyz="1 0 0" />
       <limit effort="100.0" velocity="100.0" />
       <dynamics damping="0.2" />
@@ -116,9 +116,9 @@
 
 
     <joint name="${prefix}rear_right_wheel_joint" type="continuous">
-      <parent link="${prefix}chassis_link" />
+      <parent link="${prefix}base_link" />
       <child link="${prefix}rear_right_wheel" />
-      <origin xyz="-${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}" />
+      <origin xyz="-${wheelbase/2} ${base_width/2} 0" rpy="0 0 ${PI/2}" />
       <axis xyz="1 0 0" />
       <limit effort="100.0" velocity="100.0" />
       <dynamics damping="0.2" />
@@ -155,9 +155,9 @@
     </link>
 
     <joint name="${prefix}rear_left_wheel_joint" type="continuous">
-      <parent link="${prefix}chassis_link" />
+      <parent link="${prefix}base_link" />
       <child link="${prefix}rear_left_wheel" />
-      <origin xyz="-${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}" />
+      <origin xyz="-${wheelbase/2} -${base_width/2} 0" rpy="0 0 ${PI/2}" />
       <axis xyz="1 0 0" />
       <limit effort="100.0" velocity="100.0" />
       <dynamics damping="0.2" />
@@ -178,99 +178,99 @@
     </link>
 
     <joint name="${prefix}virtual_front_wheel_joint" type="revolute">
-      <parent link="${prefix}chassis_link" />
+      <parent link="${prefix}base_link" />
       <child link="${prefix}virtual_front_wheel" />
-      <origin xyz="${wheelbase/2} 0 -${base_height/2}" rpy="0 0 ${PI/2}" />
+      <origin xyz="${wheelbase/2} 0 0" rpy="0 0 ${PI/2}" />
       <axis xyz="0 0 1" />
       <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0" />
       <dynamics damping="0.2" />
     </joint>
 
     <!-- front right wheel -->
-     
+
     <link name="${prefix}front_right_wheel">
 
       <collision>
-        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}" />
         <geometry>
-          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}" />
         </geometry>
       </collision>
 
       <visual>
-        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}" />
         <geometry>
-          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}" />
         </geometry>
-        <material name="black"/>
+        <material name="black" />
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
-        <mass value="${wheel_mass}"/>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}" />
+        <mass value="${wheel_mass}" />
         <inertia
           ixx="0.000270" ixy="0.0" ixz="0.0"
           iyy="0.000270" iyz="0.0"
-          izz="0.000426"/>
+          izz="0.000426" />
       </inertial>
     </link>
 
     <joint name="${prefix}front_right_wheel_joint" type="revolute">
-      <parent link="${prefix}chassis_link" />
+      <parent link="${prefix}base_link" />
       <child link="${prefix}front_right_wheel" />
-      <origin xyz="${wheelbase/2} ${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
-      <axis xyz="0 0 1"/>
-      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
-      <dynamics damping="0.2"/>
-      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
+      <origin xyz="${wheelbase/2} ${base_width/2} 0" rpy="0 0 ${PI/2}" />
+      <axis xyz="0 0 1" />
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0" />
+      <dynamics damping="0.2" />
+      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0" />
     </joint>
 
     <!-- front left wheel -->
 
     <link name="${prefix}front_left_wheel">
       <collision>
-        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}" />
         <geometry>
-          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}" />
         </geometry>
       </collision>
 
       <visual>
-        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}" />
         <geometry>
-          <cylinder length="${wheel_len}" radius="${wheel_radius}"/>
+          <cylinder length="${wheel_len}" radius="${wheel_radius}" />
         </geometry>
-        <material name="black"/>
+        <material name="black" />
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
-        <mass value="${wheel_mass}"/>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}" />
+        <mass value="${wheel_mass}" />
         <inertia
           ixx="0.000270" ixy="0.0" ixz="0.0"
           iyy="0.000270" iyz="0.0"
-          izz="0.000426"/>
+          izz="0.000426" />
       </inertial>
 
     </link>
 
     <joint name="${prefix}front_left_wheel_joint" type="revolute">
-      <parent link="${prefix}chassis_link" />
+      <parent link="${prefix}base_link" />
       <child link="${prefix}front_left_wheel" />
-      <origin xyz="${wheelbase/2} -${base_width/2} -${base_height/2}" rpy="0 0 ${PI/2}"/>
-      <axis xyz="0 0 1"/>
-      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0"/>
-      <dynamics damping="0.2"/>
-      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0"/>
+      <origin xyz="${wheelbase/2} -${base_width/2} 0" rpy="0 0 ${PI/2}" />
+      <axis xyz="0 0 1" />
+      <limit lower="-0.4" upper="0.4" effort="100.0" velocity="0.0" />
+      <dynamics damping="0.2" />
+      <mimic joint="${prefix}virtual_front_wheel_joint" multiplier="1.0" offset="0.0" />
     </joint>
 
-    
+
     <!-- lidar -->
 
     <joint name="${prefix}laser_joint" type="fixed">
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}laser_frame" />
-      <origin xyz="0.05 0 ${base_height/2+0.005}" rpy="0 0 0" />
+      <origin xyz="0.180 0 0.195" rpy="0 0 0" />
     </joint>
 
     <link name="${prefix}laser_frame">
@@ -301,7 +301,7 @@
     <joint name="${prefix}camera_joint" type="fixed">
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}camera_link" />
-      <origin xyz="${base_length/2} 0 0" rpy="0 0 0" />
+      <origin xyz="0.25 0 0.085" rpy="0 0 0" />
     </joint>
 
     <link name="${prefix}camera_link">

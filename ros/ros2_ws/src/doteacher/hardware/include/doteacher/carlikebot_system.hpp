@@ -40,77 +40,98 @@
 
 namespace doteacher
 {
-struct JointValue
-{
-  double position{0.0};
-  double velocity{0.0};
-  double effort{0.0};
-};
-
-struct Joint
-{
-  explicit Joint(const std::string & name) : joint_name(name)
+  struct JointValue
   {
-    state = JointValue();
-    command = JointValue();
-  }
+    double position{0.0};
+    double velocity{0.0};
+    double effort{0.0};
+  };
 
-  Joint() = default;
+  struct Joint
+  {
+    explicit Joint(const std::string &name) : joint_name(name)
+    {
+      state = JointValue();
+      command = JointValue();
+    }
 
-  std::string joint_name;
-  JointValue state;
-  JointValue command;
-};
-class CarlikeBotSystemHardware : public hardware_interface::SystemInterface
-{
-public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);
+    Joint() = default;
 
-  hardware_interface::CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & info) override;
+    std::string joint_name;
+    JointValue state;
+    JointValue command;
+  };
+  class CarlikeBotSystemHardware : public hardware_interface::SystemInterface
+  {
 
-  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+    struct Config
+    {
+      float adj_steer = 0;
+      float adj_throttle_8_0 = 0;
+      float adj_throttle_5_0 = 0;
+      float adj_throttle_3_0 = 0;
+      float adj_throttle_2_0 = 0;
+      float adj_throttle_1_2 = 0;
+      float adj_throttle_1_0 = 0;
+      float adj_throttle_0_9 = 0;
+      float adj_throttle_0_8 = 0;
+      float adj_throttle_0_7 = 0;
+      float adj_throttle_0_6 = 0;
+      float adj_throttle_0_5 = 0;
+      float adj_throttle_0_4 = 0;
+      float adj_throttle_0_3 = 0;
+      float adj_throttle_0_2 = 0;
+      float adj_throttle_0_1 = 0;
+      float adj_throttle_0_0 = 0;
+    };
 
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+    public : RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);
 
-  hardware_interface::CallbackReturn on_activate(
-    const rclcpp_lifecycle::State & previous_state) override;
+    hardware_interface::CallbackReturn on_init(
+        const hardware_interface::HardwareInfo &info) override;
 
-  hardware_interface::CallbackReturn on_deactivate(
-    const rclcpp_lifecycle::State & previous_state) override;
+    std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-  hardware_interface::return_type read(
-    const rclcpp::Time & time, const rclcpp::Duration & period) override;
+    std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-  hardware_interface::return_type write(
-    const rclcpp::Time & time, const rclcpp::Duration & period) override;
+    hardware_interface::CallbackReturn on_activate(
+        const rclcpp_lifecycle::State &previous_state) override;
 
-private:
-  // Parameters for the CarlikeBot simulation
-  double hw_start_sec_;
-  double hw_stop_sec_;
+    hardware_interface::CallbackReturn on_deactivate(
+        const rclcpp_lifecycle::State &previous_state) override;
 
-  // std::vector<std::tuple<std::string, double, double>>
-  //   hw_interfaces_;  // name of joint, state, command
-  std::map<std::string, Joint> hw_interfaces_;
-  // pipe
-  std::ofstream pipe_;
-  const std::string pipe_name_ = "/tmp/steer_throttle_pipe";
+    hardware_interface::return_type read(
+        const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
-  const float steer_adjust_ = 1.4; // 조향 보정
-  const float max_motor_rpm_ = 310.0; // 모터의 최대 RPM
-  const float gear_ratio_ = 30.0 / 54.0; // 기어비 (모터 측 / 바퀴 측)
-  const float wheel_diameter_m_ = 65.0 / 1000.0; // 바퀴의 지름 (m)
-  const float wheel_circumference_m_ = M_PI * wheel_diameter_m_; // 바퀴의 둘레 (m)
+    hardware_interface::return_type write(
+        const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
-  // 최대 차량 속도 (m/s)
-  const float max_speed_mps_ = (max_motor_rpm_ / 60.0) * gear_ratio_ * wheel_circumference_m_;
+  private:
+    // Parameters for the CarlikeBot simulation
+    double hw_start_sec_;
+    double hw_stop_sec_;
 
-  bool openPipe();
-  void writePipe(float steer, float throttle);
-  void closePipe();
-};
+    Config config_;
+    // std::vector<std::tuple<std::string, double, double>>
+    //   hw_interfaces_;  // name of joint, state, command
+    std::map<std::string, Joint> hw_interfaces_;
+    // pipe
+    std::ofstream pipe_;
+    const std::string pipe_name_ = "/tmp/steer_throttle_pipe";
 
-}  // namespace doteacher
+    const float max_motor_rpm_ = 310.0;                            // 모터의 최대 RPM
+    const float gear_ratio_ = 30.0 / 54.0;                         // 기어비 (모터 측 / 바퀴 측)
+    const float wheel_diameter_m_ = 65.0 / 1000.0;                 // 바퀴의 지름 (m)
+    const float wheel_circumference_m_ = M_PI * wheel_diameter_m_; // 바퀴의 둘레 (m)
 
-#endif  // CARLIKE_JETSON__CARLIKEBOT_SYSTEM_HPP_
+    // 최대 차량 속도 (m/s)
+    const float max_speed_mps_ = (max_motor_rpm_ / 60.0) * gear_ratio_ * wheel_circumference_m_;
+
+    bool openPipe();
+    void writePipe(float steer, float throttle);
+    void closePipe();
+  };
+
+} // namespace doteacher
+
+#endif // CARLIKE_JETSON__CARLIKEBOT_SYSTEM_HPP_
