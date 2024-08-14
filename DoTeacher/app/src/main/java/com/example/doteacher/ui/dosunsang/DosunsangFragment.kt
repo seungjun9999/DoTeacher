@@ -129,17 +129,8 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
     }
 
     private fun startRecommendation() {
-        val userParam = UserParam(
-            userEmail = SingletonUtil.user!!.userEmail,
-            userName = SingletonUtil.user!!.userName,
-            userImage = SingletonUtil.user!!.userImage,
-            preferences = SingletonUtil.user!!.preferences,
-            password = "pass",
-            userTuto = true,
-            prefSelect = false
-        )
         if(number !=null){
-            dosunsangViewModel.recommend(userParam, number!!)
+            SingletonUtil.user?.let { dosunsangViewModel.recommend(it.userEmail, number!!) }
         }
 
     }

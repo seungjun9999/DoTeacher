@@ -31,11 +31,11 @@ class DosunsangViewModel @Inject constructor(
 
 
 
-    fun recommend(userParam: UserParam,robotId : Int) {
+    fun recommend(userEmail:String,robotId : Int) {
         _connectionState.value = ConnectionState.LOADING
         viewModelScope.launch {
             when (val response = safeApiCall(Dispatchers.IO) {
-                userDataSource.recommend(userParam, robotId)
+                userDataSource.recommend(userEmail, robotId)
             }) {
                 is ResultWrapper.Success -> {
                     val msg = response.data.msg

@@ -58,7 +58,10 @@ interface UserService {
     suspend fun updateUserToken(@Path("userId") userId: Int, @Query("token") token: String): ResponseData<UserData>
 
     @POST("socket/recommend/{robotId}")
-    suspend fun recommend(@Body userParam: UserParam, @Path("robotId") robotId: Int) : ResponseData<UserData>
+    suspend fun recommend(
+        @Query("userEmail") userEmail: String,
+        @Path("robotId") robotId: Int
+    ): ResponseData<String>
 
 
     @POST("socket/picture/{robotId}")
