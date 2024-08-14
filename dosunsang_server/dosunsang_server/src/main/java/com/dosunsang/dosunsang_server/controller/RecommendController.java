@@ -1,7 +1,6 @@
 package com.dosunsang.dosunsang_server.controller;
 
 import com.dosunsang.dosunsang_server.RobotRegistration;
-import com.dosunsang.dosunsang_server.dto.ProductDto;
 import com.dosunsang.dosunsang_server.dto.ResultDto;
 import com.dosunsang.dosunsang_server.dto.UserDto;
 import com.dosunsang.dosunsang_server.service.ChatGptService;
@@ -17,16 +16,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
+@RequestMapping("/socket")
 @Slf4j
 public class RecommendController {
 
-    @Autowired
-    private ChatGptService chatGptService;
-    private UserService userService;
-    ArrayList<Integer> productList = new ArrayList<>();
+    private final ChatGptService chatGptService;
+    private final UserService userService;
+    private final ArrayList<Integer> productList = new ArrayList<>();
 
-    @PostMapping("/socket/recommend/{robotId}")
-    public ResultDto<String> recommend(@PathVariable int robotId,@RequestParam String userEmail) throws IOException {
+    @Autowired
+    public RecommendController(ChatGptService chatGptService, UserService userService) {
+        this.chatGptService = chatGptService;
+        this.userService = userService;
+    }
+
+    @PostMapping("/recommend/{robotId}")
+    public ResultDto<String> recommend(@PathVariable int robotId, @RequestParam String userEmail) throws IOException {
         UserDto user = userService.findUser(userEmail);
         if (user == null) {
             return ResultDto.res(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다.");
@@ -44,7 +49,8 @@ public class RecommendController {
             String msg = chatGptService.sendMessage(String.valueOf(sendmsg));
             String userId = String.valueOf(user.getId() + ", ");
 
-            log.info(userId +" user id dlqslek");
+            log.info(userId + "is");
+
             RobotRegistration robotRegistration = RobotRegistration.getInstance();
             WebSocketSession session = robotRegistration.getSession(robotId);
 
