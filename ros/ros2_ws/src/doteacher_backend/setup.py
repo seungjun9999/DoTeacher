@@ -29,6 +29,8 @@ setup(
             'upload_picture = doteacher_backend.upload_picture:main',
             'detect_pose_take_picture = doteacher_backend.detect_pose_take_picture:main',
             'upload_picture_service = doteacher_backend.upload_picture_service:main',
+            
+            'connect_server_node = doteacher_backend.connect_server_node:main',
         ],
     },
 )

@@ -4,62 +4,81 @@ from sensor_msgs.msg import Image as Img
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
-
 import os
 from ament_index_python.packages import get_package_share_directory
 from ultralytics import YOLO
 from ultralytics.utils.plotting import colors
 from PIL import Image, ImageDraw, ImageFont
+from doteacher_interfaces.srv import DetectedImage  # 사용자 정의 서비스 가져오기
 
-import sys
-sys.path.append('/mnt/data/')
 
-class ImageProcessor(Node):
+class DetectPictureService(Node):
     def __init__(self):
-        super().__init__('image_processor')
+        super().__init__('detect_picture_service')
         self.subscription = self.create_subscription(
             Img,
             'image_raw',
             self.listener_callback,
             10)
-        self.subscription  # prevent unused variable warning
-        self.publisher_ = self.create_publisher(Img, 'image_processed', 10)
-
+        self.publisher_ = self.create_publisher(Img, 'detect_picture', 10)
         self.bridge = CvBridge()
-        package_share_directory = get_package_share_directory('doteacher_vision')
-        model_path = os.path.join(package_share_directory, 'models/best.pt')
+        model_path = os.path.join(get_package_share_directory('doteacher_vision'), 'models/best.pt')
 
-        # YOLOv8 Pose 모델 로드
+        # YOLOv8 모델 로드
         self.model = YOLO(model_path)
 
-        self.get_logger().info("Image Processor node has been started.")
+        self.latest_frame = None  # 가장 최근에 수신된 이미지를 저장할 변수
 
+        # 서비스 생성
+        self.srv = self.create_service(DetectedImage, 'detect_image', self.handle_detect_image)
+
+        self.get_logger().info("Detect Picture Service has been started.")
 
     def listener_callback(self, data):
-        # self.get_logger().info('Receiving image data...')
-        current_frame = self.bridge.imgmsg_to_cv2(data)
+        # 수신된 최신 이미지를 저장
+        self.latest_frame = data
 
-        # detect_picture.py의 함수를 사용하여 이미지 처리
-        processed_frame = self.detect_target(current_frame)
+    def handle_detect_image(self, request, response):
+        if self.latest_frame is None:
+            response.success = False
+            response.message = "No image has been received yet."
+            self.get_logger().warn(response.message)
+            return response
 
-        # 처리된 이미지를 다시 image_processed 토픽으로 발행
-        self.publisher_.publish(self.bridge.cv2_to_imgmsg(processed_frame))
-        # self.get_logger().info('Processed image published')
+        current_frame = self.bridge.imgmsg_to_cv2(self.latest_frame)
 
+        # 이미지를 처리
+        processed_frame, track_id = self.detect_target(current_frame)
+
+        # 처리된 이미지를 ROS 이미지로 변환
+        detected_image = self.bridge.cv2_to_imgmsg(processed_frame)
+
+        # 결과를 응답에 설정
+        response.success = True
+        response.message = "Image processed successfully."
+        response.detected_image = detected_image
+        response.track_id = track_id
+
+        # 처리된 이미지를 토픽으로 발행
+        self.publisher_.publish(detected_image)
+
+        return response
 
     def detect_target(self, src):
         font_path = "/usr/share/fonts/nanum/NanumGothic.ttf"
         font_size = 24
         font = ImageFont.truetype(font_path, font_size)
 
-        # 현재 프레임에서 객체 추적 수행 (커스텀 모델)
+        # 현재 프레임에서 객체 추적 수행
         custom_results = self.model.track(src, persist=True)
 
         # OpenCV 이미지를 Pillow 이미지로 변환
         im_pil = Image.fromarray(cv2.cvtColor(src, cv2.COLOR_BGR2RGB))
         draw = ImageDraw.Draw(im_pil)
         
-        # 경계 상자와 추적 ID, 클래스 레이블 추출 및 주석 처리 (커스텀 모델)
+        result_track_id = -1
+        
+        # 경계 상자와 추적 ID, 클래스 레이블 추출 및 주석 처리
         if custom_results[0].boxes.id is not None:
             bboxes = custom_results[0].boxes.xyxy.cpu().numpy()
             track_ids = custom_results[0].boxes.id.cpu().numpy()
@@ -74,16 +93,17 @@ class ImageProcessor(Node):
                     draw.text((x1, y1 - font_size), label, font=font, fill=color)
 
             self.get_logger().warn(f"{self.model.names[int(classes[0])]} {int(track_ids[0])} ({conf:.2f})")
+            result_track_id = int(track_ids[0])
             
 
         # Pillow 이미지를 다시 OpenCV 이미지로 변환
         result = cv2.cvtColor(np.array(im_pil), cv2.COLOR_RGB2BGR)
         
-        return result
+        return result, result_track_id
 
 def main(args=None):
     rclpy.init(args=args)
-    node = ImageProcessor()
+    node = DetectPictureService()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

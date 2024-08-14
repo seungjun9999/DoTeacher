@@ -1,0 +1,6 @@
+
+---
+bool success
+string message
+sensor_msgs/Image detected_image
+int32 track_id

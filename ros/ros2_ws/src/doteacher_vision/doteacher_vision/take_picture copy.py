@@ -92,7 +92,7 @@ class DetectPose(Node):
                 self.call_service_sound('capture_sound')
                 
                 # 5초 후 이미지를 저장하는 작업을 한 번만 실행
-                # self.get_clock().call_later(5, lambda: self.save_image(src, result))
+                self.get_clock().call_later(5, lambda: self.save_image(src, result))
 
     def save_image(self, src, result):
         # 이미지 저장 처리

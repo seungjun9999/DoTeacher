@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'coordinate_listener = doteacher_interaction.coordinate_listener:main',
+            'rpi_cmd_publisher_service = doteacher_interaction.rpi_cmd_publisher_service:main',
         ],
     },
 )

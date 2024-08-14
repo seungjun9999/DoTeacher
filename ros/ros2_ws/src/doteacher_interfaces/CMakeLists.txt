@@ -8,10 +8,14 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(sensor_msgs REQUIRED)  # sensor_msgs 패키지 추가
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/SteerThrottle.msg"
   "srv/UploadPicture.srv"
+  "srv/RPiCommand.srv"
+  "srv/DetectedImage.srv"
+  DEPENDENCIES sensor_msgs  # sensor_msgs 의존성 추가
 )
 
 if(BUILD_TESTING)
