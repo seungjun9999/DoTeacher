@@ -56,7 +56,7 @@ class UserDataSourceImpl @Inject constructor(
     }
 
     override suspend fun recommend(userParam: UserParam, robotId: Int): ResponseData<UserData> {
-        return userService.recommend(userParam,1)
+        return userService.recommend(userParam,robotId)
     }
 
     override suspend fun userDescription(userId: Int, userDes: Int): ResponseData<UserData> {
@@ -64,11 +64,15 @@ class UserDataSourceImpl @Inject constructor(
     }
 
     override suspend fun goNext(robotId: Int): ResponseData<MessageResponse> {
-        return userService.goNext(1)
+        return userService.goNext(robotId)
     }
 
     override suspend fun takePhoto(robotId: Int): ResponseData<MessageResponse> {
-        return userService.takePhoto(1)
+        return userService.takePhoto(robotId)
+    }
+
+    override suspend fun updateUserName(userId: Int, userName: String): ResponseData<UserData> {
+        return userService.updateUserName(userId,userName)
     }
 
 }

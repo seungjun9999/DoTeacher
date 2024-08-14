@@ -33,6 +33,9 @@ interface UserService {
     @PUT("user/{userId}/tuto")
     suspend fun updateUserTuto(@Path("userId") userId: Int, @Query("userTuto") userTuto: Boolean): ResponseData<UserData>
 
+    @PUT("user/{userId}/name")
+    suspend fun updateUserName(@Path("userId") userId: Int, @Query("username") userName:String) : ResponseData<UserData>
+
     @PUT("user/{userId}/profile-image")
     suspend fun updateProfileImage(
         @Path("userId") userId: Int,
@@ -56,8 +59,12 @@ interface UserService {
 
     @POST("socket/recommend/{robotId}")
     suspend fun recommend(@Body userParam: UserParam, @Path("robotId") robotId: Int) : ResponseData<UserData>
+
+
     @POST("socket/picture/{robotId}")
     suspend fun takePhoto(@Path("robotId") robotId: Int) : ResponseData<MessageResponse>
+
+
     @POST("socket/next/{robotId}")
     suspend fun goNext( @Path("robotId") robotId: Int) : ResponseData<MessageResponse>
 }

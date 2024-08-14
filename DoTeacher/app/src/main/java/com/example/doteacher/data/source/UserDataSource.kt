@@ -45,4 +45,5 @@ interface UserDataSource {
 
     suspend fun goNext(robotId: Int) : ResponseData<MessageResponse>
 
+    suspend fun updateUserName(userId: Int, userName : String) : ResponseData<UserData>
 }

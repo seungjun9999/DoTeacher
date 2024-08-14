@@ -39,13 +39,14 @@ public class RecommendController {
         // 거리기반 정렬 알고리즘 필요함
         try {
             String msg = chatGptService.sendMessage(String.valueOf(sendmsg));
+            String userid = String.valueOf(user.id+", ");
             // log.info(String.valueOf(msg));
 
             RobotRegistration robotRegistration = RobotRegistration.getInstance();
             WebSocketSession session = robotRegistration.getSession(robotId);
 
             if (session != null) {
-                session.sendMessage(new TextMessage(msg));
+                session.sendMessage(new TextMessage(userid+msg));
 
             } else {
                 log.info("null");
@@ -58,7 +59,7 @@ public class RecommendController {
                 productList.add(Integer.parseInt(str));
             }
 
-            
+
             return ResultDto.res(HttpStatus.OK,"성공");
         } catch (IOException e) {
             return ResultDto.res(HttpStatus.BAD_REQUEST,"실패");

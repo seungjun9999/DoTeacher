@@ -141,6 +141,8 @@ dependencies {
     implementation (libs.glide)
     annotationProcessor (libs.compiler)
 
+    implementation ("com.journeyapps:zxing-android-embedded:4.2.0")
+
     implementation (libs.lottie)
 
 }

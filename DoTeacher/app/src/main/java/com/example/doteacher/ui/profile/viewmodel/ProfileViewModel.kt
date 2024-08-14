@@ -48,6 +48,11 @@ class ProfileViewModel @Inject constructor(
         _userData.value = SingletonUtil.user
     }
 
+    fun updateUserName(){
+
+    }
+
+
     fun updateProfileImage(userId: Int, imageUrl: String) {
         viewModelScope.launch {
             when (val response = safeApiCall(Dispatchers.IO) {
