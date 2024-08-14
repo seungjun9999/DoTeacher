@@ -59,8 +59,9 @@ interface UserService {
 
     @POST("socket/recommend/{robotId}")
     suspend fun recommend(
-        @Query("userEmail") userEmail: String,
-        @Path("robotId") robotId: Int
+        @Path("robotId") robotId: Int,
+        @Query("userEmail") userEmail: String
+
     ): ResponseData<String>
 
 

@@ -26,7 +26,7 @@ public class RecommendController {
     ArrayList<Integer> productList = new ArrayList<>();
 
     @PostMapping("/socket/recommend/{robotId}")
-    public ResultDto<String> recommend(@RequestParam String userEmail, @PathVariable int robotId) throws IOException {
+    public ResultDto<String> recommend(@PathVariable int robotId,@RequestParam String userEmail) throws IOException {
         UserDto user = userService.findUser(userEmail);
         if (user == null) {
             return ResultDto.res(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다.");

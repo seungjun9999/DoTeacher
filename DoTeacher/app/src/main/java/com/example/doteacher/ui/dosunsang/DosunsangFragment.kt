@@ -130,7 +130,7 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
 
     private fun startRecommendation() {
         if(number !=null){
-            SingletonUtil.user?.let { dosunsangViewModel.recommend(it.userEmail, number!!) }
+            SingletonUtil.user?.let { dosunsangViewModel.recommend(number!!, it.userEmail) }
         }
 
     }

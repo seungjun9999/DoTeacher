@@ -37,7 +37,7 @@ interface UserDataSource {
 
     suspend fun updateUserToken(userId: Int, token: String): ResponseData<UserData>
 
-    suspend fun recommend(userEmail: String, robotId : Int) : ResponseData<String>
+    suspend fun recommend(robotId: Int, userEmail: String) : ResponseData<String>
 
     suspend fun userDescription(userId: Int, userDes: Int) : ResponseData<UserData>
 
