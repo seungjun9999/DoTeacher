@@ -12,18 +12,14 @@ import com.example.doteacher.ui.util.server.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.WebSocket
-import okhttp3.WebSocketListener
+import okhttp3.*
 import timber.log.Timber
 import javax.inject.Inject
-
 
 @HiltViewModel
 class DosunsangViewModel @Inject constructor(
     private val userDataSource: UserDataSource
-) :ViewModel(){
+) : ViewModel() {
 
     private val _connectionState = MutableLiveData<ConnectionState>()
     val connectionState: LiveData<ConnectionState> = _connectionState
@@ -39,11 +35,12 @@ class DosunsangViewModel @Inject constructor(
         _connectionState.value = if (isConnected) ConnectionState.CONNECTED else ConnectionState.DISCONNECTED
     }
 
-    fun toggleConnection(context: Context) {
+    fun toggleConnection(context: Context, userParam: UserParam) {
         when (_connectionState.value) {
             ConnectionState.DISCONNECTED -> {
                 _connectionState.value = ConnectionState.CONNECTING
                 connectWebSocket()
+                recommend(userParam)
             }
             ConnectionState.CONNECTED -> {
                 // 이미 연결된 상태에서는 아무 동작도 하지 않음
@@ -59,11 +56,19 @@ class DosunsangViewModel @Inject constructor(
         val request = Request.Builder().url("ws://i11d102.p.ssafy.io:8081/ws").build()
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
+                Timber.d("WebSocket message received: $text")
                 _serverMessage.postValue(text)
                 when (text) {
-                    "ack start" -> _connectionState.postValue(ConnectionState.CONNECTED)
+                    "ack start" -> {
+                        _connectionState.postValue(ConnectionState.CONNECTED)
+                    }
                     "ack end" -> _connectionState.postValue(ConnectionState.DISCONNECTED)
                 }
+            }
+
+            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                Timber.e("WebSocket failure: ${t.message}")
+                _connectionState.postValue(ConnectionState.DISCONNECTED)
             }
         })
     }
@@ -76,17 +81,18 @@ class DosunsangViewModel @Inject constructor(
         }
     }
 
-
-    fun recommend(userParam: UserParam){
+    fun recommend(userParam: UserParam) {
         viewModelScope.launch {
-            when(val response = safeApiCall(Dispatchers.IO){
-                userDataSource.recommend(userParam,1)
-            }){
+            when (val response = safeApiCall(Dispatchers.IO) {
+                userDataSource.recommend(userParam, 1)
+            }) {
                 is ResultWrapper.Success -> {
                     val msg = response.data.msg
+                    Timber.d("Recommend success: $msg")
                 }
                 is ResultWrapper.GenericError -> {
                     val msg = response.message
+                    Timber.d("Recommend error: $msg")
                 }
                 is ResultWrapper.NetworkError -> {
                     Timber.d("네트워크 에러")
@@ -94,12 +100,12 @@ class DosunsangViewModel @Inject constructor(
             }
         }
     }
-    
-    fun photo(){
-        viewModelScope.launch { 
-            when(val response = safeApiCall(Dispatchers.IO){
+
+    fun photo() {
+        viewModelScope.launch {
+            when (val response = safeApiCall(Dispatchers.IO) {
                 userDataSource.takePhoto(1)
-            }){
+            }) {
                 is ResultWrapper.Success -> {
                     Timber.d("사진 성공")
                 }
@@ -113,11 +119,11 @@ class DosunsangViewModel @Inject constructor(
         }
     }
 
-    fun gonext(){
+    fun gonext() {
         viewModelScope.launch {
-            when(val response = safeApiCall(Dispatchers.IO){
+            when (val response = safeApiCall(Dispatchers.IO) {
                 userDataSource.goNext(1)
-            }){
+            }) {
                 is ResultWrapper.Success -> {
                     Timber.d("다음으로 성공")
                 }
@@ -135,7 +141,6 @@ class DosunsangViewModel @Inject constructor(
         super.onCleared()
         webSocket?.close(1000, "ViewModel is being cleared")
     }
-
 }
 
 enum class ConnectionState {

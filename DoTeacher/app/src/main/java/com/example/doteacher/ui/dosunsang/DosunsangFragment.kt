@@ -11,8 +11,8 @@ import com.example.doteacher.ui.base.BaseFragment
 import com.example.doteacher.ui.dosunsang.viewmodel.ConnectionState
 import com.example.doteacher.ui.dosunsang.viewmodel.DosunsangViewModel
 import com.example.doteacher.ui.util.SingletonUtil
-import com.example.doteacher.ui.util.SingletonUtil.user
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter
 class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragment_dosunsang) {
 
     private val dosunsangViewModel: DosunsangViewModel by viewModels()
+
     override fun initView() {
         initData()
         clickEventListener()
@@ -36,6 +37,7 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
 
     private fun observeViewModel() {
         dosunsangViewModel.connectionState.observe(viewLifecycleOwner) { state ->
+            Timber.d("Connection state changed: $state")
             when (state) {
                 ConnectionState.DISCONNECTED -> {
                     binding.noconnect.visibility = View.VISIBLE
@@ -57,16 +59,20 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
                     binding.sleeplottie.visibility = View.GONE
                     binding.robotlottie.visibility = View.VISIBLE
                     binding.loadinglottie.visibility = View.GONE
+                    binding.robotlottie.playAnimation()
                     dosunsangViewModel.saveConnectionState(requireContext(), true)
                 }
             }
         }
 
         dosunsangViewModel.serverMessage.observe(viewLifecycleOwner) { message ->
+            Timber.d("Server message received: $message")
             when (message) {
                 "ack start" -> {
                     binding.loadinglottie.visibility = View.GONE
                     binding.loadinglottie.cancelAnimation()
+                    binding.robotlottie.visibility = View.VISIBLE
+                    binding.robotlottie.playAnimation()
                 }
                 "ack end" -> {
                     dosunsangViewModel.saveConnectionState(requireContext(), false)
@@ -77,9 +83,21 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
 
     private fun clickEventListener() {
         binding.noconnect.setOnClickListener {
+            Timber.d("noconnect clicked")
+            binding.sleeplottie.visibility = View.GONE
+            binding.sleeplottie.cancelAnimation()
             binding.loadinglottie.visibility = View.VISIBLE
             binding.loadinglottie.playAnimation()
-            dosunsangViewModel.toggleConnection(requireContext())
+            val userParam = UserParam(
+                userEmail = SingletonUtil.user!!.userEmail,
+                userName = SingletonUtil.user!!.userName,
+                userImage = SingletonUtil.user!!.userImage,
+                preferences = SingletonUtil.user!!.preferences,
+                password = "pass",
+                userTuto = true,
+                prefSelect = false
+            )
+            dosunsangViewModel.toggleConnection(requireContext(), userParam)
         }
         binding.photo.setOnClickListener {
             dosunsangViewModel.photo()
@@ -88,7 +106,6 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
             dosunsangViewModel.gonext()
         }
     }
-
 
     private fun initData() {
         binding.userData = SingletonUtil.user
