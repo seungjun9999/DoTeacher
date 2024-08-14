@@ -41,4 +41,8 @@ interface UserDataSource {
 
     suspend fun userDescription(userId: Int, userDes: Int) : ResponseData<UserData>
 
+    suspend fun takePhoto(robotId: Int) : ResponseData<MessageResponse>
+
+    suspend fun goNext(robotId: Int) : ResponseData<MessageResponse>
+
 }

@@ -63,5 +63,12 @@ class UserDataSourceImpl @Inject constructor(
         return userService.userDescription(userId, userDes)
     }
 
+    override suspend fun goNext(robotId: Int): ResponseData<MessageResponse> {
+        return userService.takePhoto(1)
+    }
+
+    override suspend fun takePhoto(robotId: Int): ResponseData<MessageResponse> {
+        return userService.goNext(1)
+    }
 
 }

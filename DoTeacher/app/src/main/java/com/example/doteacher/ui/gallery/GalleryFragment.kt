@@ -1,18 +1,14 @@
 package com.example.doteacher.ui.gallery
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.palette.graphics.Palette
-import com.bumptech.glide.request.transition.Transition
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
-import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentGalleryBinding
 import com.example.doteacher.ui.base.BaseFragment
@@ -26,7 +22,6 @@ import java.security.MessageDigest
 class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_gallery) {
     private val galleryViewModel: GalleryViewModel by viewModels()
     private lateinit var galleryAdapter: GalleryAdapter
-    private var isPhotoListActive = true
 
     override fun initView() {
         initData()
@@ -51,6 +46,8 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding>(R.layout.fragment_g
     private fun loadUserPhotos() {
         SingletonUtil.user?.id?.let { galleryViewModel.getUserPhotos(it) }
     }
+
+
 
     private fun loadUserData(){
         SingletonUtil.user?.userEmail?.let { email ->

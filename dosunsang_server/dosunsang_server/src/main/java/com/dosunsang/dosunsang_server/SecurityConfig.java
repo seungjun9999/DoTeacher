@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // 인증 없이 접근 가능한 경로 설정
-                        .requestMatchers("/authenticate", "/register", "/user/**", "/recommend/**", "/ws",
+                        .requestMatchers("/authenticate", "/register", "/user/**", "/socket/**", "/ws",
                                 "/photo/**", "/photos/**", "/products/**",
                                 "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
                         .permitAll()

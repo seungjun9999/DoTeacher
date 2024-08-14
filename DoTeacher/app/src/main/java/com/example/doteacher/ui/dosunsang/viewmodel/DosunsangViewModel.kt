@@ -35,8 +35,42 @@ class DosunsangViewModel @Inject constructor(
                 }
             }
         }
+    }
+    
+    fun photo(){
+        viewModelScope.launch { 
+            when(val response = safeApiCall(Dispatchers.IO){
+                userDataSource.takePhoto(1)
+            }){
+                is ResultWrapper.Success -> {
+                    Timber.d("사진 성공")
+                }
+                is ResultWrapper.GenericError -> {
+                    Timber.d("${response.message} 사진에러")
+                }
+                is ResultWrapper.NetworkError -> {
+                    Timber.d("네트워크 에러")
+                }
+            }
+        }
+    }
 
-
+    fun gonext(){
+        viewModelScope.launch {
+            when(val response = safeApiCall(Dispatchers.IO){
+                userDataSource.goNext(1)
+            }){
+                is ResultWrapper.Success -> {
+                    Timber.d("다음으로 성공")
+                }
+                is ResultWrapper.GenericError -> {
+                    Timber.d("${response.message} 다음으로 에러")
+                }
+                is ResultWrapper.NetworkError -> {
+                    Timber.d("네트워크 에러")
+                }
+            }
+        }
     }
 
 }

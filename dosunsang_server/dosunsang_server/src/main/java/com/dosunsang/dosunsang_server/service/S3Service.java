@@ -2,6 +2,10 @@ package com.dosunsang.dosunsang_server.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,9 +16,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.Optional;
 
@@ -27,10 +34,10 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final String DIR_NAME = "pet_picture";
+    private final String DIR_NAME = "profile_images";
 
     public String upload(String fileName, MultipartFile multipartFile) throws IOException {
-        File uploadFile = convert(multipartFile)
+        File uploadFile = convertAndRotateImage(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
         return upload(fileName, uploadFile);
     }
@@ -58,15 +65,54 @@ public class S3Service {
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File("/tmp/upload/" + file.getOriginalFilename());
+    private Optional<File> convertAndRotateImage(MultipartFile file) throws IOException {
+        File tempFile = new File("/tmp/upload/" + file.getOriginalFilename());
+        file.transferTo(tempFile);
+
+        BufferedImage image = ImageIO.read(tempFile);
+        BufferedImage rotatedImage = rotateImageBasedOnExif(image, tempFile);
+
+        File convertFile = new File("/tmp/upload/rotated_" + file.getOriginalFilename());
         if (convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
+            try (OutputStream os = new FileOutputStream(convertFile)) {
+                ImageIO.write(rotatedImage, "jpg", os);
             }
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    private BufferedImage rotateImageBasedOnExif(BufferedImage image, File file) {
+        try {
+            Metadata metadata = ImageMetadataReader.readMetadata(file);
+            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            int orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+
+            double angle = 0;
+            switch (orientation) {
+                case 6: // 90 degrees CW
+                    angle = Math.toRadians(90);
+                    break;
+                case 3: // 180 degrees
+                    angle = Math.toRadians(180);
+                    break;
+                case 8: // 90 degrees CCW
+                    angle = Math.toRadians(270);
+                    break;
+                default:
+                    break;
+            }
+
+            if (angle != 0) {
+                AffineTransform transform = new AffineTransform();
+                transform.rotate(angle, image.getWidth() / 2.0, image.getHeight() / 2.0);
+                AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+                image = op.filter(image, null);
+            }
+        } catch (Exception e) {
+            log.error("EXIF 정보를 읽는 중 오류 발생: ", e);
+        }
+        return image;
     }
 
     public ResponseEntity<byte[]> download(String fileName) throws IOException {

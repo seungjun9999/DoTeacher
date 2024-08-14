@@ -2,8 +2,6 @@ package com.example.doteacher.ui.util
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import com.example.doteacher.BuildConfig
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
@@ -24,16 +22,14 @@ object S3Uploader {
         AmazonS3Client(credentials)
     }
 
-    suspend fun uploadImage(context: Context, imageUri: Uri): String {
-        val compressedImage = compressImage(context, imageUri)
+    suspend fun uploadImage(context: Context, bitmap: Bitmap): String {
+        val compressedImage = compressImage(bitmap)
         return uploadCompressedImage(compressedImage)
     }
 
-    private fun compressImage(context: Context, imageUri: Uri): ByteArray {
-        val inputStream = context.contentResolver.openInputStream(imageUri)
-        val originalBitmap = BitmapFactory.decodeStream(inputStream)
+    private fun compressImage(bitmap: Bitmap): ByteArray {
         val outputStream = ByteArrayOutputStream()
-        originalBitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream)
         return outputStream.toByteArray()
     }
 

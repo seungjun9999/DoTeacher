@@ -151,10 +151,12 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
     }
 
     private fun showLoading() {
-        // 로딩 표시 구현
+        binding.uploadlottie.visibility = View.VISIBLE
+        binding.uploadlottie.playAnimation()
     }
 
     private fun hideLoading() {
-        // 로딩 숨기기 구현
+        binding.uploadlottie.visibility = View.GONE
+        binding.uploadlottie.cancelAnimation()
     }
 }

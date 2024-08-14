@@ -184,5 +184,19 @@
                 app:layout_constraintStart_toStartOf="@+id/ctv_profile_setup"
                 app:layout_constraintBottom_toBottomOf="@+id/textView23"
                 app:layout_constraintTop_toTopOf="@+id/textView23" />
+
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/uploadlottie"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_rawRes="@raw/anime_loading"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

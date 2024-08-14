@@ -31,6 +31,12 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
         binding.connect.setOnClickListener {
             toggleRobotState()
         }
+        binding.photo.setOnClickListener {
+            dosunsangViewModel.photo()
+        }
+        binding.gonext.setOnClickListener {
+            dosunsangViewModel.gonext()
+        }
     }
 
     private fun toggleRobotState() {

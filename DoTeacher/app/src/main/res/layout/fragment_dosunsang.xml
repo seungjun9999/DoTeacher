@@ -152,24 +152,24 @@
 
 
         <ImageView
-                android:src="@drawable/script"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView14"
+                android:src="@drawable/camera"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/photo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/connect"
                 app:layout_constraintTop_toTopOf="@+id/connect"
                 android:layout_marginTop="20dp" />
 
         <ImageView
-                android:src="@drawable/relistening"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView15"
+                android:src="@drawable/nextbtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/gonext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/connect"
                 app:layout_constraintTop_toTopOf="@+id/connect"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="22dp" />
 
 
         <ImageView
