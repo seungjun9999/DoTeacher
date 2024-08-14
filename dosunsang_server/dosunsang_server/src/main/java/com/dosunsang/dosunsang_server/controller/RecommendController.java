@@ -44,6 +44,7 @@ public class RecommendController {
             String msg = chatGptService.sendMessage(String.valueOf(sendmsg));
             String userId = String.valueOf(user.getId() + ", ");
 
+            log.info(userId +" user id dlqslek");
             RobotRegistration robotRegistration = RobotRegistration.getInstance();
             WebSocketSession session = robotRegistration.getSession(robotId);
 
