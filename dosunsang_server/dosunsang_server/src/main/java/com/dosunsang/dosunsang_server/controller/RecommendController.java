@@ -76,7 +76,7 @@ public class RecommendController {
     }
 
 
-    @PostMapping("/socket/picture/{robotId}")
+    @PostMapping("/picture/{robotId}")
     public ResultDto<String> picture(@PathVariable int robotId) throws IOException {
         RobotRegistration robotRegistration = RobotRegistration.getInstance();
         WebSocketSession session = robotRegistration.getSession(robotId);
@@ -88,7 +88,7 @@ public class RecommendController {
         }
     }
 
-    @PostMapping("/socket/next/{robotId}")
+    @PostMapping("/next/{robotId}")
     public ResultDto<String> next(@PathVariable int robotId) throws IOException {
         RobotRegistration robotRegistration = RobotRegistration.getInstance();
         WebSocketSession session = robotRegistration.getSession(robotId);
