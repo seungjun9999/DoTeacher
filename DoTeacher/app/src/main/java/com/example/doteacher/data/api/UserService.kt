@@ -64,7 +64,6 @@ interface UserService {
 
     ): ResponseData<String>
 
-
     @POST("socket/picture/{robotId}")
     suspend fun takePhoto(@Path("robotId") robotId: Int) : ResponseData<MessageResponse>
 
