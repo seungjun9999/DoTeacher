@@ -64,11 +64,11 @@ class UserDataSourceImpl @Inject constructor(
     }
 
     override suspend fun goNext(robotId: Int): ResponseData<MessageResponse> {
-        return userService.takePhoto(1)
+        return userService.goNext(1)
     }
 
     override suspend fun takePhoto(robotId: Int): ResponseData<MessageResponse> {
-        return userService.goNext(1)
+        return userService.takePhoto(1)
     }
 
 }
