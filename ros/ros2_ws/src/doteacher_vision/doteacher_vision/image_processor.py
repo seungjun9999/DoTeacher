@@ -66,7 +66,7 @@ class ImageProcessor(Node):
             classes = custom_results[0].boxes.cls.cpu().numpy()
             confs = custom_results[0].boxes.conf.cpu().numpy()  # 신뢰도 추가
             for bbox, track_id, class_idx, conf in zip(bboxes, track_ids, classes, confs):
-                if conf > 0.3:  # 신뢰도 임계값 설정
+                if conf > 0.65:  # 신뢰도 임계값 설정
                     x1, y1, x2, y2 = [int(coord) for coord in bbox]
                     label = f"{self.model.names[int(class_idx)]} {int(track_id)} ({conf:.2f})"
                     color = colors(int(track_id), True)

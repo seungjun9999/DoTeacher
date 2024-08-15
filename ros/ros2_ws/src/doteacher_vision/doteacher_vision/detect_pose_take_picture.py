@@ -11,8 +11,6 @@ from ament_index_python.packages import get_package_share_directory
 from ultralytics import YOLO
 from ultralytics.utils.plotting import colors
 
-import sys
-sys.path.append('/mnt/data/')
 
 class DetectPose(Node):
     def __init__(self):

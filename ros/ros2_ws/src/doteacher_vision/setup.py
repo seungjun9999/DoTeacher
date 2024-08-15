@@ -26,6 +26,8 @@ setup(
             'camera_publisher = doteacher_vision.camera_publisher:main',
             'image_processor = doteacher_vision.image_processor:main',
             'take_picture = doteacher_vision.take_picture:main',
+            
+            'detect_picture_service = doteacher_vision.detect_picture_service:main',
         ],
     },
 )
