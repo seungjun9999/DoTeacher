@@ -169,6 +169,7 @@ class DosunsangFragment : BaseFragment<FragmentDosunsangBinding>(R.layout.fragme
         binding.sleeplottie.playAnimation()
         binding.loadinglottie.visibility = View.GONE
         binding.loadinglottie.pauseAnimation()
+        dosunsangViewModel.setRobotInfo("-", 0)
     }
 
     private fun showLoadingState() {

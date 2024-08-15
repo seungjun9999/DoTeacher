@@ -1,10 +1,12 @@
 package com.example.doteacher.ui.mypage
 
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.doteacher.R
 import com.example.doteacher.databinding.FragmentMyPageBinding
 import com.example.doteacher.ui.base.BaseFragment
 import com.example.doteacher.ui.dialog.DialogFragment
+import com.example.doteacher.ui.home.viewmodel.HomeViewModel
 import com.example.doteacher.ui.util.SingletonUtil
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -13,7 +15,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page), DialogFragment.DialogListener {
 
-
+    private val homeViewModel: HomeViewModel by viewModels()
     override fun initView() {
         setupMyPageItems()
         initData()
@@ -60,6 +62,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                     findNavController().navigate(R.id.action_mypageFragment_to_settingsFragment)
                 }
             }
+        }
+    }
+
+    override fun onDialogClosed(neverShowAgain: Boolean) {
+        if (neverShowAgain) {
+            homeViewModel.updateUserTuto()
         }
     }
 
