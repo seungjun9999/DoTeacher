@@ -31,22 +31,31 @@ def initialize_mqtt():
 
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
-    client.subscribe(TOPIC)
-    client.subscribe(JETSON_TOPIC)
+    client.subscribe(FROM_JETSON_TOPIC)
 
 def on_message(client, userdata, msg):
     print(f"Received message: {msg.topic} {msg.payload.decode()}")
 
-    if msg.payload.decode() in ["beep", "take_picture_sound"]:
-        play_audio('beep.mp3' if msg.payload.decode() == "beep" else '5s_camera.mp3')
+    dec_msg = msg.payload.decode()
+    if dec_msg in ["ment_start", "ment_end", "beep", "p_sound"]:
+        if dec_msg == "ment_start":
+            play_audio('ment_start.mp3')
+        elif dec_msg == "ment_end":
+            play_audio('ment_end.mp3')
+        elif dec_msg == "beep":
+            play_audio('beep.mp3')
+        elif dec_msg =="p_sound":
+            play_audio('5s_camera.mp3')
     else:
         process_payload(msg.payload.decode())
+            
 
 def process_payload(payload):
     try:
         if payload.startswith("desc:"):
-            signal = int(payload.split(":")[1])
-            handle_signal(signal)
+            handle_desc(int(payload.split(":")[1]))
+        elif payload.startswith("next:"):
+            handle_next(int(payload.split(":")[1]))
         else:
             print("Unknown message format.")
     except ValueError:
@@ -125,8 +134,8 @@ def handle_user_input(user_input):
 def process_destination_request(user_input):
     for destination, index in VALID_DESTINATIONS.items():
         if destination in user_input:
-            mqtt_client.publish(JETSON_TOPIC, f"desc:{index}")
-            print(f"Sent signal to Jetson Nano: desc:{index}")
+            mqtt_client.publish(NAV_JETSON_TOPIC, f"nav:{index}")
+            print(f"Sent signal to Jetson Nano: nav:{index}")
             return f"{destination}로 이동 신호를 보냈습니다."
     return "지정된 작품이나 위치가 아닙니다. 다시 말씀해 주세요."
 
@@ -161,7 +170,8 @@ def play_audio(file_path):
     except Exception as e:
         print(f"Audio playback failed: {e}")
 
-def handle_signal(signal):
+def handle_desc(signal):
+    global VALID_DESTINATIONS
     if 0 <= signal < len(VALID_DESTINATIONS):
         user_input = f"{list(VALID_DESTINATIONS.keys())[signal]} 설명해줘"
         response = handle_user_input(user_input)
@@ -171,11 +181,21 @@ def handle_signal(signal):
     else:
         print("유효하지 않은 신호입니다.")
 
+def handle_next(signal):
+    global VALID_DESTINATIONS
+    if 0 <= signal < len(VALID_DESTINATIONS):
+        synthesize_speech(f"{list(VALID_DESTINATIONS.keys())[signal]}으로 안내해드리겠습니다.", "response.mp3")
+        play_audio("response.mp3")
+    else:
+        print("유효하지 않은 신호입니다.")
+
 # 전역 변수들
 BROKER = "broker.hivemq.com"
 PORT = 1883
-TOPIC = "raspberry_pi/start_explanation"
-JETSON_TOPIC = "ros2/nav"
+FROM_JETSON_TOPIC = "jetson/from"
+TO_JETSON_TOPIC = "jetson/to"
+NAV_JETSON_TOPIC = "jetson/nav"
+
 VALID_DESTINATIONS = {
     "난맹첩": 0, "아홉번째 파도": 1, "부유세계 마타베이의 걸작": 2, "겨울 풍경": 3, "게르니카": 4,
     "무제": 5, "송하음다도": 6, "시계의 연속성": 7, "밤의 카페 테라스": 8, "별이 빛나는 밤": 9,
