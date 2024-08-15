@@ -15,6 +15,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/UploadPicture.srv"
   "srv/RPiCommand.srv"
   "srv/DetectedImage.srv"
+  "srv/DetectPoseService.srv"
+  "srv/Nav2Index.srv"
   DEPENDENCIES sensor_msgs  # sensor_msgs 의존성 추가
 )
 

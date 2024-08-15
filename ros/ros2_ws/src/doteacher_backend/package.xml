@@ -6,8 +6,11 @@
   <description>TODO: Package description</description>
   <maintainer email="npcocft@gmail.com">jeongjae</maintainer>
   <license>TODO: License declaration</license>
-
-  <depend>doteacher_interfaces.srv</depend>
+  
+  <depend>rclpy</depend>
+  <depend>nav2_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>doteacher_interfaces</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

@@ -9,8 +9,7 @@ from ament_index_python.packages import get_package_share_directory
 from ultralytics import YOLO
 from ultralytics.utils.plotting import colors
 from PIL import Image, ImageDraw, ImageFont
-from doteacher_interfaces.srv import DetectedImage  # 사용자 정의 서비스 가져오기
-
+from doteacher_interfaces.srv import Nav2Index, DetectedImage
 
 class DetectPictureService(Node):
     def __init__(self):
