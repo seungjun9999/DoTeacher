@@ -3,6 +3,7 @@ package com.example.doteacher.ui.account
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,8 +45,12 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
             val email = binding.etvUseremail.text.toString()
             val password = binding.etvUserpass.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.setEmailAndPassword(email, password)
-                (binding.root as MotionLayout).transitionToEnd()
+                if (isValidEmail(email)) {
+                    viewModel.setEmailAndPassword(email, password)
+                    (binding.root as MotionLayout).transitionToEnd()
+                } else {
+                    Toast.makeText(context, "올바른 이메일 형식을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(context, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
@@ -99,6 +104,10 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         binding.etvUserpass.isEnabled = false
 
         binding.etvNickname.requestFocus()
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     private fun resetToInitialState() {
