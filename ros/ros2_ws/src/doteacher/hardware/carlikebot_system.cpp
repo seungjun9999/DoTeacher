@@ -123,6 +123,10 @@ namespace doteacher
       {
         adj_throttle = config_.adj_throttle_0_1;
       }
+      else if (throttle_abs > 0.05)
+      {
+        adj_throttle = config_.adj_throttle_0_05;
+      }
       else
       {
         adj_throttle = config_.adj_throttle_0_0;
@@ -301,6 +305,7 @@ namespace doteacher
     config_.adj_throttle_0_3 = std::stof(info_.hardware_parameters["adj_throttle_0_3"]);
     config_.adj_throttle_0_2 = std::stof(info_.hardware_parameters["adj_throttle_0_2"]);
     config_.adj_throttle_0_1 = std::stof(info_.hardware_parameters["adj_throttle_0_1"]);
+    config_.adj_throttle_0_05 = std::stof(info_.hardware_parameters["adj_throttle_0_05"]);
     config_.adj_throttle_0_0 = std::stof(info_.hardware_parameters["adj_throttle_0_0"]);
     // // END: This part here is for exemplary purposes - Please do not copy to your production code
 

@@ -82,6 +82,7 @@ namespace doteacher
       float adj_throttle_0_3 = 0;
       float adj_throttle_0_2 = 0;
       float adj_throttle_0_1 = 0;
+      float adj_throttle_0_05 = 0;
       float adj_throttle_0_0 = 0;
     };
 

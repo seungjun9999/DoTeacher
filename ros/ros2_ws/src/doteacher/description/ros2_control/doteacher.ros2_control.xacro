@@ -22,9 +22,10 @@
         <param name="adj_throttle_0_5">1.8</param>
         <param name="adj_throttle_0_4">1.6</param>
         <param name="adj_throttle_0_3">1.4</param>
-        <param name="adj_throttle_0_2">1.2</param>
-        <param name="adj_throttle_0_1">0.8</param>
-        <param name="adj_throttle_0_0">0.6</param>
+        <param name="adj_throttle_0_2">0.8</param>
+        <param name="adj_throttle_0_1">0.4</param>
+        <param name="adj_throttle_0_05">0.2</param>
+        <param name="adj_throttle_0_0">0.1</param>
       </hardware>
       <joint name="${prefix}virtual_front_wheel_joint">
         <command_interface name="position"/>
