@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <gazebo>
+        <plugin name="carlikebot_ros2_control" filename="libgz_ros2_control-system.so">
+            <parameters>$(find doteacher)/config/ros2_control/doteacher_controllers.yaml</parameters>
+        </plugin>
+    </gazebo>
+
+</robot>
